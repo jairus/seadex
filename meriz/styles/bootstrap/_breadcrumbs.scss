@@ -1,0 +1,30 @@
+//
+// Breadcrumbs
+// --------------------------------------------------
+
+.breadcrumbs-wrapper {
+  width: 100%;
+  background-color: $breadcrumb-bg;
+  padding: 5px 0;
+}
+
+.breadcrumb {
+  padding: $breadcrumb-padding-vertical 0;
+  margin-bottom: 0;
+  list-style: none;
+  background-color: transparent;
+
+  > li {
+    display: inline-block;
+
+    + li:before {
+      content: "#{$breadcrumb-separator}\00a0"; // Unicode space added since inline-block means non-collapsing white-space
+      padding: 0 5px;
+      color: $brand-primary;
+    }
+  }
+
+  > .active {
+    color: $breadcrumb-active-color;
+  }
+}

@@ -1,0 +1,36 @@
+@-webkit-keyframes fadeInDown {
+  0% {
+    top: -110px;
+    min-height: 100px;
+    max-height: 100px;
+  }
+
+  100% {
+    top: 0;
+    min-height: 65px;
+    max-height: 65px;
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    top: -110px;
+    min-height: 100px;
+    max-height: 100px;
+  }
+
+  100% {
+    top: 0;
+    min-height: 65px;
+    max-height: 65px;
+  }
+}
+
+.fadeInDown {
+  -webkit-animation-name: fadeInDown;
+  animation-name: fadeInDown;
+  -webkit-animation-duration: 0.75s;
+  animation-duration: 0.75s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}

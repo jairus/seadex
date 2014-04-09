@@ -1,0 +1,11 @@
+/*
+ * Shortcut for managing many files. Please don't use this file on a live site due to performance implications.
+ * Instead merge the files below to a single CSS file manually or using your backend technology.
+ */
+
+@import url('fonts.css');
+@import url('projekktor.css');
+@import url('datepicker.css');
+@import url('select.css');
+@import url('carousel.css');
+@import url('main.css');

@@ -1,0 +1,63 @@
+
+
+/*--Screen Smaller than 767px--*/
+@media(max-width: 767px){
+	 
+}
+
+/*--Screen between 768px and 992px--*/
+@media(min-width: 768px){
+	
+}
+
+/*--Screen equal to 992px and up--*/
+@media(min-width: 992px){
+
+	
+}
+
+@media(min-width: 1170px) {
+
+}
+
+.starter-template {
+	padding-top: 40px;
+	text-align: center;
+	margin-bottom:20px;
+}
+#form-quote{
+	/*background-color: #cfd7db;*/
+	max-width: 100%;
+	padding: 20px 15px 10px 15px;
+	margin-top: 30px;
+	border: 1px solid black;
+	min-height: 150px;
+}
+#rfq-summary{
+	/*background-color: #cfd7db;*/
+	max-width: 100%;
+	padding: 20px 15px 10px 15px;
+	margin-top: 30px;
+	border: 1px solid black;
+	min-height: 150px;
+}
+#prev{
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
+.formcontainer{
+	max-width: 570px;
+	margin:auto;
+}
+.backbutton{
+	padding-top:20px;
+	padding-bottom:20px;
+}
+.btn {
+    white-space: normal;
+}
+.btn-lg{
+	margin-bottom:10px;
+	margin-left:10px;
+}

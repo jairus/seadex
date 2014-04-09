@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Seadex - Ship or be shipped</title>
+
+        <link rel="stylesheet" href="styles/_all.css">
+
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="styles/ie8.css">
+            <script src="scripts/libs/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <script>document.body.className += ' js';</script>
+
+        <!-- Fixed navbar -->
+        <div class="navbar navbar-default top-nav" id="top-nav" role="navigation">
+          <div class="container">
+
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="home.html">
+                <img src="images/logo.png" data-small="images/logo-small.png" alt="Seadex">
+              </a>
+            </div>
+
+            <div class="navbar-collapse collapse">
+              <div class="navbar-right">
+                <ul class="nav navbar-nav">
+                  <li><a href="rfq_step_1.html">Request for quotation</a></li>
+                  <li><a href="about.html">About</a></li>
+                  <li><a href="situation.html">Situation</a></li>
+                  <li><a href="consumers.html">Consumers</a></li>
+                  <li><a href="service_providers.html">Service providers</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                  <li>
+                    <button type="button" class="btn btn-primary navbar-btn" id="show-login">Login</button>
+                  </li>
+                </ul>
+              </div>
+
+            </div><!--/.nav-collapse -->
+
+            <div class="login-popup" id="login-popup">
+              <form role="form">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="login" placeholder="Username">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" id="password" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+              </form>
+              <button type="button" class="popup-close close">&times;</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-header sub-header-homepage">
+          <div class="container theme-showcase" >
+              <h1>Get the <span>best freight</span> rates FOR YOUR SHIPMENT !</h1>
+              <h2><span>Save up to 50%</span> or more by choosing the right service provider!</h2>
+              <hr>
+              <h3>Please select what type of consumer you are:</h3>
+              <p data-toggle="buttons" class="consumer-type">
+                <label class="btn btn-transculent btn-lg btn-tick">
+                  <input type="radio" name="options" id="option1"> I'm into professional logistics
+                </label>
+                <label class="btn btn-transculent btn-lg btn-tick">
+                  <input type="radio" name="options" id="option2"> I'm a Professional consumer
+                </label>
+              </p>
+              <p>
+                <a href="http://getbootstrap.com/examples/theme/#" class="btn btn-success btn-lg" role="button">Get free quotes now !</a>
+              </p>
+
+          </div> <!-- /container -->
+        </div>
+
+        <div class="homepage" role="main">
+          <section class="container">
+
+            <div class="row text-center">
+              <div class="col-md-12 bottom">
+                <h2 class="section-title">How does seadex work ?</h2>
+              </div>
+
+              <div class="col-md-12">
+
+                <div class="row gap">
+                  <div class="col-sm-3 icon icon-mail">
+                    <h3>Fill in the request</h3>
+                    <p>Fill in all the details about your shipment in the request form</p>
+                  </div>
+
+                  <div class="col-sm-3 icon icon-connection">
+                    <h3>Seadex connects with our logistic partners</h3>
+                    <p>Seadex selects the best options for your cargo and preferences</p>
+                  </div>
+
+                  <div class="col-sm-3 icon icon-list">
+                    <h3>Compare the offers</h3>
+                    <p>Without any cost or obligations, you can compare the received offers and bids from our partners</p>
+                  </div>
+
+                  <div class="col-sm-3 icon icon-search">
+                    <h3>Select the service provider</h3>
+                    <p>Select the service provider that suits you best in terms of prices,transit times and other preferences as offered.</p>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </section>
+
+          <section class="video text-center">
+
+            <div class="container">
+              <div class="col-md-12 bottom">
+                <h2 class="section-title">Demo video</h2>
+              </div>
+
+              <div class="col-md-12 video-wrapper">
+                <video width="800" height="450" style="width: 100%; height: 100%;" poster="media/intro.png" controls="controls" preload="none">
+                  <!-- MP4 for Safari, IE9, iPhone, iPad, Android, and Windows Phone 7 -->
+                  <source src="media/intro.mp4" />
+                  <source src="media/intro.webm" />
+                  <source src="media/intro.ogv" />
+                </video>
+              </div>
+
+            </div>
+
+          </section>
+
+          <section class="container">
+
+            <div class="row text-center">
+              <div class="col-md-12 bottom">
+                <h2 class="section-title">Why use seadex ?</h2>
+              </div>
+
+              <div class="col-md-12 gap">
+
+                <div class="row">
+                  <div class="col-sm-4 icon-side icon-gear">
+                    <p>Seadex is a <strong>free to use</strong>, no obligation service</p>
+                  </div>
+
+                  <div class="col-sm-4 icon-side icon-wallet">
+                    <p><strong>Save money</strong> with competitive quotes and Chose the best rates</p>
+                  </div>
+
+                  <div class="col-sm-4 icon-side icon-clock">
+                    <p><strong>Save time</strong> service providers come to you</p>
+                  </div>
+
+                </div>
+
+                <div class="row">
+
+                  <div class="col-sm-4 icon-side icon-chart">
+                    <p>Choose organized and quality certified <strong>logistic partners world wide</strong> such as ISO compliant vendors.</p>
+                  </div>
+
+                  <div class="col-sm-4 icon-side icon-port">
+                    <p><strong>Over 6000 Ports</strong> to choose from</p>
+                  </div>
+
+                  <div class="col-sm-4 icon-side icon-thumb">
+                    <p>Over <strong>1.000.0000 historical voyages</strong> in the Database</p>
+                  </div>
+
+                </div>
+
+                <div class="row">
+
+                  <div class="col-sm-4 icon-side icon-server">
+                    <p>Over <strong>5000 Container Vessels in the Database</strong> with Details and sailing schedules</p>
+                  </div>
+
+                  <div class="col-sm-4 icon-side icon-tree">
+                    <p><strong>Reduce your carbon foot print</strong></p>
+                  </div>
+
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <ul class="carousel" id="home-carousel">
+                      <li>
+                        <img src="images/placeholders/carousel_logo_135x45.jpg" alt="">
+                        <p>Choose organized and qualitycertified logistic partners world wide such as ISO compliant vendors.</p>
+                      </li>
+                      <li>
+                        <img src="images/placeholders/carousel_logo_135x45.jpg" alt="">
+                        <p>Choose organized and qualitycertified logistic partners world wide such as ISO compliant vendors.</p>
+                      </li>
+                      <li>
+                        <img src="images/placeholders/carousel_logo_135x45.jpg" alt="">
+                        <p>Choose organized and qualitycertified logistic partners world wide such as ISO compliant vendors.</p>
+                      </li>
+                      <li>
+                        <img src="images/placeholders/carousel_logo_135x45.jpg" alt="">
+                        <p>Choose organized and qualitycertified logistic partners world wide such as ISO compliant vendors.</p>
+                      </li>
+                      <li>
+                        <img src="images/placeholders/carousel_logo_135x45.jpg" alt="">
+                        <p>Choose organized and qualitycertified logistic partners world wide such as ISO compliant vendors.</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </section>
+
+        </div>
+
+        <div id="footer">
+
+          <div class="container">
+
+            <div class="row">
+
+              <div class="col-sm-12 col-md-6">
+                <ul class="nav">
+                  <li><a href="#">About</a></li>
+                  <li><a href="#">Situation</a></li>
+                  <li><a href="#">Consumers</a></li>
+                  <li><a href="#">Service providers</a></li>
+                </ul>
+
+                <div class="social-links">
+                  <a href="#" class="social-icon linkedin">LinkedIn</a>
+                  <a href="#" class="social-icon facebook">Facebook</a>
+                </div>
+
+                <p class="copyright">Copyright 2014 Seadex AS.</p>
+              </div>
+
+              <div class="col-xs-6 col-md-3">
+                  <ul class="list-group">
+                    <li class="list-group-item list-group-title">SEADEX AS HQ</li>
+                    <li class="list-group-item">DRONNING MAUDES GATE 11</li>
+                    <li class="list-group-item">0250 OSLO</li>
+                    <li class="list-group-item">NORWAY</li>
+                    <li class="list-group-item">EMAIL: <a href="mailto:info@seadex.no">INFO@SEADEX.NO</a></li>
+                  </ul>
+              </div>
+
+              <div class="col-xs-6 col-md-3">
+                <ul class="list-group">
+                  <li class="list-group-item list-group-title">SEADEX SINGAPORE OFFICE</li>
+                  <li class="list-group-item">MARINA VIEW ASIA</li>
+                  <li class="list-group-item">POWER 1018960</li>
+                  <li class="list-group-item">SINGAPORE</li>
+                  <li class="list-group-item">EMAIL: <a href="mailto:info@seadex.no">INFO@SEADEX.NO</a></li>
+                </ul>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <script src="scripts/_all.js"></script>
+    </body>
+</html>

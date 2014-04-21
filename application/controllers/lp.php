@@ -54,7 +54,7 @@ class lp extends CI_Controller {
 		
 	}
 	
-	public function rfq($id, $bid=false){
+	public function rfq($id, $action='bid'){
 		if(!$_SESSION['logistic_provider']['id']){
 			echo "<script>self.location='".site_url("lp")."/'</script>";
 		}
@@ -77,7 +77,7 @@ class lp extends CI_Controller {
 		$this->load->view('sitelayout/header.php');
 		$this->load->view('lp/nav.php');
 		$data['rfq'] = $rfqdata;
-		if($bid){
+		if($action=='bid'){
 			$this->load->view('lp/rfqsummary_bid.php', $data);
 		}
 		else{
@@ -160,10 +160,11 @@ class lp extends CI_Controller {
 					destination_date,
 					destination_time_zone,
 					destination_timestamp_utc,
-					destination_date_utc
+					destination_date_utc,
+					dateadded
 					from `rfq` where ";
 					
-					$sql .= $sql_ext." order by `id`";
+					$sql .= $sql_ext." order by `id` desc limit 100";
 				}
 				
 				else if($_SESSION['searchfilter']['type']=="Country Search"){
@@ -192,11 +193,12 @@ class lp extends CI_Controller {
 					destination_date,
 					destination_time_zone,
 					destination_timestamp_utc,
-					destination_date_utc
+					destination_date_utc,
+					dateadded
 					from `rfq` where 
 					`origin_country` = '".mysql_real_escape_string($country)."' or 
 					`destination_country` = '".mysql_real_escape_string($country)."'
-					order by `id` desc limit 50";
+					order by `id` desc limit 100";
 				}
 				else if($_SESSION['searchfilter']['type']=="Search by Keywords"){
 					$keyword = trim($_SESSION['searchfilter']['keyword']);
@@ -222,10 +224,11 @@ class lp extends CI_Controller {
 					destination_date,
 					destination_time_zone,
 					destination_timestamp_utc,
-					destination_date_utc
+					destination_date_utc,
+					dateadded
 					from `rfq` where 
 					lower(`data_plain`) like '%".mysql_real_escape_string(trim($keyword))."%'
-					order by `id` desc limit 50";
+					order by `id` desc limit 100";
 					
 					//echo $sql;
 				}
@@ -265,10 +268,11 @@ class lp extends CI_Controller {
 						destination_date,
 						destination_time_zone,
 						destination_timestamp_utc,
-						destination_date_utc
+						destination_date_utc,
+						dateadded
 						from `rfq` where ";
 						$sql .= implode($sql_arr, " or ");
-						$sql .= " order by `id`";
+						$sql .= " order by `id` desc limit 100";
 					}
 				}
 				else{
@@ -291,8 +295,9 @@ class lp extends CI_Controller {
 					destination_date,
 					destination_time_zone,
 					destination_timestamp_utc,
-					destination_date_utc
-					from `rfq` where 1 order by `id` desc limit 50";
+					destination_date_utc,
+					dateadded
+					from `rfq` where 1 order by `id` desc limit 100";
 				}
 			}
 			else{
@@ -315,8 +320,9 @@ class lp extends CI_Controller {
 				destination_date,
 				destination_time_zone,
 				destination_timestamp_utc,
-				destination_date_utc
-				from `rfq` where 1 order by `id` desc limit 50";
+				destination_date_utc,
+				dateadded
+				from `rfq` where 1 order by `id` desc limit 100";
 			}
 			$q = $this->db->query($sql_cnt);
 			$count = $q->result_array();
@@ -473,12 +479,12 @@ class lp extends CI_Controller {
 		$bid['destination']['country'] = $country;
 		$bid['destination']['country_code'] = $country_code;
 		
-		$port1 = explode("-", urldecode($bid['origin']['port']));
+		$port1 = explode("--", urldecode($bid['origin']['port']));
 		$port1_id = trim($port1[0]);
 		$port1 = trim($port1[1]);
 		$bid['origin']['port_id'] = $port1_id;
 		$bid['origin']['port'] = $port1;
-		$port2 = explode("-", urldecode($bid['destination']['port']));
+		$port2 = explode("--", urldecode($bid['destination']['port']));
 		$port2_id = trim($port2[0]);
 		$port2 = trim($port2[1]);
 		$bid['destination']['port_id'] = $port2_id;
@@ -486,6 +492,17 @@ class lp extends CI_Controller {
 		if($_FILES){
 			$bid['files'] = $_FILES;
 		}
+		
+		//convert to USD
+		$currency = explode(" ", $bid['total_bid_currency']);
+		$currency = $currency[0];
+		$exchange_rate = @file_get_contents("http://rate-exchange.appspot.com/currency?from=".$currency."&to=USD");
+		$exchange_rate = @json_decode($exchange_rate);
+		
+		if(isset($exchange_rate->rate)){
+			$bid['total_bid_usd'] = $exchange_rate->rate * $bid['total_bid'];
+		}
+		
 		
 		if(!trim($bid['total_bid'])){
 			?><script>alert("Please specify your total bid price!");</script><?
@@ -513,6 +530,7 @@ class lp extends CI_Controller {
 			`destination_date` = '".mysql_real_escape_string($bid['destination']['date'])."',
 			`total_bid_currency` = '".mysql_real_escape_string($bid['total_bid_currency'])."',
 			`total_bid` = '".mysql_real_escape_string($bid['total_bid'])."',
+			`total_bid_usd` = '".mysql_real_escape_string($bid['total_bid_usd'])."',
 			`dateadded` = NOW()
 		";
 		$this->db->db_debug = FALSE; //disable debugging for queries

@@ -97,55 +97,433 @@ if($rfq['userprofile']['customer_type']){
 	$rfq['userprofile']['type'] = $rfq['userprofile']['customer_type'];
 }
 
+$bid_data = unserialize(base64_decode($bids[0]['data']));
+
 
 ?>
 <div class="container-fluid" id="container" style="max-width:90%">
-	<iframe name="ninjaframe" style="display:none" ></iframe>
-	<form action="<?php echo site_url("lp/submit_bid"); ?>" method="post" enctype="multipart/form-data" target="ninjaframe">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-6">
 			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
+		</div>
+		<div class="col-md-6 text-right">
+			<h2><a href="<?php echo site_url("cs")."/rfq/".$rfq['id']."/bids" ?>">Back to Bids</a></h2>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12 text-left">
 			<table class="table table-bordered">
-				<tr>
-					<th width="50%">Customer Type</th>
-					<td width="50%"><?php echo ucfirst($rfq['customer_type']); ?></td>
+			<tr>
+					<th colspan=2 class="text-center" style="background:#f0f0f0">
+					Bid Summary
+					</th>
 				</tr>
 				<tr>
-					<th width="50%">E-mail</th>
-					<td width="50%"><?php echo $rfq['userprofile']['email']; ?></td>
+					<td colspan=2>
+						<table class="table table-bordered">
+							<tr>
+								<th width="33%">Company</th>
+								<th width="33%">Total Bid</th>
+								<th width="33%">
+								<div class="row">
+									<div class="col-sm-3">Total Bid in</div>
+									<div class="col-sm-9">
+										<select name="total_bid_currency" class="form-control" disabled>
+											<option selected="selected" value="USD United States Dollars">
+												USD United States Dollars
+											</option>
+											<option>
+												EUR Euro
+											</option>
+											<option value="CAD Canada Dollars">
+												CAD Canada Dollars
+											</option>
+											<option>
+												GBP United Kingdom Pounds
+											</option>
+											<option>
+												DEM Germany Deutsche Marks
+											</option>
+											<option>
+												FRF France Francs
+											</option>
+											<option>
+												JPY Japan Yen
+											</option>
+											<option>
+												NLG Netherlands Guilders
+											</option>
+											<option>
+												ITL Italy Lira
+											</option>
+											<option>
+												CHF Switzerland Francs
+											</option>
+											<option>
+												DZD Algeria Dinars
+											</option>
+											<option>
+												ARP Argentina Pesos
+											</option>
+											<option>
+												AUD Australia Dollars
+											</option>
+											<option>
+												ATS Austria Schillings
+											</option>
+											<option>
+												BSD Bahamas Dollars
+											</option>
+											<option>
+												BBD Barbados Dollars
+											</option>
+											<option>
+												BEF Belgium Francs
+											</option>
+											<option>
+												BMD Bermuda Dollars
+											</option>
+											<option>
+												BRR Brazil Real
+											</option>
+											<option>
+												BGL Bulgaria Lev
+											</option>
+											<option>
+												CAD Canada Dollars
+											</option>
+											<option>
+												CLP Chile Pesos
+											</option>
+											<option>
+												CNY China Yuan Renmimbi
+											</option>
+											<option>
+												CYP Cyprus Pounds
+											</option>
+											<option>
+												CSK Czech Republic Koruna
+											</option>
+											<option>
+												DKK Denmark Kroner
+											</option>
+											<option>
+												NLG Dutch Guilders
+											</option>
+											<option>
+												XCD Eastern Caribbean Dollars
+											</option>
+											<option>
+												EGP Egypt Pounds
+											</option>
+											<option>
+												EUR Euro
+											</option>
+											<option>
+												FJD Fiji Dollars
+											</option>
+											<option>
+												FIM Finland Markka
+											</option>
+											<option>
+												FRF France Francs
+											</option>
+											<option>
+												DEM Germany Deutsche Marks
+											</option>
+											<option>
+												XAU Gold Ounces
+											</option>
+											<option>
+												GRD Greece Drachmas
+											</option>
+											<option>
+												HKD Hong Kong Dollars
+											</option>
+											<option>
+												HUF Hungary Forint
+											</option>
+											<option>
+												ISK Iceland Krona
+											</option>
+											<option>
+												INR India Rupees
+											</option>
+											<option>
+												IDR Indonesia Rupiah
+											</option>
+											<option>
+												IEP Ireland Punt
+											</option>
+											<option>
+												ILS Israel New Shekels
+											</option>
+											<option>
+												ITL Italy Lira
+											</option>
+											<option>
+												JMD Jamaica Dollars
+											</option>
+											<option>
+												JPY Japan Yen
+											</option>
+											<option>
+												JOD Jordan Dinar
+											</option>
+											<option>
+												KRW Korea (South) Won
+											</option>
+											<option>
+												LBP Lebanon Pounds
+											</option>
+											<option>
+												LUF Luxembourg Francs
+											</option>
+											<option>
+												MYR Malaysia Ringgit
+											</option>
+											<option>
+												MXP Mexico Pesos
+											</option>
+											<option>
+												NLG Netherlands Guilders
+											</option>
+											<option>
+												NZD New Zealand Dollars
+											</option>
+											<option>
+												NOK Norway Kroner
+											</option>
+											<option>
+												PKR Pakistan Rupees
+											</option>
+											<option>
+												XPD Palladium Ounces
+											</option>
+											<option>
+												PHP Philippines Pesos
+											</option>
+											<option>
+												XPT Platinum Ounces
+											</option>
+											<option>
+												PLZ Poland Zloty
+											</option>
+											<option>
+												PTE Portugal Escudo
+											</option>
+											<option>
+												ROL Romania Leu
+											</option>
+											<option>
+												RUR Russia Rubles
+											</option>
+											<option>
+												SAR Saudi Arabia Riyal
+											</option>
+											<option>
+												XAG Silver Ounces
+											</option>
+											<option>
+												SGD Singapore Dollars
+											</option>
+											<option>
+												SKK Slovakia Koruna
+											</option>
+											<option>
+												ZAR South Africa Rand
+											</option>
+											<option>
+												KRW South Korea Won
+											</option>
+											<option>
+												ESP Spain Pesetas
+											</option>
+											<option>
+												XDR Special Drawing Right (IMF)
+											</option>
+											<option>
+												SDD Sudan Dinar
+											</option>
+											<option>
+												SEK Sweden Krona
+											</option>
+											<option>
+												CHF Switzerland Francs
+											</option>
+											<option>
+												TWD Taiwan Dollars
+											</option>
+											<option>
+												THB Thailand Baht
+											</option>
+											<option>
+												TTD Trinidad and Tobago Dollars
+											</option>
+											<option>
+												TRL Turkey Lira
+											</option>
+											<option>
+												GBP United Kingdom Pounds
+											</option>
+											<option>
+												USD United States Dollars
+											</option>
+											<option>
+												VEB Venezuela Bolivar
+											</option>
+											<option>
+												ZMK Zambia Kwacha
+											</option>
+											<option>
+												EUR Euro
+											</option>
+											<option>
+												XCD Eastern Caribbean Dollars
+											</option>
+											<option>
+												XDR Special Drawing Right (IMF)
+											</option>
+											<option>
+												XAG Silver Ounces
+											</option>
+											<option>
+												XAU Gold Ounces
+											</option>
+											<option>
+												XPD Palladium Ounces
+											</option>
+											<option>
+												XPT Platinum Ounces
+											</option>
+										</select>
+									</div>
+								</div>
+								</th>
+							</tr>
+							<?php
+							$t = count($bids);
+							for($i=0; $i<$t; $i++){
+								?>
+								<tr>
+									<td>
+										<?php echo $bids[$i]['company_name'] ; ?>
+									</td>
+									<td>
+										<?php 
+										$currency = explode(" ", $bids[$i]['total_bid_currency'], 2);
+										$currency_short = $currency[0];
+										$currency_long = $currency[1];
+										echo $currency_short." ";
+										echo number_format($bids[$i]['total_bid'], 2, ".", ","); 
+										echo " (".$currency_long.")";
+										?>
+									</td>
+									<td>
+										<?php
+										$currency_short = "USD";
+										$currency_long = "United States Dollars";
+										$bid_equiv = $bids[$i]['total_bid_usd'];
+										echo $currency_short." ";
+										echo number_format($bid_equiv, 2, ".", ","); 
+										echo " (".$currency_long.")";
+										?>
+									</td>
+								</tr>
+								<?php
+							}
+							?>
+						</table>
+						<?php
+						$t = count($bid_data['files']['attachments']['name']);
+						if(trim($bid_data['files']['attachments']['name'][0])==""){
+							$t = 0;
+						}
+						
+						if($t || trim($bid_data['additional_notes'])){
+							?>
+							<table class="table table-bordered">
+								<tr>
+									<?php
+									if($t){
+										?>
+										<th style="width:50%">
+											Attachments
+										</th>
+										<?php
+									}
+									if(trim($bid_data['additional_notes'])){
+										?>
+										<th style="width:50%">
+											Additional Notes
+										</th>
+										<?php
+									}
+									?>
+								</tr>
+								<tr>
+									<?php
+									if($t){
+										?>
+										<td>
+										<?php
+										for($i=0; $i<$t; $i++){
+											$url = site_url()."_uploads/bid_".$bids[0]['id']."/".urlencode($bid_data['files']['attachments']['name'][$i]);
+											echo "<a href='".$url."' target='_blank'>".$bid_data['files']['attachments']['name'][$i]."</a><br>";
+										}
+										?>
+										</td>
+										<?php
+									}
+									if(trim($bid_data['additional_notes'])){
+										?>
+										<td>
+											<?php
+											echo nl2br(strip_tags($bid_data['additional_notes']));
+											?>
+										</td>
+										<?php
+									}
+									?>
+								</tr>
+							</table>
+							<?php
+						}
+						if($rfq['bid_id']<1){
+							?>
+							<script>
+							function acceptBid(){
+								jQuery("#acceptbutton").hide();
+								jQuery("#acceptform").fadeIn(200);
+							}
+							</script>
+							<div class="text-center" style="margin-bottom:30px;">
+								<input id="acceptbutton" type="button" class="btn btn-default" value="Accept This Bid and Contact Service Provider" onclick="return acceptBid();" >
+								<div id='acceptform' style="display:none; max-width:500px; margin:auto">
+									<form class="form-horizontal" action="<?php echo site_url("cs")."/rfq/".$rfq['id']."/acceptbid?bid_id=".$_GET['bid_id']; ?>" method="post">
+										<div class="row">Message</div>
+										<div class="row"><textarea class="form-control" style="height:100px;" name="message" ><?php
+										
+										echo "Hello! I would like to inform you that I accepted your bid for my RFQ. Please don't hesitate to contact me on how to proceed from here and for further details.";
+										
+										?></textarea></div>
+										<div class="row" style="margin-top:10px;"><input type="submit" value="Proceed" class="form-control btn btn-default" /></div>
+									</form>
+								</div>
+							</div>
+							<?php
+						}
+						else if($rfq['bid_id']==$bids[0]['id']){
+							?>
+							<div class="text-center" style="margin-bottom:30px; color:green">Accepted Bid</div>
+							<?php
+						}
+						?>
+					</td>
 				</tr>
+				
 				<?php
-				if($rfq['userprofile']['company_name']){
-					?>
-					<tr>
-						<th width="50%">Company Name</th>
-						<td width="50%"><?php echo $rfq['userprofile']['company_name']; ?></td>
-					</tr>
-					<?php
-				}
-				?>
-				<tr>
-					<th width="50%">First Name</th>
-					<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
-				</tr>
-				<tr>
-					<th width="50%">Last Name</th>
-					<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
-				</tr>
-				<tr>
-					<th width="50%">Country</th>
-					<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
-				</tr>
-				<tr>
-					<th width="50%">Contact Number</th>
-					<td width="50%"><?php echo $rfq['userprofile']['contactnumber']; ?></td>
-				</tr>
-				<?php
-				if(isset($rfq['shipping_info']['type_of_company_to_quote'])){
+				if(isset($rfq['shipping_info']['type_of_company_to_quote'])&&0){
 					?>
 					<tr>
 						<th width="50%">RFQ for</th>
@@ -174,339 +552,57 @@ if($rfq['userprofile']['customer_type']){
 								<tr>
 									<td width="25%"><b>Country:</b> <?php echo $rfq['shipping_info']['origin']['country']; ?></td>
 									<td width="25%">
-									<select class="form-control" name='origin[country]' id="origin_country" onchange="getPorts('origin_port', this.value)">
-									<option value="AL - Albania">Albania</option>
-									<option value="DZ - Algeria">Algeria</option>
-									<option value="AO - Angola">Angola</option>
-									<option value="AR - Argentina">Argentina</option>
-									<option value="AW - Aruba">Aruba</option>
-									<option value="AU - Australia">Australia</option>
-									<option value="BS - Bahamas">Bahamas</option>
-									<option value="BH - Bahrain">Bahrain</option>
-									<option value="BD - Bangladesh">Bangladesh</option>
-									<option value="BE - Belgium">Belgium</option>
-									<option value="BZ - Belize">Belize</option>
-									<option value="BJ - Benin">Benin</option>
-									<option value="BR - Brazil">Brazil</option>
-									<option value="VG - British Virgin Islands">British Virgin Islands</option>
-									<option value="BN - Brunei">Brunei</option>
-									<option value="BG - Bulgaria">Bulgaria</option>
-									<option value="KH - Cambodia">Cambodia</option>
-									<option value="CM - Cameroon">Cameroon</option>
-									<option value="CA - Canada">Canada</option>
-									<option value="CV - Cape Verde">Cape Verde</option>
-									<option value="CL - Chile">Chile</option>
-									<option value="CN - China">China</option>
-									<option value="CO - Colombia">Colombia</option>
-									<option value="KM - Comoros">Comoros</option>
-									<option value="CR - Costa Rica">Costa Rica</option>
-									<option value="HR - Croatia">Croatia</option>
-									<option value="CU - Cuba">Cuba</option>
-									<option value="CY - Cyprus">Cyprus</option>
-									<option value="CD - Democratic Republic of the Congo">Democratic Republic of the Congo</option>
-									<option value="DK - Denmark">Denmark</option>
-									<option value="DJ - Djibouti">Djibouti</option>
-									<option value="DO - Dominican Republic">Dominican Republic</option>
-									<option value="EC - Ecuador">Ecuador</option>
-									<option value="EG - Egypt">Egypt</option>
-									<option value="SV - El Salvador">El Salvador</option>
-									<option value="GQ - Equatorial Guinea">Equatorial Guinea</option>
-									<option value="ER - Eritrea">Eritrea</option>
-									<option value="EE - Estonia">Estonia</option>
-									<option value="FO - Faroe Islands">Faroe Islands</option>
-									<option value="FJ - Fiji">Fiji</option>
-									<option value="FI - Finland">Finland</option>
-									<option value="FR - France">France</option>
-									<option value="GF - French Guiana">French Guiana</option>
-									<option value="GA - Gabon">Gabon</option>
-									<option value="GM - Gambia">Gambia</option>
-									<option value="GE - Georgia">Georgia</option>
-									<option value="DE - Germany">Germany</option>
-									<option value="GH - Ghana">Ghana</option>
-									<option value="GI - Gibraltar">Gibraltar</option>
-									<option value="GR - Greece">Greece</option>
-									<option value="GL - Greenland">Greenland</option>
-									<option value="GP - Guadeloupe">Guadeloupe</option>
-									<option value="GT - Guatemala">Guatemala</option>
-									<option value="GN - Guinea">Guinea</option>
-									<option value="GW - Guinea-Bissau">Guinea-Bissau</option>
-									<option value="GY - Guyana">Guyana</option>
-									<option value="HT - Haiti">Haiti</option>
-									<option value="HN - Honduras">Honduras</option>
-									<option value="HK - Hong Kong">Hong Kong</option>
-									<option value="IS - Iceland">Iceland</option>
-									<option value="IN - India">India</option>
-									<option value="ID - Indonesia">Indonesia</option>
-									<option value="IR - Iran">Iran</option>
-									<option value="IQ - Iraq">Iraq</option>
-									<option value="IE - Ireland">Ireland</option>
-									<option value="IM - Isle of Man">Isle of Man</option>
-									<option value="IL - Israel">Israel</option>
-									<option value="IT - Italy">Italy</option>
-									<option value="JM - Jamaica">Jamaica</option>
-									<option value="JP - Japan">Japan</option>
-									<option value="JO - Jordan">Jordan</option>
-									<option value="KE - Kenya">Kenya</option>
-									<option value="KW - Kuwait">Kuwait</option>
-									<option value="LV - Latvia">Latvia</option>
-									<option value="LB - Lebanon">Lebanon</option>
-									<option value="LR - Liberia">Liberia</option>
-									<option value="LY - Libya">Libya</option>
-									<option value="LT - Lithuania">Lithuania</option>
-									<option value="MO - Macao">Macao</option>
-									<option value="MG - Madagascar">Madagascar</option>
-									<option value="MY - Malaysia">Malaysia</option>
-									<option value="MV - Maldives">Maldives</option>
-									<option value="MT - Malta">Malta</option>
-									<option value="MQ - Martinique">Martinique</option>
-									<option value="MR - Mauritania">Mauritania</option>
-									<option value="MU - Mauritius">Mauritius</option>
-									<option value="MX - Mexico">Mexico</option>
-									<option value="MA - Morocco">Morocco</option>
-									<option value="MZ - Mozambique">Mozambique</option>
-									<option value="NA - Namibia">Namibia</option>
-									<option value="NL - Netherlands">Netherlands</option>
-									<option value="NC - New Caledonia">New Caledonia</option>
-									<option value="NZ - New Zealand">New Zealand</option>
-									<option value="NI - Nicaragua">Nicaragua</option>
-									<option value="NG - Nigeria">Nigeria</option>
-									<option value="KP - North Korea">North Korea</option>
-									<option value="NO - Norway">Norway</option>
-									<option value="OM - Oman">Oman</option>
-									<option value="PK - Pakistan">Pakistan</option>
-									<option value="PA - Panama">Panama</option>
-									<option value="PG - Papua New Guinea">Papua New Guinea</option>
-									<option value="PY - Paraguay">Paraguay</option>
-									<option value="PE - Peru">Peru</option>
-									<option value="PH - Philippines">Philippines</option>
-									<option value="PL - Poland">Poland</option>
-									<option value="PT - Portugal">Portugal</option>
-									<option value="PR - Puerto Rico">Puerto Rico</option>
-									<option value="QA - Qatar">Qatar</option>
-									<option value="CG - Republic of the Congo">Republic of the Congo</option>
-									<option value="RO - Romania">Romania</option>
-									<option value="RU - Russia">Russia</option>
-									<option value="WS - Samoa">Samoa</option>
-									<option value="ST - Sao Tome and Principe">Sao Tome and Principe</option>
-									<option value="SA - Saudi Arabia">Saudi Arabia</option>
-									<option value="SN - Senegal">Senegal</option>
-									<option value="SC - Seychelles">Seychelles</option>
-									<option value="SL - Sierra Leone">Sierra Leone</option>
-									<option value="SG - Singapore">Singapore</option>
-									<option value="SB - Solomon Islands">Solomon Islands</option>
-									<option value="SO - Somalia">Somalia</option>
-									<option value="ZA - South Africa">South Africa</option>
-									<option value="GS - South Georgia and the South Sandwich Islands">South Georgia and the South Sandwich Islands</option>
-									<option value="KR - South Korea">South Korea</option>
-									<option value="ES - Spain">Spain</option>
-									<option value="LK - Sri Lanka">Sri Lanka</option>
-									<option value="SD - Sudan">Sudan</option>
-									<option value="SR - Suriname">Suriname</option>
-									<option value="SE - Sweden">Sweden</option>
-									<option value="SY - Syria">Syria</option>
-									<option value="TW - Taiwan">Taiwan</option>
-									<option value="TZ - Tanzania">Tanzania</option>
-									<option value="TH - Thailand">Thailand</option>
-									<option value="TG - Togo">Togo</option>
-									<option value="TN - Tunisia">Tunisia</option>
-									<option value="TR - Turkey">Turkey</option>
-									<option value="TC - Turks and Caicos Islands">Turks and Caicos Islands</option>
-									<option value="TV - Tuvalu">Tuvalu</option>
-									<option value="UA - Ukraine">Ukraine</option>
-									<option value="AE - United Arab Emirates">United Arab Emirates</option>
-									<option value="GB - United Kingdom">United Kingdom</option>
-									<option value="US - United States">United States</option>
-									<option value="UY - Uruguay">Uruguay</option>
-									<option value="VI - U.S. Virgin Islands">U.S. Virgin Islands</option>
-									<option value="VU - Vanuatu">Vanuatu</option>
-									<option value="VE - Venezuela">Venezuela</option>
-									<option value="VN - Vietnam">Vietnam</option>
-									<option value="YE - Yemen">Yemen</option>
-									</select>
+										<?php
+										echo $bid_data['origin']['country'];
+										?>
 									</td>
 									<td width="25%"><b>Country:</b> <?php echo $rfq['shipping_info']['destination']['country']; ?></td>
 									<td width="25%">
-									<select id="destination_country" class="form-control" name='destination[country]' onchange="getPorts('destination_port', this.value)">
-									<option value="AL - Albania">Albania</option>
-									<option value="DZ - Algeria">Algeria</option>
-									<option value="AO - Angola">Angola</option>
-									<option value="AR - Argentina">Argentina</option>
-									<option value="AW - Aruba">Aruba</option>
-									<option value="AU - Australia">Australia</option>
-									<option value="BS - Bahamas">Bahamas</option>
-									<option value="BH - Bahrain">Bahrain</option>
-									<option value="BD - Bangladesh">Bangladesh</option>
-									<option value="BE - Belgium">Belgium</option>
-									<option value="BZ - Belize">Belize</option>
-									<option value="BJ - Benin">Benin</option>
-									<option value="BR - Brazil">Brazil</option>
-									<option value="VG - British Virgin Islands">British Virgin Islands</option>
-									<option value="BN - Brunei">Brunei</option>
-									<option value="BG - Bulgaria">Bulgaria</option>
-									<option value="KH - Cambodia">Cambodia</option>
-									<option value="CM - Cameroon">Cameroon</option>
-									<option value="CA - Canada">Canada</option>
-									<option value="CV - Cape Verde">Cape Verde</option>
-									<option value="CL - Chile">Chile</option>
-									<option value="CN - China">China</option>
-									<option value="CO - Colombia">Colombia</option>
-									<option value="KM - Comoros">Comoros</option>
-									<option value="CR - Costa Rica">Costa Rica</option>
-									<option value="HR - Croatia">Croatia</option>
-									<option value="CU - Cuba">Cuba</option>
-									<option value="CY - Cyprus">Cyprus</option>
-									<option value="CD - Democratic Republic of the Congo">Democratic Republic of the Congo</option>
-									<option value="DK - Denmark">Denmark</option>
-									<option value="DJ - Djibouti">Djibouti</option>
-									<option value="DO - Dominican Republic">Dominican Republic</option>
-									<option value="EC - Ecuador">Ecuador</option>
-									<option value="EG - Egypt">Egypt</option>
-									<option value="SV - El Salvador">El Salvador</option>
-									<option value="GQ - Equatorial Guinea">Equatorial Guinea</option>
-									<option value="ER - Eritrea">Eritrea</option>
-									<option value="EE - Estonia">Estonia</option>
-									<option value="FO - Faroe Islands">Faroe Islands</option>
-									<option value="FJ - Fiji">Fiji</option>
-									<option value="FI - Finland">Finland</option>
-									<option value="FR - France">France</option>
-									<option value="GF - French Guiana">French Guiana</option>
-									<option value="GA - Gabon">Gabon</option>
-									<option value="GM - Gambia">Gambia</option>
-									<option value="GE - Georgia">Georgia</option>
-									<option value="DE - Germany">Germany</option>
-									<option value="GH - Ghana">Ghana</option>
-									<option value="GI - Gibraltar">Gibraltar</option>
-									<option value="GR - Greece">Greece</option>
-									<option value="GL - Greenland">Greenland</option>
-									<option value="GP - Guadeloupe">Guadeloupe</option>
-									<option value="GT - Guatemala">Guatemala</option>
-									<option value="GN - Guinea">Guinea</option>
-									<option value="GW - Guinea-Bissau">Guinea-Bissau</option>
-									<option value="GY - Guyana">Guyana</option>
-									<option value="HT - Haiti">Haiti</option>
-									<option value="HN - Honduras">Honduras</option>
-									<option value="HK - Hong Kong">Hong Kong</option>
-									<option value="IS - Iceland">Iceland</option>
-									<option value="IN - India">India</option>
-									<option value="ID - Indonesia">Indonesia</option>
-									<option value="IR - Iran">Iran</option>
-									<option value="IQ - Iraq">Iraq</option>
-									<option value="IE - Ireland">Ireland</option>
-									<option value="IM - Isle of Man">Isle of Man</option>
-									<option value="IL - Israel">Israel</option>
-									<option value="IT - Italy">Italy</option>
-									<option value="JM - Jamaica">Jamaica</option>
-									<option value="JP - Japan">Japan</option>
-									<option value="JO - Jordan">Jordan</option>
-									<option value="KE - Kenya">Kenya</option>
-									<option value="KW - Kuwait">Kuwait</option>
-									<option value="LV - Latvia">Latvia</option>
-									<option value="LB - Lebanon">Lebanon</option>
-									<option value="LR - Liberia">Liberia</option>
-									<option value="LY - Libya">Libya</option>
-									<option value="LT - Lithuania">Lithuania</option>
-									<option value="MO - Macao">Macao</option>
-									<option value="MG - Madagascar">Madagascar</option>
-									<option value="MY - Malaysia">Malaysia</option>
-									<option value="MV - Maldives">Maldives</option>
-									<option value="MT - Malta">Malta</option>
-									<option value="MQ - Martinique">Martinique</option>
-									<option value="MR - Mauritania">Mauritania</option>
-									<option value="MU - Mauritius">Mauritius</option>
-									<option value="MX - Mexico">Mexico</option>
-									<option value="MA - Morocco">Morocco</option>
-									<option value="MZ - Mozambique">Mozambique</option>
-									<option value="NA - Namibia">Namibia</option>
-									<option value="NL - Netherlands">Netherlands</option>
-									<option value="NC - New Caledonia">New Caledonia</option>
-									<option value="NZ - New Zealand">New Zealand</option>
-									<option value="NI - Nicaragua">Nicaragua</option>
-									<option value="NG - Nigeria">Nigeria</option>
-									<option value="KP - North Korea">North Korea</option>
-									<option value="NO - Norway">Norway</option>
-									<option value="OM - Oman">Oman</option>
-									<option value="PK - Pakistan">Pakistan</option>
-									<option value="PA - Panama">Panama</option>
-									<option value="PG - Papua New Guinea">Papua New Guinea</option>
-									<option value="PY - Paraguay">Paraguay</option>
-									<option value="PE - Peru">Peru</option>
-									<option value="PH - Philippines">Philippines</option>
-									<option value="PL - Poland">Poland</option>
-									<option value="PT - Portugal">Portugal</option>
-									<option value="PR - Puerto Rico">Puerto Rico</option>
-									<option value="QA - Qatar">Qatar</option>
-									<option value="CG - Republic of the Congo">Republic of the Congo</option>
-									<option value="RO - Romania">Romania</option>
-									<option value="RU - Russia">Russia</option>
-									<option value="WS - Samoa">Samoa</option>
-									<option value="ST - Sao Tome and Principe">Sao Tome and Principe</option>
-									<option value="SA - Saudi Arabia">Saudi Arabia</option>
-									<option value="SN - Senegal">Senegal</option>
-									<option value="SC - Seychelles">Seychelles</option>
-									<option value="SL - Sierra Leone">Sierra Leone</option>
-									<option value="SG - Singapore">Singapore</option>
-									<option value="SB - Solomon Islands">Solomon Islands</option>
-									<option value="SO - Somalia">Somalia</option>
-									<option value="ZA - South Africa">South Africa</option>
-									<option value="GS - South Georgia and the South Sandwich Islands">South Georgia and the South Sandwich Islands</option>
-									<option value="KR - South Korea">South Korea</option>
-									<option value="ES - Spain">Spain</option>
-									<option value="LK - Sri Lanka">Sri Lanka</option>
-									<option value="SD - Sudan">Sudan</option>
-									<option value="SR - Suriname">Suriname</option>
-									<option value="SE - Sweden">Sweden</option>
-									<option value="SY - Syria">Syria</option>
-									<option value="TW - Taiwan">Taiwan</option>
-									<option value="TZ - Tanzania">Tanzania</option>
-									<option value="TH - Thailand">Thailand</option>
-									<option value="TG - Togo">Togo</option>
-									<option value="TN - Tunisia">Tunisia</option>
-									<option value="TR - Turkey">Turkey</option>
-									<option value="TC - Turks and Caicos Islands">Turks and Caicos Islands</option>
-									<option value="TV - Tuvalu">Tuvalu</option>
-									<option value="UA - Ukraine">Ukraine</option>
-									<option value="AE - United Arab Emirates">United Arab Emirates</option>
-									<option value="GB - United Kingdom">United Kingdom</option>
-									<option value="US - United States">United States</option>
-									<option value="UY - Uruguay">Uruguay</option>
-									<option value="VI - U.S. Virgin Islands">U.S. Virgin Islands</option>
-									<option value="VU - Vanuatu">Vanuatu</option>
-									<option value="VE - Venezuela">Venezuela</option>
-									<option value="VN - Vietnam">Vietnam</option>
-									<option value="YE - Yemen">Yemen</option>
-									</select>
+										<?php
+										echo $bid_data['destination']['country'];
+										?>
 									</td>
 								</tr>
 								<tr>
 									<td width="25%"><b>City:</b> <?php echo $rfq['shipping_info']['origin']['city']; ?></td>
-									<td width="25%"><input type="text" class="form-control" name='origin[city]' placeholder="City" value="<?php echo htmlentitiesX($rfq['shipping_info']['origin']['city']); ?>"></td>
+									<td width="25%">
+										<?php
+										echo $bid_data['origin']['city'];
+										?>
+									</td>
 									<td width="25%"><b>City:</b> <?php echo $rfq['shipping_info']['destination']['city']; ?></td>
-									<td width="25%"> <input type="text" class="form-control" name='destination[city]' placeholder="City" value="<?php echo htmlentitiesX($rfq['shipping_info']['destination']['city']); ?>"></td>
+									<td width="25%">
+										<?php
+										echo $bid_data['destination']['city'];
+										?>
+									</td>
 								</tr>
 								<tr>
 									<td width="25%"><b>Port:</b> <?php echo $rfq['shipping_info']['origin']['port']; ?></td>
 									<td width="25%">
-									<select class="form-control" name='origin[port]' id="origin_port"></select>
+										<?php
+										echo $bid_data['origin']['port'];
+										?>
 									</td>
 									<td width="25%"><b>Port:</b> <?php echo $rfq['shipping_info']['destination']['port']; ?></td>
 									<td width="25%">
-									<select class="form-control" name='destination[port]' id="destination_port"></select>
+										<?php
+										echo $bid_data['destination']['port'];
+										?>
 									</td>
 								</tr>
 								<tr>
 									<td width="25%"><b>Pickup Date (m/d/y):</b> <?php echo $rfq['shipping_info']['origin']['date']; ?></td>
 									<td width="25%">
-									<div style="position:relative">
-									<input value="<?php echo $rfq['shipping_info']['origin']['date']; ?>" type="text" class="form-control" name='origin[date]' id="origin_date" readonly>
-									<span class="glyphicon glyphicon-calendar" style="position:absolute; top:11px; cursor:pointer; right:20px"onclick="pickup.show()"></span>
-									</div>
+									<?php
+										echo $bid_data['origin']['date'];
+										?>
 									</td>
 									<td width="25%"><b>Delivery Date (m/d/y):</b> <?php echo $rfq['shipping_info']['destination']['date']; ?></td>
 									<td width="25%">
-									<div style="position:relative">
-									<input value="<?php echo $rfq['shipping_info']['destination']['date']; ?>" type="text" class="form-control" name='destination[date]' id="destination_date" readonly>
-									<span class="glyphicon glyphicon-calendar" style="position:absolute; top:11px; cursor:pointer; right:20px"onclick="delivery.show()"></span>
-									</div>
+										<?php
+										echo $bid_data['destination']['date'];
+										?>
 									</td>
 								</tr>
 								<!--
@@ -795,320 +891,6 @@ if($rfq['userprofile']['customer_type']){
 							
 						</td>
 					</tr>
-					<tr>
-						<th colspan="2" class="text-center"  style="background:#f0f0f0">
-						Your Bid
-						</th>
-					</tr>
-					<tr>
-						<th>
-						Total Bid Price and Attachments
-						</th>
-						<th>
-						Additional Notes
-						</th>
-					</tr>
-					<tr>
-						<td>
-						<div class="row">
-							<div class="col-md-12" style="padding-top:10px;">
-							<b>Total Bid Price</b>
-							</div>
-							<div class="col-md-6">
-								<select name="total_bid_currency" class="form-control">
-								<option selected="selected" value="USD United States Dollars">
-									USD United States Dollars
-								</option>
-								<option>
-									EUR Euro
-								</option>
-								<option value="CAD Canada Dollars">
-									CAD Canada Dollars
-								</option>
-								<option>
-									GBP United Kingdom Pounds
-								</option>
-								<option>
-									DEM Germany Deutsche Marks
-								</option>
-								<option>
-									FRF France Francs
-								</option>
-								<option>
-									JPY Japan Yen
-								</option>
-								<option>
-									NLG Netherlands Guilders
-								</option>
-								<option>
-									ITL Italy Lira
-								</option>
-								<option>
-									CHF Switzerland Francs
-								</option>
-								<option>
-									DZD Algeria Dinars
-								</option>
-								<option>
-									ARP Argentina Pesos
-								</option>
-								<option>
-									AUD Australia Dollars
-								</option>
-								<option>
-									ATS Austria Schillings
-								</option>
-								<option>
-									BSD Bahamas Dollars
-								</option>
-								<option>
-									BBD Barbados Dollars
-								</option>
-								<option>
-									BEF Belgium Francs
-								</option>
-								<option>
-									BMD Bermuda Dollars
-								</option>
-								<option>
-									BRR Brazil Real
-								</option>
-								<option>
-									BGL Bulgaria Lev
-								</option>
-								<option>
-									CAD Canada Dollars
-								</option>
-								<option>
-									CLP Chile Pesos
-								</option>
-								<option>
-									CNY China Yuan Renmimbi
-								</option>
-								<option>
-									CYP Cyprus Pounds
-								</option>
-								<option>
-									CSK Czech Republic Koruna
-								</option>
-								<option>
-									DKK Denmark Kroner
-								</option>
-								<option>
-									NLG Dutch Guilders
-								</option>
-								<option>
-									XCD Eastern Caribbean Dollars
-								</option>
-								<option>
-									EGP Egypt Pounds
-								</option>
-								<option>
-									EUR Euro
-								</option>
-								<option>
-									FJD Fiji Dollars
-								</option>
-								<option>
-									FIM Finland Markka
-								</option>
-								<option>
-									FRF France Francs
-								</option>
-								<option>
-									DEM Germany Deutsche Marks
-								</option>
-								<option>
-									XAU Gold Ounces
-								</option>
-								<option>
-									GRD Greece Drachmas
-								</option>
-								<option>
-									HKD Hong Kong Dollars
-								</option>
-								<option>
-									HUF Hungary Forint
-								</option>
-								<option>
-									ISK Iceland Krona
-								</option>
-								<option>
-									INR India Rupees
-								</option>
-								<option>
-									IDR Indonesia Rupiah
-								</option>
-								<option>
-									IEP Ireland Punt
-								</option>
-								<option>
-									ILS Israel New Shekels
-								</option>
-								<option>
-									ITL Italy Lira
-								</option>
-								<option>
-									JMD Jamaica Dollars
-								</option>
-								<option>
-									JPY Japan Yen
-								</option>
-								<option>
-									JOD Jordan Dinar
-								</option>
-								<option>
-									KRW Korea (South) Won
-								</option>
-								<option>
-									LBP Lebanon Pounds
-								</option>
-								<option>
-									LUF Luxembourg Francs
-								</option>
-								<option>
-									MYR Malaysia Ringgit
-								</option>
-								<option>
-									MXP Mexico Pesos
-								</option>
-								<option>
-									NLG Netherlands Guilders
-								</option>
-								<option>
-									NZD New Zealand Dollars
-								</option>
-								<option>
-									NOK Norway Kroner
-								</option>
-								<option>
-									PKR Pakistan Rupees
-								</option>
-								<option>
-									XPD Palladium Ounces
-								</option>
-								<option>
-									PHP Philippines Pesos
-								</option>
-								<option>
-									XPT Platinum Ounces
-								</option>
-								<option>
-									PLZ Poland Zloty
-								</option>
-								<option>
-									PTE Portugal Escudo
-								</option>
-								<option>
-									ROL Romania Leu
-								</option>
-								<option>
-									RUR Russia Rubles
-								</option>
-								<option>
-									SAR Saudi Arabia Riyal
-								</option>
-								<option>
-									XAG Silver Ounces
-								</option>
-								<option>
-									SGD Singapore Dollars
-								</option>
-								<option>
-									SKK Slovakia Koruna
-								</option>
-								<option>
-									ZAR South Africa Rand
-								</option>
-								<option>
-									KRW South Korea Won
-								</option>
-								<option>
-									ESP Spain Pesetas
-								</option>
-								<option>
-									XDR Special Drawing Right (IMF)
-								</option>
-								<option>
-									SDD Sudan Dinar
-								</option>
-								<option>
-									SEK Sweden Krona
-								</option>
-								<option>
-									CHF Switzerland Francs
-								</option>
-								<option>
-									TWD Taiwan Dollars
-								</option>
-								<option>
-									THB Thailand Baht
-								</option>
-								<option>
-									TTD Trinidad and Tobago Dollars
-								</option>
-								<option>
-									TRL Turkey Lira
-								</option>
-								<option>
-									GBP United Kingdom Pounds
-								</option>
-								<option>
-									USD United States Dollars
-								</option>
-								<option>
-									VEB Venezuela Bolivar
-								</option>
-								<option>
-									ZMK Zambia Kwacha
-								</option>
-								<option>
-									EUR Euro
-								</option>
-								<option>
-									XCD Eastern Caribbean Dollars
-								</option>
-								<option>
-									XDR Special Drawing Right (IMF)
-								</option>
-								<option>
-									XAG Silver Ounces
-								</option>
-								<option>
-									XAU Gold Ounces
-								</option>
-								<option>
-									XPD Palladium Ounces
-								</option>
-								<option>
-									XPT Platinum Ounces
-								</option>
-								</select>
-							</div>
-							<div class="col-md-6">
-								<input type="text" name="total_bid" id="total_bid" class="form-control" placeholder="e.g. 1000.00" value="0.00" onblur="validDecimal(jQuery(this))" />
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12" style="padding-top:10px;">
-							<b>Attachments</b>&nbsp;&nbsp;<i>(Your company's formal quotation file/s)</i>
-							</div>
-							<div class="col-md-12">
-								<div id="attachments_container" style="padding:10px"><div style="padding-bottom:5px;"><input type="file" name="attachments[]" /></div></div>
-								<a href="javascript:moreAttachments()">Add More Attachments</a>
-							</div>
-						</div>
-						</td>
-						<td>
-							<textarea name="additional_notes" class="form-control" placeholder="Additional Notes" style="height:100%"></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td colspan=2 class="text-center">
-							<input type="submit" class="btn btn-default" style="margin:20px;" value="Submit Your Bid" onclick="return confirm('Are you sure you want to submit this bid?');" >
-							<input type="button" class="btn btn-default" style="margin:20px;" value="Cancel" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfq['id']; ?>'">
-						</td>
-					</tr>
 					<?php
 				}
 				?>
@@ -1120,5 +902,4 @@ if($rfq['userprofile']['customer_type']){
 			?>
 		</div>
 	</div>
-</form>
 </div>

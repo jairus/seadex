@@ -100,7 +100,7 @@ if($rfq['userprofile']['customer_type']){
 
 ?>
 <div class="container-fluid" id="container" style="max-width:90%">
-	<iframe name="ninjaframe" style="display:none" ></iframe>
+	<iframe name="ninjaframe" style="display:none ; width:500px; height:200px;"  ></iframe>
 	<form action="<?php echo site_url("lp/submit_bid"); ?>" method="post" enctype="multipart/form-data" target="ninjaframe">
 	<div class="row">
 		<div class="col-md-12">

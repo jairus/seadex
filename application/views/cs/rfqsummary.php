@@ -51,57 +51,356 @@ if($rfq['userprofile']['contact_number']){
 			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
 		</div>
 		<div class="col-md-6 text-right">
-			<input type="button" class="btn btn-default" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
+			<h2><a href="<?php echo site_url("cs") ?>">Back to Dashboard</a></h2>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12 text-left">
 			<table class="table table-bordered">
 				<tr>
-					<th width="50%">Customer Type</th>
-					<td width="50%"><?php echo ucfirst($rfq['customer_type']); ?></td>
+					<th colspan=2 class="text-center" style="background:#f0f0f0">
+					Bids
+					</th>
 				</tr>
 				<tr>
-					<th width="50%">E-mail</th>
-					<td width="50%"><?php echo $rfq['userprofile']['email']; ?></td>
+					<td colspan=2>
+						<?php
+						$t = count($bids);
+						if($t){
+							?>
+							<table class="table table-bordered">
+								<tr>
+									<th width="30%">Company</th>
+									<th width="30%">Total Bid</th>
+									<th width="30%">
+									<div class="row">
+										<div class="col-sm-3">Total Bid in</div>
+										<div class="col-sm-9">
+											<select name="total_bid_currency" class="form-control" disabled>
+												<option selected="selected" value="USD United States Dollars">
+													USD United States Dollars
+												</option>
+												<option>
+													EUR Euro
+												</option>
+												<option value="CAD Canada Dollars">
+													CAD Canada Dollars
+												</option>
+												<option>
+													GBP United Kingdom Pounds
+												</option>
+												<option>
+													DEM Germany Deutsche Marks
+												</option>
+												<option>
+													FRF France Francs
+												</option>
+												<option>
+													JPY Japan Yen
+												</option>
+												<option>
+													NLG Netherlands Guilders
+												</option>
+												<option>
+													ITL Italy Lira
+												</option>
+												<option>
+													CHF Switzerland Francs
+												</option>
+												<option>
+													DZD Algeria Dinars
+												</option>
+												<option>
+													ARP Argentina Pesos
+												</option>
+												<option>
+													AUD Australia Dollars
+												</option>
+												<option>
+													ATS Austria Schillings
+												</option>
+												<option>
+													BSD Bahamas Dollars
+												</option>
+												<option>
+													BBD Barbados Dollars
+												</option>
+												<option>
+													BEF Belgium Francs
+												</option>
+												<option>
+													BMD Bermuda Dollars
+												</option>
+												<option>
+													BRR Brazil Real
+												</option>
+												<option>
+													BGL Bulgaria Lev
+												</option>
+												<option>
+													CAD Canada Dollars
+												</option>
+												<option>
+													CLP Chile Pesos
+												</option>
+												<option>
+													CNY China Yuan Renmimbi
+												</option>
+												<option>
+													CYP Cyprus Pounds
+												</option>
+												<option>
+													CSK Czech Republic Koruna
+												</option>
+												<option>
+													DKK Denmark Kroner
+												</option>
+												<option>
+													NLG Dutch Guilders
+												</option>
+												<option>
+													XCD Eastern Caribbean Dollars
+												</option>
+												<option>
+													EGP Egypt Pounds
+												</option>
+												<option>
+													EUR Euro
+												</option>
+												<option>
+													FJD Fiji Dollars
+												</option>
+												<option>
+													FIM Finland Markka
+												</option>
+												<option>
+													FRF France Francs
+												</option>
+												<option>
+													DEM Germany Deutsche Marks
+												</option>
+												<option>
+													XAU Gold Ounces
+												</option>
+												<option>
+													GRD Greece Drachmas
+												</option>
+												<option>
+													HKD Hong Kong Dollars
+												</option>
+												<option>
+													HUF Hungary Forint
+												</option>
+												<option>
+													ISK Iceland Krona
+												</option>
+												<option>
+													INR India Rupees
+												</option>
+												<option>
+													IDR Indonesia Rupiah
+												</option>
+												<option>
+													IEP Ireland Punt
+												</option>
+												<option>
+													ILS Israel New Shekels
+												</option>
+												<option>
+													ITL Italy Lira
+												</option>
+												<option>
+													JMD Jamaica Dollars
+												</option>
+												<option>
+													JPY Japan Yen
+												</option>
+												<option>
+													JOD Jordan Dinar
+												</option>
+												<option>
+													KRW Korea (South) Won
+												</option>
+												<option>
+													LBP Lebanon Pounds
+												</option>
+												<option>
+													LUF Luxembourg Francs
+												</option>
+												<option>
+													MYR Malaysia Ringgit
+												</option>
+												<option>
+													MXP Mexico Pesos
+												</option>
+												<option>
+													NLG Netherlands Guilders
+												</option>
+												<option>
+													NZD New Zealand Dollars
+												</option>
+												<option>
+													NOK Norway Kroner
+												</option>
+												<option>
+													PKR Pakistan Rupees
+												</option>
+												<option>
+													XPD Palladium Ounces
+												</option>
+												<option>
+													PHP Philippines Pesos
+												</option>
+												<option>
+													XPT Platinum Ounces
+												</option>
+												<option>
+													PLZ Poland Zloty
+												</option>
+												<option>
+													PTE Portugal Escudo
+												</option>
+												<option>
+													ROL Romania Leu
+												</option>
+												<option>
+													RUR Russia Rubles
+												</option>
+												<option>
+													SAR Saudi Arabia Riyal
+												</option>
+												<option>
+													XAG Silver Ounces
+												</option>
+												<option>
+													SGD Singapore Dollars
+												</option>
+												<option>
+													SKK Slovakia Koruna
+												</option>
+												<option>
+													ZAR South Africa Rand
+												</option>
+												<option>
+													KRW South Korea Won
+												</option>
+												<option>
+													ESP Spain Pesetas
+												</option>
+												<option>
+													XDR Special Drawing Right (IMF)
+												</option>
+												<option>
+													SDD Sudan Dinar
+												</option>
+												<option>
+													SEK Sweden Krona
+												</option>
+												<option>
+													CHF Switzerland Francs
+												</option>
+												<option>
+													TWD Taiwan Dollars
+												</option>
+												<option>
+													THB Thailand Baht
+												</option>
+												<option>
+													TTD Trinidad and Tobago Dollars
+												</option>
+												<option>
+													TRL Turkey Lira
+												</option>
+												<option>
+													GBP United Kingdom Pounds
+												</option>
+												<option>
+													USD United States Dollars
+												</option>
+												<option>
+													VEB Venezuela Bolivar
+												</option>
+												<option>
+													ZMK Zambia Kwacha
+												</option>
+												<option>
+													EUR Euro
+												</option>
+												<option>
+													XCD Eastern Caribbean Dollars
+												</option>
+												<option>
+													XDR Special Drawing Right (IMF)
+												</option>
+												<option>
+													XAG Silver Ounces
+												</option>
+												<option>
+													XAU Gold Ounces
+												</option>
+												<option>
+													XPD Palladium Ounces
+												</option>
+												<option>
+													XPT Platinum Ounces
+												</option>
+											</select>
+										</div>
+									</div>
+									</th>
+									<th width="10%"></th>
+								</tr>
+								<?php
+								
+								for($i=0; $i<$t; $i++){
+									?>
+									<tr>
+										<td>
+											<?php 
+											//echo "<a href='".site_url("cs")."/rfq/".$rfq['id']."/bid?bid_id=".$bids[$i]['id']."'>".$bids[$i]['company_name']."</a>" ; 
+											echo $bids[$i]['company_name'];
+											if($rfq['bid_id']==$bids[$i]['id']){
+												echo "&nbsp;&nbsp;<a style='color:green'>( Accepted Bid )</a>";
+											}
+											?>
+										</td>
+										<td>
+											<?php 
+											$currency = explode(" ", $bids[$i]['total_bid_currency'], 2);
+											$currency_short = $currency[0];
+											$currency_long = $currency[1];
+											echo $currency_short." ";
+											echo number_format($bids[$i]['total_bid'], 2, ".", ","); 
+											echo " (".$currency_long.")";
+											?>
+										</td>
+										<td>
+											<?php
+											$currency_short = "USD";
+											$currency_long = "United States Dollars";
+											$bid_equiv = $bids[$i]['total_bid_usd'];
+											echo $currency_short." ";
+											echo number_format($bid_equiv, 2, ".", ","); 
+											echo " (".$currency_long.")";
+											?>
+										</td>
+										<td>
+											<?php echo "<a href='".site_url("cs")."/rfq/".$rfq['id']."/bid?bid_id=".$bids[$i]['id']."'>View Bid</a>" ; ?>
+										</td>
+									</tr>
+									<?php
+								}
+								?>
+							</table>
+							<?php
+						}
+						else{
+							echo "<div class='text-center' style='padding:30px;'>There are no bids in this listing.</div>";
+						}
+						?>
+					</td>
 				</tr>
 				<?php
-				if($rfq['userprofile']['company_name']){
-					?>
-					<tr>
-						<th width="50%">Company Name</th>
-						<td width="50%"><?php echo $rfq['userprofile']['company_name']; ?></td>
-					</tr>
-					<?php
-				}
-				?>
-				<tr>
-					<th width="50%">First Name</th>
-					<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
-				</tr>
-				<tr>
-					<th width="50%">Last Name</th>
-					<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
-				</tr>
-				<tr>
-					<th width="50%">Country</th>
-					<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
-				</tr>
-				<tr>
-					<th width="50%">Contact Number</th>
-					<td width="50%"><?php echo $rfq['userprofile']['contactnumber']; ?></td>
-				</tr>
-				<?php
-				if(isset($rfq['shipping_info']['type_of_company_to_quote'])){
-					?>
-					<tr>
-						<th width="50%">RFQ for</th>
-						<td width="50%">
-						<?php echo $rfq['shipping_info']['type_of_company_to_quote']; ?>
-						</td>
-					</tr>
-					<?php
-				}
 				if(isset($rfq['shipping_info'])){
 					?>
 					<tr>
@@ -412,12 +711,13 @@ if($rfq['userprofile']['contact_number']){
 					</tr>
 					<tr>
 						<td colspan=2 class="text-center">
-							<input type="button" class="btn btn-default" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
+							
 						</td>
 					</tr>
 					<?php
 				}
 				?>
+				
 			</table>
 			<?php
 			//echo "<pre>";

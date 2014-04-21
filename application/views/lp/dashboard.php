@@ -265,8 +265,9 @@
 				  <th class="start">#</th>
 				  <th width="22.5%">Origin</th>
 				  <th width="22.5%">Destination</th>
-				  <th width="20%">Pickup Date</th>
-				  <th width="20%">Delivery Date</th>
+				  <th width="13.3%">Pickup Date</th>
+				  <th width="13.3%">Delivery Date</th>
+				  <th width="13.3%">Date Added</th>
 				  <th class="end" width="13%"></th>
 				</tr>
 			  </thead>
@@ -274,6 +275,9 @@
 				<?php
 				$t = count($rfqs);
 				for($i=0; $i<$t; $i++){
+					if(!trim($rfqs[$i]['origin_port'])){
+						//continue;
+					}
 					?>
 					<tr>
 					  <td>
@@ -308,6 +312,11 @@
 						<?php
 						  echo date("M d, Y", strtotime($rfqs[$i]['destination_date']));
 						?>
+					  </td>
+					  <td>
+					  <?php
+						  echo date("M d, Y", strtotime($rfqs[$i]['dateadded']));
+					  ?>
 					  </td>
 					  <td>
 						<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']; ?>'" value="More" />

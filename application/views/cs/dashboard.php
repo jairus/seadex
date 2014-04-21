@@ -22,6 +22,12 @@
 		-moz-border-radius: 5px 5px 0px 0px !important; 
 		-webkit-border-radius: 5px 5px 0px 0px !important; 
 	}
+	.menu{
+		/*cursor:pointer;*/
+	}
+	.menu a{
+		/*color: #2A5C80;*/
+	}
 	</style>
 	<script>
 		function getPorts(idx, country_code, port){
@@ -54,13 +60,17 @@
 			  <tbody>
 				<tr>
 				  <td>
+				  <!--
 				  <div class="menu">Freight Request – for FREE</div>
 				  <div class="menu">Offer Listings</div>
-				  <div class="menu">Active Listings </div>
+				  -->
+				  <div class="menu"><a href="<?php echo site_url("cs"); ?>">Active Listings</a></div>
+				  <!--
 				  <div class="menu">Completed Listings </div>
 				  <div class="menu">Expired Listings </div>
 				  <div class="menu">Change Password</div>
 				  <div class="menu">Delete profile</div>
+				  -->
 				  </td>
 				</tr>
 			  </tbody>
@@ -73,8 +83,9 @@
 				  <th class="start">#</th>
 				  <th width="22.5%">Origin</th>
 				  <th width="22.5%">Destination</th>
-				  <th width="20%">Pickup Date</th>
-				  <th width="20%">Delivery Date</th>
+				  <th width="13.3%">Bids</th>
+				  <th width="13.3%">Lowest Bid (USD)</th>
+				  <th width="13.3%">Date Added</th>
 				  <th class="end" width="13%"></th>
 				</tr>
 			  </thead>
@@ -109,17 +120,22 @@
 					  </td>
 					  <td>
 						<?php
-						  echo date("M d, Y", strtotime($rfqs[$i]['origin_date']));
+						  echo count($rfqs[$i]['bids']);
 						?>
 					  </td>
 					  <td>
 						<?php
-						  echo date("M d, Y", strtotime($rfqs[$i]['destination_date']));
+						  echo "USD ".number_format($rfqs[$i]['bids'][0]['total_bid_usd'],2,".", ",");
+						?>
+					  </td>
+					   <td>
+						<?php
+						  echo date("M d, Y", strtotime($rfqs[$i]['dateadded']));
 						?>
 					  </td>
 					  <td>
-						<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']; ?>'" value="More" />
-						<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']."/bid"; ?>'" value="Bid" />
+						<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("cs/rfq")."/".$rfqs[$i]['id']."/bids";; ?>'" value="Bids" />
+						<!--<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("cd/rfq")."/".$rfqs[$i]['id']."/delete"; ?>'" value="Del" />-->
 						<!--<input type="button" class="btn btn-sm" value="Bid" />-->
 					  </td>
 					</tr>

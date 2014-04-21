@@ -45,12 +45,178 @@ class cs extends CI_Controller {
 		
 	}
 	
+	public function rfq($id, $action){
+		$sql = "select * from `rfq` where `id`='".mysql_real_escape_string($id)."' and `customer_id`='".$_SESSION['customer']['id']."'";
+		$q = $this->db->query($sql);
+		$rfq = $q->result_array();
+		if($rfq[0]['id']){
+			if($rfq[0]['customer_id']){
+				$sql = "select * from `customers` where `id`='".mysql_real_escape_string($rfq[0]['customer_id'])."'";
+				$q = $this->db->query($sql);
+				$customer = $q->result_array();
+				
+			}
+			$rfqdata = unserialize(base64_decode($rfq[0]['data']));
+			$rfqdata['id'] = $rfq[0]['id'];
+			$rfqdata['bid_id'] = $rfq[0]['bid_id'];
+			$rfqdata['logistic_provider_id'] = $rfq[0]['logistic_provider_id'];
+			$rfqdata['dateaccepted'] = $rfq[0]['dateaccepted'];
+			if($customer[0]['id']){
+				$rfqdata['userprofile'] = $customer[0];
+			}
+			
+			
+			if($action=="bids"){
+				$sql = "select `bids`.`id`, `company_name`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` 
+				left join `logistic_providers`
+				on (`bids`.`logistic_provider_id` = `logistic_providers`.`id`)
+				where `bids`.`rfq_id` = '".$rfq[0]['id']."' order by `bids`.`total_bid_usd` asc";
+				$q = $this->db->query($sql);
+				$bids = $q->result_array();
+				$this->load->view('sitelayout/header.php');
+				$this->load->view('sitelayout/nav.php');
+				$data['rfq'] = $rfqdata;
+				$data['bids'] = $bids;
+				$this->load->view('cs/rfqsummary.php', $data);
+				$this->load->view('sitelayout/footer.php');
+			}
+			else if($action=="bid"){
+				$sql = "select `bids`.`data`, `bids`.`id`, `company_name`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` 
+				left join `logistic_providers`
+				on (`bids`.`logistic_provider_id` = `logistic_providers`.`id`)
+				where 
+				`bids`.`rfq_id` = '".$rfq[0]['id']."' 
+				and `bids`.`id`='".$_GET['bid_id']."'
+				order by `bids`.`total_bid_usd` asc";
+				$q = $this->db->query($sql);
+				$bids = $q->result_array();
+				$this->load->view('sitelayout/header.php');
+				$this->load->view('sitelayout/nav.php');
+				$data['rfq'] = $rfqdata;
+				$data['bids'] = $bids;
+				$this->load->view('cs/rfqsummary_bid.php', $data);
+				$this->load->view('sitelayout/footer.php');
+			}
+			else if($action=="acceptbid" && $rfqdata['bid_id']<1){
+				$sql = "select `bids`.`id`, `bids`.`logistic_provider_id` from `bids` 
+				where 
+				`bids`.`rfq_id` = '".$rfq[0]['id']."' 
+				and `bids`.`id`='".$_GET['bid_id']."'
+				order by `bids`.`total_bid_usd` asc";
+				
+				$q = $this->db->query($sql);
+				$bids = $q->result_array();
+				if(isset($bids[0]['id'])){
+					$sql = "update `rfq` set
+					`bid_id` = '".$bids[0]['id']."',
+					`logistic_provider_id` = '".$bids[0]['logistic_provider_id']."',
+					`dateaccepted` = NOW()
+					where
+					`id`='".$rfq[0]['id']."'
+					and `bid_id` < 1
+					;
+					";
+					$q = $this->db->query($sql);
+					$subject = "Bid Accepted";
+					$message = strip_tags(trim($_POST['message']));
+					$message .= "\n\n--\n\n";
+					$bidref = site_url("lp")."/rfq/".$rfq[0]['id']."/bid?bid_id=".$bids[0]['id'];
+					$message .= "Bid Reference URL: <a href='".$bidref."'>".$bidref."</a><br />";
+					
+					//send message
+					$sql = "insert into `messages` set
+						`from` = 'customer_".$customer[0]['id']."',
+						`to` = 'logistic_provider_".$bids[0]['logistic_provider_id']."',
+						`subject` = '".mysql_real_escape_string($subject)."',
+						`message` = '".mysql_real_escape_string($message)."',
+						`dateadded` = NOW()
+					";
+					$q = $this->db->query($sql);
+					
+					
+					//send email to logistic provider
+					$sql = "select * from `logistic_providers` where `id`='".$bids[0]['logistic_provider_id']."'";
+					$q = $this->db->query($sql);
+					$lp = $q->result_array();
+					
+					$emailtos = array();
+					$email = array();
+					$email['name'] = $lp[0]['name']." - ".$lp[0]['company_name'];
+					$email['email'] = $lp[0]['email'];
+					$emailtos[] = $email;
+					
+					$this->sendAcceptBid($emailtos, $message);
+					?>
+					<script>
+					self.location="<?php echo site_url("cs"); ?>/acceptbid_success";
+					</script>
+					<?php
+				}
+				else{
+					?>
+					<script>
+					self.location="<?php echo site_url("cs"); ?>";
+					</script>
+					<?php
+				}
+			}
+		}
+	}
+	
+	private function sendAcceptBid($emailtos, $moremessage=""){
+	
+		$from = "noreply@seadex.com";
+		$fromname = "Seadex";
+
+		$subject = "Your bid has been accepted!";
+		$template = array();
+		$template['data'] = array();
+		$template['data']['name'] = $toname;
+		$email_content = "
+Hello,
+
+Your bid had been accepted with the following message:
+
+".$moremessage."
+
+Regards,
+The SeaDex team";
+		$template['data']['content'] = $email_content;
+		$template['data']['content'] = nl2br($template['data']['content']);
+		$template['slug'] = "seadex"; 
+		
+		send_email($from, $fromname, $emailtos, $subject, $message, $template);
+
+	}
+
+	
+	public function acceptbid_success(){
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('sitelayout/nav.php');
+		$content = $this->load->view('cs/acceptbid_success.php', '', true);
+		$data['content'] = $content;
+		$this->load->view('sitelayout/container_cs.php', $data);
+		$this->load->view('sitelayout/footer.php');
+	}
+	
 	
 	public function rfqs(){
 		$this->dashboard();
 	}
 	
 	public function dashboard(){
+		$sql = "select * from `rfq` where `customer_id`='".$_SESSION['customer']['id']."' order by id desc";
+		$q = $this->db->query($sql);
+		$rfqs = $q->result_array();
+		
+		$t = count($rfqs);
+		for($i=0; $i<$t; $i++){
+			$sql = "select `id`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` where `rfq_id` = '".$rfqs[$i]['id']."' order by `total_bid_usd` asc";
+			$q = $this->db->query($sql);
+			$bids = $q->result_array();
+			$rfqs[$i]['bids'] = $bids;
+		}
+		
 		$this->load->view('sitelayout/header.php');
 		$this->load->view('sitelayout/nav.php');
 		$data['rfqs'] = $rfqs;
@@ -200,6 +366,15 @@ class cs extends CI_Controller {
 			$this->load->view('sitelayout/container_cs.php', $data);
 			$this->load->view('sitelayout/footer.php');
 		}
+	}
+	
+	public function thankyou(){
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('sitelayout/nav.php');
+		$content = $this->load->view('cs/register_thankyou.php', '', true);
+		$data['content'] = $content;
+		$this->load->view('sitelayout/container_cs.php', $data);
+		$this->load->view('sitelayout/footer.php');
 	}
 	
 	public function sendWelcome($emailtos){

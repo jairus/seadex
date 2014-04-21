@@ -277,6 +277,7 @@ class rfq extends CI_Controller {
 				`destination_city` = '".mysql_real_escape_string($rfq_shipping_info['destination']['city'])."',
 				`destination_port` = '".mysql_real_escape_string($rfq_shipping_info['destination']['port'])."',
 				`destination_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['date'])."',
+				`customer_id` = '".mysql_real_escape_string($customer[0]['id'])."',
 				`dateadded` = NOW()
 				";
 				$q = $this->db->query($sql);
@@ -321,6 +322,7 @@ class rfq extends CI_Controller {
 				`destination_city` = '".mysql_real_escape_string($rfq_shipping_info['destination']['city'])."',
 				`destination_port` = '".mysql_real_escape_string($rfq_shipping_info['destination']['port'])."',
 				`destination_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['date'])."',
+				`customer_id` = '".mysql_real_escape_string($customer[0]['id'])."',
 				`dateadded` = NOW()
 				";
 				$q = $this->db->query($sql);
@@ -364,6 +366,7 @@ class rfq extends CI_Controller {
 				`destination_city` = '".mysql_real_escape_string($rfq_shipping_info['destination']['city'])."',
 				`destination_port` = '".mysql_real_escape_string($rfq_shipping_info['destination']['port'])."',
 				`destination_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['date'])."',
+				`customer_id` = '".mysql_real_escape_string($customer['id'])."',
 				`dateadded` = NOW()
 				";
 				$q = $this->db->query($sql);

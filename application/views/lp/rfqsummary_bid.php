@@ -118,6 +118,16 @@ if($rfq['userprofile']['customer_type']){
 					<th width="50%">E-mail</th>
 					<td width="50%"><?php echo $rfq['userprofile']['email']; ?></td>
 				</tr>
+				<?php
+				if($rfq['userprofile']['company_name']){
+					?>
+					<tr>
+						<th width="50%">Company Name</th>
+						<td width="50%"><?php echo $rfq['userprofile']['company_name']; ?></td>
+					</tr>
+					<?php
+				}
+				?>
 				<tr>
 					<th width="50%">First Name</th>
 					<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>

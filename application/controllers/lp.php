@@ -58,11 +58,22 @@ class lp extends CI_Controller {
 		if(!$_SESSION['logistic_provider']['id']){
 			echo "<script>self.location='".site_url("lp")."/'</script>";
 		}
+		
 		$sql = "select * from `rfq` where `id`='".mysql_real_escape_string($id)."'";
 		$q = $this->db->query($sql);
 		$rfq = $q->result_array();
+		if($rfq[0]['customer_id']){
+			$sql = "select * from `customers` where `id`='".mysql_real_escape_string($rfq[0]['customer_id'])."'";
+			$q = $this->db->query($sql);
+			$customer = $q->result_array();
+			
+		}
 		$rfqdata = unserialize(base64_decode($rfq[0]['data']));
 		$rfqdata['id'] = $rfq[0]['id'];
+		if($customer[0]['id']){
+			$rfqdata['userprofile'] = $customer[0];
+		}
+		
 		$this->load->view('sitelayout/header.php');
 		$this->load->view('lp/nav.php');
 		$data['rfq'] = $rfqdata;

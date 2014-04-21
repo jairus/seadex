@@ -278,8 +278,45 @@ function swap(&$arr, $a, $b) {
 }
 
 //mandrill
-function send_email($from, $fromname, $emailtos, $subject, $message, $template){
-	$formvars['key'] ='ed3f246e-b16c-4ffb-8a19-e0c36c8877ea';
+/*
+$email = array();
+$email['name'] = $name;
+$email['email'] = $fb_email;
+$emailtos[] = $email;
+
+$from = "db@e27.co";
+$fromname = "E27 DB";
+$to = $user['email'];
+if(!$to){
+	$to = $user['business_email'];
+}
+$subject = "[e27 DB] Welcome to E27 DB (Beta)";
+$template = array();
+$template['data'] = array();
+$template['data']['name'] = $toname;
+$email_content = "Welcome to 27x
+
+	Before you get started, here's a few things you should know:
+	
+	1. <b>This is Real Beta</b> - You're using a version of 27x that's still in it's infancy. You should be prepared to see incorrect data, links that are broken, and general stuff that just don't work. Fret not, we're here to build this for the long term. We value you feedback, so if you see something that needs to be fixed, or if you have a great idea on how something can be done, send us feedback at <a href='mailto:feedback@27x.co'>feedback@27x.co</a>.
+	
+	2. <b>We're small, but still growing</b> - Right now, we just have a handle of entries in the system. We're looking to build that base overtime through your support. Feel free to add in new entries and edit them, as you deem fit.
+	
+	3. We like criticism - As a new site, we're sure you can find lots to criticize. Remember though, constructive criticism will help make the site better.
+	
+	Thank you for using 27x. Let us know what you think!
+	
+	- 27x Team
+	<a href='http://27x.co'>27x.co</a>
+	";
+$template['data']['content'] = $email_content;
+$template['data']['content'] = nl2br($template['data']['content']);
+
+//$template['data'] = json_encode($template['data']);
+$template['slug'] = "startuplist-wrap"; 
+*/
+function send_email($from, $fromname, $emailtos, $subject, $message, $template, $debug=false){
+	//$formvars['key'] ='00Zrp2gMZCMIA7OiTJFsHQ';
 	
 	$formvars['template_name'] =  $template['slug'];
 	$formvars['template_content'] = array();
@@ -311,26 +348,19 @@ function send_email($from, $fromname, $emailtos, $subject, $message, $template){
 	$formvars['message']['track_clicks'] = true;
 	$formvars['message']['auto_text'] = true;
 	$formvars['message']['async'] = true;
-	//exit();
-	/*
-	$sp = new Snoopy();
-	//agent spoof and curl binary setup
-	$sp->agent = "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8 (.NET CLR 3.5.30729)";
-	if(isset($_SERVER['WINDIR']) && strpos($_SERVER['WINDIR'], 'Windows') !== false)
-		$sp->curl_path = dirname(__FILE__)."/magpie_0.72/extlib/curlwin32/curl";
-	else
-		$sp->curl_path = "/usr/bin/curl"; //assumed return curl binary path for linux
-	$sp->temp_dir = dirname(__FILE__)."/tmp";
-	//$URI = "https://mandrillapp.com/api/1.0/messages/send.json";
-	$URI = "http://mandrillapp.com/api/1.0/users/info.json";
-	$sp->submit($URI, $formvars);
-	echo $sp->results;
-	*/
-	$m = new Mandrill('ed3f246e-b16c-4ffb-8a19-e0c36c8877ea');
+
+	$m = new Mandrill('00Zrp2gMZCMIA7OiTJFsHQ');
 	//print_r($m->call("users/info", $formvars['message']));
 	$r = $m->call("messages/send-template", $formvars);
+	
 	if(trim($r[0]['status'])!='sent'){
 		print_r($formvars);
+		print_r($r);
+	}
+	else if($debug){
+		
+		echo "<pre>";
+		print_r($formvars['message']['to']);
 		print_r($r);
 	}
 }

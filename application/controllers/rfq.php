@@ -129,7 +129,22 @@ class rfq extends CI_Controller {
 		}
 	}
 	
+	public function logout(){
+		unset($_SESSION['customer']);
+		?>
+		<script>
+		self.location="<?php echo site_url("rfq/userprofile"); ?>";
+		</script>
+		<?php
+	}
 	public function userprofile(){
+		if(!isset($_SESSION['rfq'])){
+			?>
+			<script>
+			self.location="<?php echo site_url("rfq/"); ?>";
+			</script>
+			<?php
+		}
 		if($_POST['userprofile']){
 			//Array ( [userprofile] => Array ( [email] => [firstname] => [lastname] => [contactnumber] => [country] => ) ) 
 			$user = $_POST['userprofile'];
@@ -142,48 +157,205 @@ class rfq extends CI_Controller {
 				<?php
 				$error = true;
 			}
-			else if(!trim($user['firstname'])){
-				?>
-				<script>
-					alert("Invalid First Name!");
-				</script>
-				<?php
-				$error = true;
-			}
-			else if(!trim($user['lastname'])){
-				?>
-				<script>
-					alert("Invalid Last Name!");
-				</script>
-				<?php
-				$error = true;
-			}
-			else if(!trim($user['contactnumber'])){
-				?>
-				<script>
-					alert("Invalid Contact Number!");
-				</script>
-				<?php
-				$error = true;
-			}
-			else if(!trim($user['country'])){
-				?>
-				<script>
-					alert("Invalid Country!");
-				</script>
-				<?php
-				$error = true;
+			else{
+				$sql = "select * from `customers` where `email`='".mysql_real_escape_string(trim($user['email']))."'";
+				$q = $this->db->query($sql);
+				$customer = $q->result_array();
+				if($customer[0]['id']){
+					?>
+					<script>
+						alert("The specified E-mail address is already registered!");
+					</script>
+					<?php
+					$error = true;
+				}
 			}
 			if(!$error){
-				print_r($_SESSION['rfq']);
+				if(!trim($user['password'])){
+					?>
+					<script>
+						alert("Invalid Password!");
+					</script>
+					<?php
+					$error = true;
+				}
+				else if(trim($user['password'])!=trim($user['confirm_password'])){
+					?>
+					<script>
+						alert("Password and Confirm Password don't match!");
+					</script>
+					<?php
+					$error = true;
+				}
+				else if($user['type']=="professional"&&!trim($user['company_name'])){
+					?>
+					<script>
+						alert("Invalid Company Name!");
+					</script>
+					<?php
+					$error = true;
+				}
+				else if(!trim($user['first_name'])){
+					?>
+					<script>
+						alert("Invalid First Name!");
+					</script>
+					<?php
+					$error = true;
+				}
+				else if(!trim($user['last_name'])){
+					?>
+					<script>
+						alert("Invalid Last Name!");
+					</script>
+					<?php
+					$error = true;
+				}
+				else if(!trim($user['contact_number'])){
+					?>
+					<script>
+						alert("Invalid Contact Number!");
+					</script>
+					<?php
+					$error = true;
+				}
+				else if(!trim($user['country'])){
+					?>
+					<script>
+						alert("Invalid Country!");
+					</script>
+					<?php
+					$error = true;
+				}
+			}
+			if(!$error){
+				//print_r($_SESSION['rfq']);
 				$_SESSION['rfq']['userprofile'] = $_POST['userprofile'];
+				unset($_SESSION['rfq']['userprofile']['password']);
+				unset($_SESSION['rfq']['userprofile']['confirm_password']);
+				
+				if(trim($user['type'])=="private"){
+					$user['company_name'] = "";
+				}
+				//insert user profile
+				$sql = "insert into `customers` set
+				`email` = '".mysql_real_escape_string(trim($user['email']))."',
+				`password` = '".mysql_real_escape_string(md5(trim($user['password'])))."',
+				`first_name` = '".mysql_real_escape_string(trim($user['first_name']))."',
+				`last_name` = '".mysql_real_escape_string(trim($user['last_name']))."',
+				`type` = '".mysql_real_escape_string(trim($user['type']))."',
+				`company_name` = '".mysql_real_escape_string(trim($user['company_name']))."',
+				`country` = '".mysql_real_escape_string(trim($user['country']))."',
+				`contact_number` = '".mysql_real_escape_string(trim($user['contact_number']))."',
+				";
+				$q = $this->db->query($sql);
+				
+				$sql = "select * from `customers` where 
+					`email`='".mysql_real_escape_string(trim($user['email']))."' and 
+					`password`='".mysql_real_escape_string(md5(trim($user['password'])))."'
+				";
+				$q = $this->db->query($sql);
+				$customer = $q->result_array();
+				$_SESSION['customer'] = $customer[0];
+				unset($_SESSION['customer']['password']);
+				
 				
 				
 				$rfq_shipping_info = $_SESSION['rfq']['shipping_info'];
+				$data_plain = serialize($_SESSION['rfq']);
 				$data = base64_encode(serialize($_SESSION['rfq']));
+				$data_plain = print_r($_SESSION['rfq'], 1);
 				$sql = "
 				INSERT INTO `rfq` set 
 				`data` = '".mysql_real_escape_string($data)."',
+				`data_plain` = '".mysql_real_escape_string($data_plain)."',
+				`origin_country` = '".mysql_real_escape_string($rfq_shipping_info['origin']['country'])."',
+				`origin_city` = '".mysql_real_escape_string($rfq_shipping_info['origin']['city'])."',
+				`origin_port` = '".mysql_real_escape_string($rfq_shipping_info['origin']['port'])."',
+				`origin_date` = '".mysql_real_escape_string($rfq_shipping_info['origin']['date'])."',
+				`destination_country` = '".mysql_real_escape_string($rfq_shipping_info['destination']['country'])."',
+				`destination_city` = '".mysql_real_escape_string($rfq_shipping_info['destination']['city'])."',
+				`destination_port` = '".mysql_real_escape_string($rfq_shipping_info['destination']['port'])."',
+				`destination_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['date'])."',
+				`dateadded` = NOW()
+				";
+				$q = $this->db->query($sql);
+				$_SESSION['rfq_complete'] = true;
+				?>
+				<script>
+					window.parent.location = "<?php echo site_url("rfq/thankyou"); ?>";
+				</script>
+				<?php
+			}
+		}
+		else if($_POST['login']){
+			$user = $_POST['login'];
+			$error = false;
+			$sql = "select * from `customers` where 
+				`email`='".mysql_real_escape_string($user['email'])."' and 
+				`password`='".mysql_real_escape_string(md5($user['password']))."'
+			";
+			$q = $this->db->query($sql);
+			$customer = $q->result_array();
+			if($customer[0]['id']){
+				$_SESSION['rfq']['userprofile'] = $customer[0];
+				unset($_SESSION['rfq']['userprofile']['password']);
+				unset($_SESSION['rfq']['userprofile']['confirm_password']);
+				
+				$_SESSION['customer'] = $customer[0];
+				unset($_SESSION['customer']['password']);
+				
+				$rfq_shipping_info = $_SESSION['rfq']['shipping_info'];
+				$data_plain = serialize($_SESSION['rfq']);
+				$data = base64_encode(serialize($_SESSION['rfq']));
+				$data_plain = print_r($_SESSION['rfq'], 1);
+				$sql = "
+				INSERT INTO `rfq` set 
+				`data` = '".mysql_real_escape_string($data)."',
+				`data_plain` = '".mysql_real_escape_string($data_plain)."',
+				`origin_country` = '".mysql_real_escape_string($rfq_shipping_info['origin']['country'])."',
+				`origin_city` = '".mysql_real_escape_string($rfq_shipping_info['origin']['city'])."',
+				`origin_port` = '".mysql_real_escape_string($rfq_shipping_info['origin']['port'])."',
+				`origin_date` = '".mysql_real_escape_string($rfq_shipping_info['origin']['date'])."',
+				`destination_country` = '".mysql_real_escape_string($rfq_shipping_info['destination']['country'])."',
+				`destination_city` = '".mysql_real_escape_string($rfq_shipping_info['destination']['city'])."',
+				`destination_port` = '".mysql_real_escape_string($rfq_shipping_info['destination']['port'])."',
+				`destination_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['date'])."',
+				`dateadded` = NOW()
+				";
+				$q = $this->db->query($sql);
+				$_SESSION['rfq_complete'] = true;
+				?>
+				<script>
+					window.parent.location = "<?php echo site_url("rfq/thankyou"); ?>";
+				</script>
+				<?php
+			}
+			else{
+				?>
+				<script>
+					alert("Invalid E-mail or password combination!");
+				</script>
+				<?php
+			}
+			
+		}
+		else if($_POST['customer']){
+			if($_SESSION['customer']['id']){
+				$customer = $_SESSION['customer'];
+				$_SESSION['rfq']['userprofile'] = $customer;
+				unset($_SESSION['rfq']['userprofile']['password']);
+				unset($_SESSION['rfq']['userprofile']['confirm_password']);
+				unset($_SESSION['customer']['password']);
+				
+				$rfq_shipping_info = $_SESSION['rfq']['shipping_info'];
+				$data_plain = serialize($_SESSION['rfq']);
+				$data = base64_encode(serialize($_SESSION['rfq']));
+				$data_plain = print_r($_SESSION['rfq'], 1);
+				$sql = "
+				INSERT INTO `rfq` set 
+				`data` = '".mysql_real_escape_string($data)."',
+				`data_plain` = '".mysql_real_escape_string($data_plain)."',
 				`origin_country` = '".mysql_real_escape_string($rfq_shipping_info['origin']['country'])."',
 				`origin_city` = '".mysql_real_escape_string($rfq_shipping_info['origin']['city'])."',
 				`origin_port` = '".mysql_real_escape_string($rfq_shipping_info['origin']['port'])."',
@@ -212,6 +384,20 @@ class rfq extends CI_Controller {
 		}
 	}
 	
+	public function setDataPlain(){
+		$sql = "select * from `rfq` where 1";
+		$q = $this->db->query($sql);
+		$rfqs = $q->result_array();
+		$t = count($rfqs);
+		for($i=0; $i<$t; $i++){
+			$data_plain = base64_decode($rfqs[$i]['data']);
+			$data_plain = unserialize($data_plain);
+			$data_plain = print_r($data_plain, 1);
+			$sql = "update `rfq` set `data_plain` = '".mysql_real_escape_string($data_plain)."' where `id`='".$rfqs[$i]['id']."'";
+			echo $sql."<hr />";
+			$q = $this->db->query($sql);
+		}
+	}
 	public function thankyou(){
 		$this->load->view('sitelayout/header.php');
 		$this->load->view('sitelayout/nav.php');

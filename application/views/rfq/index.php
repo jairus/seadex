@@ -26,3 +26,19 @@
 	</p>
   </div>
 </div>
+<?php
+if($_SESSION['customer']['type']=='professional'){
+	?>
+	<script>
+		self.location="<?php echo site_url("rfq/prof"); ?>";
+	</script>
+	<?php
+}
+else if($_SESSION['customer']['type']=='private'){
+	?>
+	<script>
+		self.location="<?php echo site_url("rfq/priv"); ?>";
+	</script>
+	<?php
+}
+?>

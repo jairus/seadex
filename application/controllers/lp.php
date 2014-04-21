@@ -23,6 +23,14 @@ class lp extends CI_Controller {
 		unset($_SESSION['rfq']);
 	}
 	
+	public function sa(){
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('lp/nav.php');
+		$content = $this->load->view('lp/sa.php', $data, true);
+		$data['content'] = $content;
+		$content = $this->load->view('lp/content.php', $data);
+		$this->load->view('sitelayout/footer.php');
+	}
 	
 	public function tor(){
 		$this->load->view('sitelayout/header.php');
@@ -78,13 +86,238 @@ class lp extends CI_Controller {
 		else{
 			//$sql = "select * from `rfq` where `destination_timestamp_utc`>=".time()." order by `destination_timestamp_utc`, `destination_country` asc limit 50";
 			//$sql = "select * from `rfq` where 1 order by `destination_timestamp_utc` desc, `destination_country` asc limit 50";
-			$sql = "select * from `rfq` where 1 order by `id` desc limit 50";
+			
+			if($_POST){
+				$_SESSION['searchfilter'] = $_POST;
+				//redirect(site_url("lp")."?_refresh", "refresh");
+				
+				?>
+				<script>
+				self.location = self.location;
+				</script>
+				<?php
+				
+				return 0;
+			}
+			if($_SESSION['searchfilter']['type']){
+				if($_SESSION['searchfilter']['type']=="Route Search"){
+					$origin_country = explode("-",$_SESSION['searchfilter']['origin']['country']);
+					$origin_country = trim($origin_country[1]);
+					$origin_port = explode("--",$_SESSION['searchfilter']['origin']['port']);
+					$origin_port = trim($origin_port[1]);
+					
+					$destination_country = explode("-",$_SESSION['searchfilter']['destination']['country']);
+					$destination_country = trim($destination_country[1]);
+					$destination_port = explode("--",$_SESSION['searchfilter']['destination']['port']);
+					$destination_port = trim($destination_port[1]);
+					
+					$sql_cnt = "select 
+					count(`id`) as cnt
+					from `rfq` where ";
+					
+					if(trim($origin_country)){
+						$sql_arr[] = " `origin_country` = '".mysql_real_escape_string($origin_country)."' ";
+					}
+					if(trim($origin_port)){
+						$sql_arr[] = " `origin_port` = '".mysql_real_escape_string($origin_port)."' ";
+					}
+					if(trim($destination_country)){
+						$sql_arr[] = " `destination_country` = '".mysql_real_escape_string($destination_country)."' ";
+					}
+					if(trim($destination_port)){
+						$sql_arr[] = " `destination_port` = '".mysql_real_escape_string($destination_port)."' ";
+					}
+					
+					$sql_arr[] = " 1 ";
+					
+					$sql_ext .= implode($sql_arr, " and ");
+					
+					$sql_cnt .= $sql_ext." order by `id`";
+					
+					$sql = "select
+					id,
+					origin_country,
+					origin_city,
+					origin_port,
+					origin_date,
+					origin_time_zone,
+					origin_timestamp_utc,
+					origin_date_utc,
+					destination_country,
+					destination_city,
+					destination_port,
+					destination_date,
+					destination_time_zone,
+					destination_timestamp_utc,
+					destination_date_utc
+					from `rfq` where ";
+					
+					$sql .= $sql_ext." order by `id`";
+				}
+				
+				else if($_SESSION['searchfilter']['type']=="Country Search"){
+					$country = explode("-",$_SESSION['searchfilter']['country']);
+					$country = trim($country[1]);
+					
+					$sql_cnt = "select 
+					count(`id`) as cnt
+					from `rfq` where 
+					`origin_country` = '".mysql_real_escape_string($country)."' or 
+					`destination_country` = '".mysql_real_escape_string($country)."'
+					order by `id`";
+					
+					$sql = "select 
+					id,
+					origin_country,
+					origin_city,
+					origin_port,
+					origin_date,
+					origin_time_zone,
+					origin_timestamp_utc,
+					origin_date_utc,
+					destination_country,
+					destination_city,
+					destination_port,
+					destination_date,
+					destination_time_zone,
+					destination_timestamp_utc,
+					destination_date_utc
+					from `rfq` where 
+					`origin_country` = '".mysql_real_escape_string($country)."' or 
+					`destination_country` = '".mysql_real_escape_string($country)."'
+					order by `id` desc limit 50";
+				}
+				else if($_SESSION['searchfilter']['type']=="Search by Keywords"){
+					$keyword = trim($_SESSION['searchfilter']['keyword']);
+					
+					$sql_cnt = "select 
+					count(`id`) as cnt
+					from `rfq` where 
+					`data_plain` = '%".mysql_real_escape_string(trim($_SESSION['keyword']))."%'
+					order by `id`";
+					
+					$sql = "select
+					id,
+					origin_country,
+					origin_city,
+					origin_port,
+					origin_date,
+					origin_time_zone,
+					origin_timestamp_utc,
+					origin_date_utc,
+					destination_country,
+					destination_city,
+					destination_port,
+					destination_date,
+					destination_time_zone,
+					destination_timestamp_utc,
+					destination_date_utc
+					from `rfq` where 
+					lower(`data_plain`) like '%".mysql_real_escape_string(trim($keyword))."%'
+					order by `id` desc limit 50";
+					
+					//echo $sql;
+				}
+				else if($_SESSION['searchfilter']['type']=="Categories"){
+					$categories = array();
+					$imos = array();
+					if(is_array($_SESSION['searchfilter']['categories'])){
+						$categories = $_SESSION['searchfilter']['categories'];
+					}
+					if(is_array($_SESSION['searchfilter']['imos'])){
+						$imos = $_SESSION['searchfilter']['imos'];
+					}
+					$arr = array_merge($categories, $imos);
+					
+					if(count($arr)){
+						$sql_cnt = "select 
+						count(`id`) as cnt
+						from `rfq` where ";
+						foreach($arr as $value){
+							$sql_arr[] = " `data_plain` like '%".mysql_real_escape_string(trim($value))."%' ";
+						}
+						$sql_cnt .= implode($sql_arr, " or ");
+						$sql_cnt .= " order by `id`";
+					
+						$sql = "select
+						id,
+						origin_country,
+						origin_city,
+						origin_port,
+						origin_date,
+						origin_time_zone,
+						origin_timestamp_utc,
+						origin_date_utc,
+						destination_country,
+						destination_city,
+						destination_port,
+						destination_date,
+						destination_time_zone,
+						destination_timestamp_utc,
+						destination_date_utc
+						from `rfq` where ";
+						$sql .= implode($sql_arr, " or ");
+						$sql .= " order by `id`";
+					}
+				}
+				else{
+					$sql_cnt = "select 
+					count(`id`) as cnt
+					from `rfq` where 1 order by `id`";
+					
+					$sql = "select 
+					id,
+					origin_country,
+					origin_city,
+					origin_port,
+					origin_date,
+					origin_time_zone,
+					origin_timestamp_utc,
+					origin_date_utc,
+					destination_country,
+					destination_city,
+					destination_port,
+					destination_date,
+					destination_time_zone,
+					destination_timestamp_utc,
+					destination_date_utc
+					from `rfq` where 1 order by `id` desc limit 50";
+				}
+			}
+			else{
+				$sql_cnt = "select 
+				count(`id`) as cnt
+				from `rfq` where 1 order by `id`";
+				
+				$sql = "select 
+				id,
+				origin_country,
+				origin_city,
+				origin_port,
+				origin_date,
+				origin_time_zone,
+				origin_timestamp_utc,
+				origin_date_utc,
+				destination_country,
+				destination_city,
+				destination_port,
+				destination_date,
+				destination_time_zone,
+				destination_timestamp_utc,
+				destination_date_utc
+				from `rfq` where 1 order by `id` desc limit 50";
+			}
+			$q = $this->db->query($sql_cnt);
+			$count = $q->result_array();
+			$count = $count[0]['cnt'];
+			
 			$q = $this->db->query($sql);
 			$rfqs = $q->result_array();
 			
 			$this->load->view('sitelayout/header.php');
 			$this->load->view('lp/nav.php');
 			$data['rfqs'] = $rfqs;
+			$data['count'] = $count;
 			$content = $this->load->view('lp/dashboard.php', $data, true);
 			$data['content'] = $content;
 			$content = $this->load->view('lp/content.php', $data);
@@ -119,7 +352,9 @@ class lp extends CI_Controller {
 	}
 	public function register(){
 		if($_POST['register']){
-			
+			foreach($_POST as $key=>$value){
+				$_POST[$key] = trim($value);
+			}
 			if(!trim($_POST['company_name'])){
 				$error = true;
 				$errormsg = "Invalid Company Name";
@@ -140,6 +375,15 @@ class lp extends CI_Controller {
 				$error = true;
 				$errormsg = "Password and Confirm Password don't match";
 			}
+			else{
+				$sql = "select * from `logistic_providers` where `email`='".mysql_real_escape_string($_POST['email'])."'";
+				$q = $this->db->query($sql);
+				$r = $q->result_array();
+				if(count($r)){
+					$error = true;
+					$errormsg = "E-mail address is already registered. Please input a new one.";
+				}
+			}
 			
 			if(!$error){
 				$sql = "insert into `logistic_providers` set
@@ -150,6 +394,13 @@ class lp extends CI_Controller {
 				`dateadded` = NOW()
 				";
 				$q = $this->db->query($sql);
+				$emailtos = array();
+				$email = array();
+				$email['name'] = $_POST['name'];
+				$email['email'] = $_POST['email'];
+				$emailtos[] = $email;
+				$this->sendWelcome($emailtos);
+				
 				echo "<script>self.location='".site_url("lp/thankyou")."'</script>";
 			}
 			else{
@@ -359,6 +610,113 @@ class lp extends CI_Controller {
 		)
 
 		*/
+	}
+	
+	public function sendWelcome($emailtos){
+	
+		$from = "noreply@seadex.com";
+		$fromname = "Seadex";
+
+		$subject = "Thank you for partnering with SeaDex!";
+		$template = array();
+		$template['data'] = array();
+		$template['data']['name'] = $toname;
+		$email_content = "Thank you for partnering with SeaDex!
+
+Your acceptance of the Sales Agreement is registered and we are glad to welcome your company as a part of the SeaDex network.
+
+In the coming months we will provide your company with potential Customers opportunities when we have relevant business for you. 
+
+You get: 
+
+• A free trial period of 6 months
+• All potential Customers Leads are Free.
+• Provides qualified potential Customers leads 24/7 365 days.
+• An email list of potential Customers opportunities is received when we have relevant business for you. 
+• Login and Review the Opportunity for each potential Customer.
+• Connect with Potential Customers and bid on suitable Opportunities.
+• Close the Deal directly with the Customer
+
+The SeaDex advantages for customers: 
+
+• A web portal that allows potential Customers to upload their freight requirements.
+• It is intuitive allowing potential Customers to input their data easily and accurately.
+• It is Free to use always for potential Customers.
+• Any device, any time and anywhere.
+• Delivers qualified potential Customers to your company.
+
+
+We would like to send you a message when new additional features are released on the site. 
+Any questions? 
+Email us at <a herf='mailto:info@seadex.com'>info@seadex.com</a>
+
+SeaDex is ONLINE and focuses on Digital Channels targeting consumers. We are your Marketing Department additional resources. 
+
+
+Regards,
+The SeaDex team";
+		$template['data']['content'] = $email_content;
+		$template['data']['content'] = nl2br($template['data']['content']);
+		$template['slug'] = "seadex"; 
+		
+		send_email($from, $fromname, $emailtos, $subject, $message, $template);
+
+	}
+	
+	public function testmail(){
+		$emailtos = array();
+		$email = array();
+		$email['name'] = "jairus bondoc";
+		$email['email'] = "jairus@nmgresources.ph";
+		$emailtos[] = $email;
+
+		$from = "noreply@seadex.com";
+		$fromname = "Seadex";
+
+		$subject = "Thank you for partnering with SeaDex!";
+		$template = array();
+		$template['data'] = array();
+		$template['data']['name'] = $toname;
+		$email_content = "Thank you for partnering with SeaDex!
+
+Your acceptance of the Sales Agreement is registered and we are glad to welcome your company as a part of the SeaDex network.
+
+In the coming months we will provide your company with potential Customers opportunities when we have relevant business for you. 
+
+You get: 
+
+• A free trial period of 6 months
+• All potential Customers Leads are Free.
+• Provides qualified potential Customers leads 24/7 365 days.
+• An email list of potential Customers opportunities is received when we have relevant business for you. 
+• Login and Review the Opportunity for each potential Customer.
+• Connect with Potential Customers and bid on suitable Opportunities.
+• Close the Deal directly with the Customer
+
+The SeaDex advantages for customers: 
+
+• A web portal that allows potential Customers to upload their freight requirements.
+• It is intuitive allowing potential Customers to input their data easily and accurately.
+• It is Free to use always for potential Customers.
+• Any device, any time and anywhere.
+• Delivers qualified potential Customers to your company.
+
+
+We would like to send you a message when new additional features are released on the site. 
+Any questions? 
+Email us at <a herf='mailto:info@seadex.com'>info@seadex.com</a>
+
+SeaDex is ONLINE and focuses on Digital Channels targeting consumers. We are your Marketing Department additional resources. 
+
+
+Regards,
+The SeaDex team";
+		$template['data']['content'] = $email_content;
+		$template['data']['content'] = nl2br($template['data']['content']);
+		$template['slug'] = "seadex"; 
+		
+		send_email($from, $fromname, $emailtos, $subject, $message, $template);
+
 	}
 
 	

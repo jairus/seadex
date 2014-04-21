@@ -1,6 +1,6 @@
 <script>
 function submitRegistration(){
-		if(jQuery("#tor")[0].checked){
+		if(jQuery("#tor")[0].checked&&jQuery("#sa")[0].checked){
 			data = jQuery("#registerform").serialize();
 			jQuery.ajax({
 			  type: "POST",
@@ -13,8 +13,32 @@ function submitRegistration(){
 			});
 		}
 		else{
-			alert("You must accept the Terms and Conditions before you proceed.");
+			
+			if(!jQuery("#sa")[0].checked){
+				alert("You must accept the Sales Agreement before you proceed.");
+			}
+			else if(!jQuery("#tor")[0].checked){
+				alert("You must accept the Terms and Conditions before you proceed.");
+			}
 		}
+}
+function salesAgreement(){
+	co_name = jQuery("#company_name").val();
+	co_rep = jQuery("#name").val();
+	if(co_name&&co_rep){
+		jQuery("#company_namex").val(co_name);
+		jQuery("#company_repx").val(co_rep);
+		jQuery("#saform")[0].submit();
+	}
+	else{
+		if(!co_name){
+			alert("Please input your company name!");
+		}
+		else if(!co_rep){
+			alert("Please input your name!");
+		}
+	}
+	
 }
 </script>
 <div id="ninjadiv" style="display:none">
@@ -24,6 +48,10 @@ function submitRegistration(){
 		<h2>Sign up as a Logistics Service Provider</h2>
 	</div>
 </div>
+<form style="display:none" target="_blank" action="<?php echo site_url("lp/sa")."/"; ?>" method="post" id="saform" >
+	<input type="input" id="company_namex" name="company_name" />
+	<input type="input" id="company_repx" name="company_rep" />
+</form>
 <div class="row">
 	<div class="col-md-12">
 		<form class="form-horizontal" action="<?php echo site_url("lp/register")."/"; ?>" method="post" style="width:400px; margin:auto" id="registerform" >
@@ -33,13 +61,13 @@ function submitRegistration(){
 			  <div class="form-group">
 				<label class="col-sm-3 control-label">Company Name</label>
 				<div class="col-sm-9">
-				  <input type="text" class="form-control" name='company_name'>
+				  <input type="text" class="form-control" name='company_name' id="company_name">
 				</div>
 			  </div>
 			   <div class="form-group">
 				<label class="col-sm-3 control-label">Your Name</label>
 				<div class="col-sm-9">
-				  <input type="text" class="form-control" name='name'>
+				  <input type="text" class="form-control" name='name' id='name'>
 				</div>
 			  </div>
 			  <div class="form-group">
@@ -58,6 +86,12 @@ function submitRegistration(){
 				<label class="col-sm-3 control-label">Confirm Password</label>
 				<div class="col-sm-9">
 				  <input type="password" class="form-control" name='repassword'>
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-3 control-label"></label>
+				<div class="col-sm-9">
+					<input type="checkbox" id="sa" name="sa" value="yes" /> &nbsp;&nbsp;&nbsp;I accept the <a href="#" onclick="salesAgreement(); return false; ">Sales Agreement</a>
 				</div>
 			  </div>
 			  <div class="form-group">

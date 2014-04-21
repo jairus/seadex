@@ -68,6 +68,36 @@ function moreAttachments(){
 //print_r($rfq);
 //echo "</pre>";
 $_SESSION['for_bidding']['rfq_id'] = $rfq['id'];
+
+if($rfq['userprofile']['firstname']){
+	$rfq['userprofile']['first_name'] = $rfq['userprofile']['firstname'];
+}
+if($rfq['userprofile']['first_name']){
+	$rfq['userprofile']['firstname'] = $rfq['userprofile']['first_name'];
+}
+
+if($rfq['userprofile']['lastname']){
+	$rfq['userprofile']['last_name'] = $rfq['userprofile']['lastname'];
+}
+if($rfq['userprofile']['last_name']){
+	$rfq['userprofile']['lastname'] = $rfq['userprofile']['last_name'];
+}
+
+if($rfq['userprofile']['contactnumber']){
+	$rfq['userprofile']['contact_number'] = $rfq['userprofile']['contactnumber'];
+}
+if($rfq['userprofile']['contact_number']){
+	$rfq['userprofile']['contactnumber'] = $rfq['userprofile']['contact_number'];
+}
+
+if($rfq['userprofile']['type']){
+	$rfq['userprofile']['customer_type'] = $rfq['userprofile']['type'];
+}
+if($rfq['userprofile']['customer_type']){
+	$rfq['userprofile']['type'] = $rfq['userprofile']['customer_type'];
+}
+
+
 ?>
 <div class="container-fluid" id="container" style="max-width:90%">
 	<iframe name="ninjaframe" style="display:none" ></iframe>

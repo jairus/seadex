@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Get quotes for shipping and container freight from leading providers. Submit one form and Seadex will get your freight or cargo shipped for the lowest price">
 	<meta name="keywords" content="freight, cargo, container shipping, shipping prices, freight providers, lcl container, international move, get shipping quotes, get freight quotes">
-
+	<meta name="p:domain_verify" content="e8db88a7076a306c59ee44ae15399371"/>
     <title>Seadex<?php 
 	if(trim($title_tag)){
 		echo " | ".$title_tag;

@@ -21,6 +21,48 @@ function submitProfile(){
 		  //dataType: dataType
 		});
 }
+function loginSubmit(){
+	data = jQuery("#loginform").serialize();
+	jQuery.ajax({
+	  type: "POST",
+	  url: "<?php echo site_url("rfq/userprofile"); ?>",
+	  data: data,
+	  success: function(msg){
+		jQuery("#ninjadiv").html(msg)
+	  },
+	  //dataType: dataType
+	});
+}
+
+function proceed(){
+	data = jQuery("#proceedform").serialize();
+	jQuery.ajax({
+	  type: "POST",
+	  url: "<?php echo site_url("rfq/userprofile"); ?>",
+	  data: data,
+	  success: function(msg){
+		jQuery("#ninjadiv").html(msg)
+	  },
+	  //dataType: dataType
+	});
+}
+function custType(type){
+	jQuery("#company_name").hide();
+	if(type=="professional"){
+		jQuery("#company_name").show();
+	}
+}
+function register(){
+	jQuery("#loginform").hide();
+	jQuery("#userform").show();
+}
+function login(){
+	jQuery("#loginform").show();
+	jQuery("#userform").hide();
+}
+function logout(){
+	self.location = "<?php echo site_url("rfq/logout"); ?>";
+}
 </script>
 <div id="ninjadiv" style="display:">
 </div>
@@ -30,31 +72,143 @@ function submitProfile(){
 	</div>
 </div>
 <div class="row">
-	<form class="form-horizontal" method="post" id='userform' action="<?php echo site_url("rfq/userprofile"); ?>">
-		<input type="hidden" name="userprofile" value="1" />
+	<form id="proceedform" class="form-horizontal" method="post" action="<?php echo site_url("rfq/userprofile"); ?>">
+		<input type="hidden" name="customer" value="1" />
 		<div class="col-md-12">
 			<div class="form-group">
-				<label class="col-sm-3 control-label">Your E-mail Address</label>
+				<label class="col-sm-3 control-label">E-mail Address</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" name="userprofile[email]" />
+					<?php echo $_SESSION['customer']['email']; ?>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">First Name</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" name="userprofile[firstname]" />
+					<?php echo $_SESSION['customer']['first_name']; ?>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Last Name</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" name="userprofile[lastname]" />
+					<?php echo $_SESSION['customer']['last_name']; ?>
+				</div>
+			</div>
+			<div class="col-md-12 text-center">
+				<a href="#" onclick="logout(); return false;" >Click here to use a different Account.</a>
+			</div>
+			<div class="col-md-12 backbutton text-center">
+				<button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4"); ?>'">Back</button>
+				<?php
+				if($skipbutton){
+					?><button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4?skip=true"); ?>'">Skip</button><?php
+				}
+				?>
+				<button type="button" class="btn btn-default" onclick="proceed()" >Submit</button>
+			</div>
+		</div>
+	</form>
+	<form style="display:none" class="form-horizontal" method="post" id='loginform' action="<?php echo site_url("rfq/userprofile"); ?>">
+		<input type="hidden" name="login" value="1" />
+		<div class="col-md-12">
+			<div class="form-group">
+				<div class="col-sm-12 text-center" >Login to your Account</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">E-mail Address</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" name="login[email]" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Password</label>
+				<div class="col-sm-9">
+					<input type="password" class="form-control" name="login[password]" />
+				</div>
+			</div>
+			<div class="col-md-12 text-center">
+				<a href="#" onclick="register(); return false;" >Don't have an account yet? Click Here.</a>
+			</div>
+			<div class="col-md-12 backbutton text-center">
+			<button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4"); ?>'">Back</button>
+			<?php
+			if($skipbutton){
+				?><button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4?skip=true"); ?>'">Skip</button><?php
+			}
+			?>
+			<button type="button" class="btn btn-default" onclick="loginSubmit()" >Submit</button>
+			</div>
+		</div>
+	</form>
+	<form class="form-horizontal" method="post" id='userform' action="<?php echo site_url("rfq/userprofile"); ?>" style="display:none">
+		<input type="hidden" name="userprofile" value="1" />
+		<div class="col-md-12">
+			<div class="form-group">
+				<div class="col-sm-12 text-center" >Register an Account</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Customer Type</label>
+				<div class="col-sm-1">
+					<input type="radio" class="form-control" name="userprofile[type]" onclick="custType('private')" value="private" <?php
+					if($_SESSION['rfq']['customer_type']=="private"){
+						echo "checked";
+					}
+					?> />
+				</div>
+				<div class="col-sm-2">
+					Private
+				</div>
+				<div class="col-sm-1">
+					<input type="radio" class="form-control" name="userprofile[type]" onclick="custType('professional')" value="professional" <?php
+					if($_SESSION['rfq']['customer_type']=="professional"){
+						echo "checked";
+					}
+					?> /> 
+				</div>
+				<div class="col-sm-2">
+					Professional
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Your E-mail Address</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" name="userprofile[email]" placeholder="This will be your login name" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Password</label>
+				<div class="col-sm-9">
+					<input type="password" class="form-control" name="userprofile[password]" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Confirm Password</label>
+				<div class="col-sm-9">
+					<input type="password" class="form-control" name="userprofile[confirm_password]" />
+				</div>
+			</div>
+			<div class="form-group" id="company_name">
+				<label class="col-sm-3 control-label">Company Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" name="userprofile[company_name]" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">First Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" name="userprofile[first_name]" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Last Name</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" name="userprofile[last_name]" />
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Contact Number</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" name="userprofile[contactnumber]" />
+					<input type="text" class="form-control" name="userprofile[contact_number]" />
 				</div>
 			</div>
 			<div class="form-group">
@@ -64,6 +218,9 @@ function submitProfile(){
 				</div>
 			</div>
 		</div>
+		<div class="col-md-12 text-center">
+			<a href="#" onclick="login(); return false;" >Already have an Account? Click Here.</a>
+		</div>
 		<div class="col-md-12 backbutton text-center">
 			<button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4"); ?>'">Back</button>
 			<?php
@@ -71,7 +228,20 @@ function submitProfile(){
 				?><button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4?skip=true"); ?>'">Skip</button><?php
 			}
 			?>
-			<button type="button" class="btn btn-default" onclick="submitProfile()" >Submit RFQ</button>
+			<button type="button" class="btn btn-default" onclick="submitProfile()" >Submit</button>
 		</div>
+		<script>
+			custType("<?php echo $_SESSION['rfq']['customer_type']; ?>");
+		</script>
 	</form>
 </div>
+<script>
+	<?php
+	if(!$_SESSION['customer']['email']){
+		?>
+		login();
+		jQuery("#proceedform").hide();
+		<?php
+	}
+	?>
+</script>

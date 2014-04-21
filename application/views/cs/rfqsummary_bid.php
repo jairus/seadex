@@ -498,7 +498,7 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 							}
 							</script>
 							<div class="text-center" style="margin-bottom:30px;">
-								<input id="acceptbutton" type="button" class="btn btn-default" value="Accept This Bid and Contact Service Provider" onclick="return acceptBid();" >
+								<input id="acceptbutton" type="button" class="btn btn-primary btn-lg" value="Accept This Bid and Contact Service Provider" onclick="return acceptBid();" >
 								<div id='acceptform' style="display:none; max-width:500px; margin:auto">
 									<form class="form-horizontal" action="<?php echo site_url("cs")."/rfq/".$rfq['id']."/acceptbid?bid_id=".$_GET['bid_id']; ?>" method="post">
 										<div class="row">Message</div>
@@ -507,7 +507,7 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 										echo "Hello! I would like to inform you that I accepted your bid for my RFQ. Please don't hesitate to contact me on how to proceed from here and for further details.";
 										
 										?></textarea></div>
-										<div class="row" style="margin-top:10px;"><input type="submit" value="Proceed" class="form-control btn btn-default" /></div>
+										<div class="row" style="margin-top:10px;"><input type="submit" value="Proceed" class="form-control btn btn-primary" /></div>
 									</form>
 								</div>
 							</div>

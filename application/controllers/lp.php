@@ -70,6 +70,9 @@ class lp extends CI_Controller {
 		}
 		$rfqdata = unserialize(base64_decode($rfq[0]['data']));
 		$rfqdata['id'] = $rfq[0]['id'];
+		$rfqdata['id'] = $rfq[0]['id'];
+		$rfqdata['bid_id'] = $rfq[0]['bid_id'];
+		$rfqdata['logistic_provider_id'] = $rfq[0]['logistic_provider_id'];
 		if($customer[0]['id']){
 			$rfqdata['userprofile'] = $customer[0];
 		}
@@ -78,7 +81,16 @@ class lp extends CI_Controller {
 		$this->load->view('lp/nav.php');
 		$data['rfq'] = $rfqdata;
 		if($action=='bid'){
-			$this->load->view('lp/rfqsummary_bid.php', $data);
+			if($_GET['bid_id']){
+				$sql = "select * from `bids` where `id`='".mysql_real_escape_string($_GET['bid_id'])."' and `logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'";
+				$q = $this->db->query($sql);
+				$bids = $q->result_array();
+				$data['bids'] = $bids;
+				$this->load->view('lp/rfqsummary_bid2.php', $data);
+			}
+			else{
+				$this->load->view('lp/rfqsummary_bid.php', $data);
+			}
 		}
 		else{
 			$this->load->view('lp/rfqsummary.php', $data);

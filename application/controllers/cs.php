@@ -168,7 +168,7 @@ class cs extends CI_Controller {
 		$from = "noreply@seadex.com";
 		$fromname = "Seadex";
 
-		$subject = "Your bid has been accepted!";
+		$subject = "Your bid had been accepted!";
 		$template = array();
 		$template['data'] = array();
 		$template['data']['name'] = $toname;
@@ -205,7 +205,7 @@ The SeaDex team";
 	}
 	
 	public function dashboard(){
-		$sql = "select * from `rfq` where `customer_id`='".$_SESSION['customer']['id']."' order by id desc";
+		$sql = "select * from `rfq` where `customer_id`='".$_SESSION['customer']['id']."' and `bid_id`<1 order by id desc";
 		$q = $this->db->query($sql);
 		$rfqs = $q->result_array();
 		
@@ -222,6 +222,29 @@ The SeaDex team";
 		$data['rfqs'] = $rfqs;
 		$data['count'] = $count;
 		$content = $this->load->view('cs/dashboard.php', $data, true);
+		$data['content'] = $content;
+		$content = $this->load->view('cs/content.php', $data);
+		$this->load->view('sitelayout/footer.php');
+	}
+	
+	public function completed_listings(){
+		$sql = "select * from `rfq` where `customer_id`='".$_SESSION['customer']['id']."' and bid_id>0 order by id desc";
+		$q = $this->db->query($sql);
+		$rfqs = $q->result_array();
+		
+		$t = count($rfqs);
+		for($i=0; $i<$t; $i++){
+			$sql = "select `id`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` where `rfq_id` = '".$rfqs[$i]['id']."' order by `total_bid_usd` asc";
+			$q = $this->db->query($sql);
+			$bids = $q->result_array();
+			$rfqs[$i]['bids'] = $bids;
+		}
+		
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('sitelayout/nav.php');
+		$data['rfqs'] = $rfqs;
+		$data['count'] = $count;
+		$content = $this->load->view('cs/completed_listings.php', $data, true);
 		$data['content'] = $content;
 		$content = $this->load->view('cs/content.php', $data);
 		$this->load->view('sitelayout/footer.php');

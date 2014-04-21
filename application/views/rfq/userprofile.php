@@ -53,16 +53,38 @@ function custType(type){
 	}
 }
 function register(){
+	jQuery("#errormessage").html("");
+	jQuery("#errormessage").hide();
+	jQuery("#errormessage2").html("");
+	jQuery("#errormessage2").hide();
 	jQuery("#loginform").hide();
 	jQuery("#userform").show();
 }
 function login(){
+	jQuery("#errormessage").html("");
+	jQuery("#errormessage").hide();
+	jQuery("#errormessage2").html("");
+	jQuery("#errormessage2").hide();
 	jQuery("#loginform").show();
 	jQuery("#userform").hide();
 }
 function logout(){
 	self.location = "<?php echo site_url("rfq/logout"); ?>";
 }
+
+function alertX(msg){
+	jQuery("#errormessage").html(msg);
+	jQuery("#errormessage").hide();
+	jQuery("#errormessage").fadeIn(300);
+	$('html, body').animate({scrollTop : 0},800);
+}
+function alertX2(msg){
+	jQuery("#errormessage2").html(msg);
+	jQuery("#errormessage2").hide();
+	jQuery("#errormessage2").fadeIn(300);
+	$('html, body').animate({scrollTop : 0},800);
+}
+
 </script>
 <div id="ninjadiv" style="display:">
 </div>
@@ -81,6 +103,18 @@ function logout(){
 					<?php echo $_SESSION['customer']['email']; ?>
 				</div>
 			</div>
+			<?php
+			if($_SESSION['customer']['company_name']){
+			?>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Company Name</label>
+				<div class="col-sm-9">
+					<?php echo $_SESSION['customer']['company_name']; ?>
+				</div>
+			</div>
+			<?php
+			}
+			?>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">First Name</label>
 				<div class="col-sm-9">
@@ -114,6 +148,10 @@ function logout(){
 				<div class="col-sm-12 text-center" >Login to your Account</div>
 			</div>
 			<div class="form-group">
+				<div class="col-sm-12 text-center" style="color:red" id="errormessage2" >
+				</div>
+			</div>
+			<div class="form-group">
 				<label class="col-sm-3 control-label">E-mail Address</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control" name="login[email]" />
@@ -145,7 +183,10 @@ function logout(){
 			<div class="form-group">
 				<div class="col-sm-12 text-center" >Register an Account</div>
 			</div>
-			
+			<div class="form-group">
+				<div class="col-sm-12 text-center" style="color:red" id="errormessage" >
+				</div>
+			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Customer Type</label>
 				<div class="col-sm-1">

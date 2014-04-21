@@ -152,7 +152,7 @@ class rfq extends CI_Controller {
 			if(!checkEmail($user['email'])){
 				?>
 				<script>
-					alert("Invalid Email!");
+					alertX("Invalid Email!");
 				</script>
 				<?php
 				$error = true;
@@ -164,7 +164,7 @@ class rfq extends CI_Controller {
 				if($customer[0]['id']){
 					?>
 					<script>
-						alert("The specified E-mail address is already registered!");
+						alertX("The specified E-mail address is already registered!");
 					</script>
 					<?php
 					$error = true;
@@ -174,7 +174,7 @@ class rfq extends CI_Controller {
 				if(!trim($user['password'])){
 					?>
 					<script>
-						alert("Invalid Password!");
+						alertX("Invalid Password!");
 					</script>
 					<?php
 					$error = true;
@@ -182,7 +182,7 @@ class rfq extends CI_Controller {
 				else if(trim($user['password'])!=trim($user['confirm_password'])){
 					?>
 					<script>
-						alert("Password and Confirm Password don't match!");
+						alertX("Password and Confirm Password don't match!");
 					</script>
 					<?php
 					$error = true;
@@ -190,7 +190,7 @@ class rfq extends CI_Controller {
 				else if($user['type']=="professional"&&!trim($user['company_name'])){
 					?>
 					<script>
-						alert("Invalid Company Name!");
+						alertX("Invalid Company Name!");
 					</script>
 					<?php
 					$error = true;
@@ -198,7 +198,7 @@ class rfq extends CI_Controller {
 				else if(!trim($user['first_name'])){
 					?>
 					<script>
-						alert("Invalid First Name!");
+						alertX("Invalid First Name!");
 					</script>
 					<?php
 					$error = true;
@@ -206,7 +206,7 @@ class rfq extends CI_Controller {
 				else if(!trim($user['last_name'])){
 					?>
 					<script>
-						alert("Invalid Last Name!");
+						alertX("Invalid Last Name!");
 					</script>
 					<?php
 					$error = true;
@@ -214,7 +214,7 @@ class rfq extends CI_Controller {
 				else if(!trim($user['contact_number'])){
 					?>
 					<script>
-						alert("Invalid Contact Number!");
+						alertX("Invalid Contact Number!");
 					</script>
 					<?php
 					$error = true;
@@ -222,7 +222,7 @@ class rfq extends CI_Controller {
 				else if(!trim($user['country'])){
 					?>
 					<script>
-						alert("Invalid Country!");
+						alertX("Invalid Country!");
 					</script>
 					<?php
 					$error = true;
@@ -246,7 +246,7 @@ class rfq extends CI_Controller {
 				`type` = '".mysql_real_escape_string(trim($user['type']))."',
 				`company_name` = '".mysql_real_escape_string(trim($user['company_name']))."',
 				`country` = '".mysql_real_escape_string(trim($user['country']))."',
-				`contact_number` = '".mysql_real_escape_string(trim($user['contact_number']))."',
+				`contact_number` = '".mysql_real_escape_string(trim($user['contact_number']))."'
 				";
 				$q = $this->db->query($sql);
 				
@@ -336,7 +336,7 @@ class rfq extends CI_Controller {
 			else{
 				?>
 				<script>
-					alert("Invalid E-mail or password combination!");
+					alertX2("Invalid E-mail or password combination!");
 				</script>
 				<?php
 			}

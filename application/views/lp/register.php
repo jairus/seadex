@@ -40,6 +40,12 @@ function salesAgreement(){
 	}
 	
 }
+function alertX(msg){
+	jQuery("#errormessage").html(msg);
+	jQuery("#errormessage").hide();
+	jQuery("#errormessage").fadeIn(300);
+	$('html, body').animate({scrollTop : 0},800);
+}
 </script>
 <div id="ninjadiv" style="display:none">
 </div>
@@ -58,6 +64,10 @@ function salesAgreement(){
 		<input type="hidden" name="register" value="1">
 		<div class="row">
 			<div class="col-md-12">
+			  <div class="form-group">
+				<div class="col-sm-12 text-center" style="color:red" id="errormessage" >
+				</div>
+			  </div>
 			  <div class="form-group">
 				<label class="col-sm-3 control-label">Company Name</label>
 				<div class="col-sm-9">

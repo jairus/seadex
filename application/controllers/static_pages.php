@@ -25,12 +25,21 @@ class static_pages extends CI_Controller {
 	}
 	
 	public function consumers(){
-		$data['title_tag'] = "Consumer";
-		$this->load->view('sitelayout/header.php', $data);
-		$this->load->view('sitelayout/nav.php');
-		$this->load->view('static_pages/consumers.php', $data);
-		$this->load->view('sitelayout/footer.php');
-		unset($_SESSION['rfq']);
+		if(!$_SESSION['customer']){
+			$data['title_tag'] = "Consumer";
+			$this->load->view('sitelayout/header.php', $data);
+			$this->load->view('sitelayout/nav.php');
+			$this->load->view('static_pages/consumers.php', $data);
+			$this->load->view('sitelayout/footer.php');
+			unset($_SESSION['rfq']);
+		}
+		else{
+			?>
+			<script>
+				self.location = "<?php echo site_url("cs"); ?>";
+			</script>
+			<?php
+		}
 	}
 	public function contact(){
 		$data['title_tag'] = "Consumer";

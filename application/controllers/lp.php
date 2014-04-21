@@ -415,7 +415,7 @@ class lp extends CI_Controller {
 				echo "<script>self.location='".site_url("lp/thankyou")."'</script>";
 			}
 			else{
-				echo "<script>alert(\"".htmlentitiesX($errormsg)."\");</script>";
+				echo "<script>alertX(\"".htmlentitiesX($errormsg)."\");</script>";
 			}
 		}
 		else{

@@ -1,6 +1,28 @@
 <?php
 @session_start();
-?>
+?>	
+	<style>
+	th{
+		background:#0E202E;
+		color: #ffffff;
+		border-bottom:0px !important;
+	}
+	table th.start{
+		border-radius: 5px 0px 0px 0px !important; 
+		-moz-border-radius: 5px 0px 0px 0px !important; 
+		-webkit-border-radius: 5px 0px 0px 0px !important; 
+	}
+	table th.end{
+		border-radius: 0px 5px 0px 0px !important; 
+		-moz-border-radius: 0px 5px 0px 0px !important; 
+		-webkit-border-radius: 0px 5px 0px 0px !important; 
+	}
+	table th.startend{
+		border-radius: 5px 5px 0px 0px !important; 
+		-moz-border-radius: 5px 5px 0px 0px !important; 
+		-webkit-border-radius: 5px 5px 0px 0px !important; 
+	}
+	</style>
 	<script>
 		function getPorts(idx, country_code, port){
 			if(country_code){
@@ -26,7 +48,7 @@
 			<table class="table table-striped">
 			  <thead>
 				<tr>
-				  <th>Search Filter</th>
+				  <th class="startend">Search Filter</th>
 				</tr>
 			  </thead>
 			  <tbody>
@@ -240,12 +262,12 @@
 			<table class="table table-striped">
 			  <thead>
 				<tr>
-				  <th>#</th>
+				  <th class="start">#</th>
 				  <th width="22.5%">Origin</th>
 				  <th width="22.5%">Destination</th>
 				  <th width="20%">Pickup Date</th>
 				  <th width="20%">Delivery Date</th>
-				  <th width="13%"></th>
+				  <th class="end" width="13%"></th>
 				</tr>
 			  </thead>
 			  <tbody>

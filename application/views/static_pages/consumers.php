@@ -43,14 +43,14 @@
 			<div class="row">
 				<div class="col-md-12">
 				  <div class="form-group">
-					<label class="col-sm-3 control-label">E-mail</label>
-					<div class="col-sm-9">
+					<label class="col-sm-6 control-label">E-mail Address</label>
+					<div class="col-sm-6">
 					  <input type="text" class="form-control" name='email' value="<?php echo htmlentitiesX($_SESSION['customer']['email']); ?>">
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label class="col-sm-3 control-label">Password</label>
-					<div class="col-sm-9">
+					<label class="col-sm-6 control-label">Password</label>
+					<div class="col-sm-6">
 					  <input type="password" class="form-control" name='password'>
 					</div>
 				  </div>

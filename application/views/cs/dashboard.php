@@ -41,7 +41,7 @@
 			}
 		}
 	</script>
-	  <h2>DASHBOARD</h2>
+	  <h2 style='text-align:right'>Active Listings</h2>
 	  <div class="table-responsive">
 		<div class="row">
 		<div class="col-md-3">

@@ -260,7 +260,7 @@ function alertX2(msg){
 			</div>
 		</div>
 		<div class="col-md-12 text-center">
-			<a href="#" onclick="login(); return false;" >Already have an Account? Click Here.</a>
+			<a href="#" onclick="login(); return false;" >Already have an Account? Click Here to Login.</a>
 		</div>
 		<div class="col-md-12 backbutton text-center">
 			<button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4"); ?>'">Back</button>

@@ -98,7 +98,7 @@
                         <li class="list-group-item">Dronning Maudes Gate 11</li>
                         <li class="list-group-item">0250 Oslo</li>
                         <li class="list-group-item">Norway</li>
-                        <li class="list-group-item">E: <a href="#">info@seadex.no</a></li>
+                        <li class="list-group-item">E: <a href="mailto:info@seadex.com">info@seadex.com</a></li>
                       </ul>
                     </div>
                   </div>
@@ -109,7 +109,7 @@
                         <li class="list-group-item">Marina View Asia</li>
                         <li class="list-gro up-item">Power 1018960</li>
                         <li class="list-group-item">Singapore</li>
-                        <li class="list-group-item">E: <a href="#">info@seadex.no</a></li>
+                        <li class="list-group-item">E: <a href="mailto:info@seadex.com">info@seadex.com</a></li>
                       </ul>
                     </div>
                   </div>
@@ -177,7 +177,7 @@
                     <li class="list-group-item">DRONNING MAUDES GATE 11</li>
                     <li class="list-group-item">0250 OSLO</li>
                     <li class="list-group-item">NORWAY</li>
-                    <li class="list-group-item">EMAIL: <a href="mailto:info@seadex.no">INFO@SEADEX.NO</a></li>
+                    <li class="list-group-item">EMAIL: <a href="mailto:info@seadex.com">INFO@SEADEX.COM</a></li>
                   </ul>
               </div>
 
@@ -187,7 +187,7 @@
                   <li class="list-group-item">MARINA VIEW ASIA</li>
                   <li class="list-group-item">POWER 1018960</li>
                   <li class="list-group-item">SINGAPORE</li>
-                  <li class="list-group-item">EMAIL: <a href="mailto:info@seadex.no">INFO@SEADEX.NO</a></li>
+                  <li class="list-group-item">EMAIL: <a href="mailto:info@seadex.com">INFO@SEADEX.COM</a></li>
                 </ul>
               </div>
 

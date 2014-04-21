@@ -24,7 +24,7 @@
                     <li class="list-group-item">DRONNING MAUDS GATE 11</li>
                     <li class="list-group-item">0250 OSLO</li>
                     <li class="list-group-item">NORWAY</li>
-                    <li class="list-group-item">EMAIL: <a href="mailto:info@seadex.no">INFO@SEADEX.NO</a></li>
+                    <li class="list-group-item">EMAIL: <a href="mailto:info@seadex.com">INFO@SEADEX.COM</a></li>
                   </ul>
               </div>
 
@@ -34,7 +34,7 @@
                   <li class="list-group-item">MARINA VIEW ASIA</li>
                   <li class="list-group-item">POWER 1018960</li>
                   <li class="list-group-item">SINGAPORE</li>
-                  <li class="list-group-item">EMAIL: <a href="mailto:info@seadex.no">INFO@SEADEX.NO</a></li>
+                  <li class="list-group-item">EMAIL: <a href="mailto:info@seadex.com">INFO@SEADEX.COM</a></li>
                 </ul>
               </div>
 

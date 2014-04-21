@@ -33,7 +33,7 @@
 				<li class="list-group-item">Dronning Maudes Gate 11</li>
 				<li class="list-group-item">0250 Oslo</li>
 				<li class="list-group-item">Norway</li>
-				<li class="list-group-item">E: <a href="#">info@seadex.no</a></li>
+				<li class="list-group-item">E: <a href="mailto:info@seadex.com">info@seadex.com</a></li>
 			  </ul>
 			</div>
 		  </div>
@@ -44,7 +44,7 @@
 				<li class="list-group-item">Marina View Asia</li>
 				<li class="list-gro up-item">Power 1018960</li>
 				<li class="list-group-item">Singapore</li>
-				<li class="list-group-item">E: <a href="#">info@seadex.no</a></li>
+				<li class="list-group-item">E: <a href="mailto:info@seadex.com">info@seadex.com</a></li>
 			  </ul>
 			</div>
 		  </div>
@@ -54,7 +54,7 @@
 	  <aside class="col-sm-4 no-margin">
 		<div class="contact-form">
 		  <h2>Contact us</h2>
-		  <p>If your company wants to participate in the pilot/beta phase with our existing pilot-customers, don't hasitate to drop us an email at <a href="mailto:INFO@SEADEX.NO">INFO@SEADEX.NO</a></p>
+		  <p>If your company wants to participate in the pilot/beta phase with our existing pilot-customers, don't hasitate to drop us an email at <a href="mailto:INFO@SEADEX.COM">INFO@SEADEX.COM</a></p>
 		 <!--
 		  <form role="form">
 			<div class="form-group">

@@ -41,7 +41,7 @@
 			}
 		}
 	</script>
-	  <h2>Customer RFQs</h2>
+	  <h2 class="text-right">Customer RFQs</h2>
 	  <div class="table-responsive">
 		<div class="row">
 		<div class="col-md-3">

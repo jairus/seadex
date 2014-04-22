@@ -2,7 +2,7 @@
 <section class="container text-center"  style="padding-bottom:50px; padding-top:60px;">
 	<div class="row">
 		<div class="col-md-12">
-		<strong>The bid has been accepted successfully. The Service Provider has been notified!</strong><br /><br /><br />
+		<strong>The bid has been accepted successfully. The Service Provider had been notified!</strong><br /><br /><br />
 		</div>
 	</div>
 	<div class="row">

@@ -10,6 +10,9 @@ class cs extends CI_Controller {
 	
 	public function index(){
 		if(!$_SESSION['customer']['id']){
+			if(!trim($_SESSION['redirect'])&&trim($_GET['redirect'])){
+				$_SESSION['redirect'] = urldecode($_GET['redirect']);
+			}
 			$this->load->view('sitelayout/header.php');
 			$this->load->view('sitelayout/nav.php');
 			$content = $this->load->view('cs/index.php', '', true);
@@ -18,7 +21,21 @@ class cs extends CI_Controller {
 			$this->load->view('sitelayout/footer.php');
 		}
 		else{
-			$this->dashboard();
+			if(trim($_SESSION['redirect'])){
+				echo "<!--";
+				print_r($_SESSION['redirect']);
+				echo "-->";
+				//exit();
+				?>
+				<script>
+					self.location = "<?php echo $_SESSION['redirect']; ?>";
+				</script>
+				<?php
+				unset($_SESSION['redirect']);
+			}
+			else{
+				$this->dashboard();
+			}
 		}
 		unset($_SESSION['rfq']);
 	}
@@ -32,7 +49,7 @@ class cs extends CI_Controller {
 		$this->load->view('sitelayout/footer.php');
 	}
 	public function account(){
-		if(!$_SESSION['logistic_provider']['id']){
+		if(!$_SESSION['customer']['id']){
 			echo "<script>self.location='".site_url("lp")."/'</script>";
 		}
 		$this->load->view('sitelayout/header.php');
@@ -46,6 +63,10 @@ class cs extends CI_Controller {
 	}
 	
 	public function rfq($id, $action){
+		if(!$_SESSION['customer']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
+		}
 		$sql = "select * from `rfq` where `id`='".mysql_real_escape_string($id)."' and `customer_id`='".$_SESSION['customer']['id']."'";
 		$q = $this->db->query($sql);
 		$rfq = $q->result_array();
@@ -161,6 +182,9 @@ class cs extends CI_Controller {
 				}
 			}
 		}
+		else{
+			//echo "here";
+		}
 	}
 	
 	private function sendAcceptBid($emailtos, $moremessage=""){
@@ -205,7 +229,10 @@ The SeaDex team";
 	}
 	
 	public function dashboard(){
-		$sql = "select * from `rfq` where `customer_id`='".$_SESSION['customer']['id']."' and `bid_id`<1 order by id desc";
+		$sql = "select * from `rfq` where 
+		`customer_id`='".$_SESSION['customer']['id']."' 
+		and `bid_id`<1 
+		order by id desc";
 		$q = $this->db->query($sql);
 		$rfqs = $q->result_array();
 		
@@ -228,7 +255,10 @@ The SeaDex team";
 	}
 	
 	public function completed_listings(){
-		$sql = "select * from `rfq` where `customer_id`='".$_SESSION['customer']['id']."' and bid_id>0 order by id desc";
+		$sql = "select * from `rfq` where 
+		`customer_id`='".$_SESSION['customer']['id']."' 
+		and bid_id>0 
+		order by id desc";
 		$q = $this->db->query($sql);
 		$rfqs = $q->result_array();
 		

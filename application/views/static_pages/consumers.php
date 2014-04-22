@@ -28,7 +28,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<form class="form-horizontal" action="<?php echo site_url("cs/login")."/"; ?>" method="post" style="max-width:400px; margin:auto" >
+			<form class="form-horizontal" action="<?php echo site_url("cs/login")."/"; ?>" method="post" style="max-width:500px; margin:auto" >
 			<?php
 			if(trim($_GET['message'])){
 				?>
@@ -43,14 +43,14 @@
 			<div class="row">
 				<div class="col-md-12">
 				  <div class="form-group">
-					<label class="col-sm-6 control-label">E-mail Address</label>
-					<div class="col-sm-6">
+					<label class="col-sm-3 control-label">E-mail Address</label>
+					<div class="col-sm-9">
 					  <input type="text" class="form-control" name='email' value="<?php echo htmlentitiesX($_SESSION['customer']['email']); ?>">
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label class="col-sm-6 control-label">Password</label>
-					<div class="col-sm-6">
+					<label class="col-sm-3 control-label">Password</label>
+					<div class="col-sm-9">
 					  <input type="password" class="form-control" name='password'>
 					</div>
 				  </div>

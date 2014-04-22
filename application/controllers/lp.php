@@ -10,6 +10,9 @@ class lp extends CI_Controller {
 	
 	public function index(){
 		if(!$_SESSION['logistic_provider']['id']){
+			if(!trim($_SESSION['redirect'])&&trim($_GET['redirect'])){
+				$_SESSION['redirect'] = urldecode($_GET['redirect']);
+			}
 			$this->load->view('sitelayout/header.php');
 			$this->load->view('sitelayout/nav.php');
 			$content = $this->load->view('lp/index.php', '', true);
@@ -18,7 +21,22 @@ class lp extends CI_Controller {
 			$this->load->view('sitelayout/footer.php');
 		}
 		else{
-			$this->dashboard();
+			
+			if(trim($_SESSION['redirect'])){
+				echo "<!--";
+				print_r($_SESSION['redirect']);
+				echo "-->";
+				//exit();
+				?>
+				<script>
+					self.location = "<?php echo $_SESSION['redirect']; ?>";
+				</script>
+				<?php
+				unset($_SESSION['redirect']);
+			}
+			else{
+				$this->dashboard();
+			}
 		}
 		unset($_SESSION['rfq']);
 	}
@@ -42,7 +60,8 @@ class lp extends CI_Controller {
 	}
 	public function account(){
 		if(!$_SESSION['logistic_provider']['id']){
-			echo "<script>self.location='".site_url("lp")."/'</script>";
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
 		}
 		$this->load->view('sitelayout/header.php');
 		$this->load->view('lp/nav.php');
@@ -54,9 +73,10 @@ class lp extends CI_Controller {
 		
 	}
 	
-	public function rfq($id, $action='bid'){
+	public function rfq($id, $action=''){
 		if(!$_SESSION['logistic_provider']['id']){
-			echo "<script>self.location='".site_url("lp")."/'</script>";
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
 		}
 		
 		$sql = "select * from `rfq` where `id`='".mysql_real_escape_string($id)."'";
@@ -549,6 +569,7 @@ class lp extends CI_Controller {
 		$q = $this->db->query($sql);
 		if(!$this->db->_error_message()){
 			$insert_id = $this->db->insert_id();
+			$bid_id = $insert_id;
 			if($insert_id){
 				$t = count($_FILES['attachments']['tmp_name']);
 				$folder = dirname(__FILE__)."/../../_uploads/bid_".$insert_id;
@@ -559,6 +580,30 @@ class lp extends CI_Controller {
 					move_uploaded_file($source, $destination);
 				}
 			}
+			
+			$sql = "select `customer_id` from `rfq` where `id`='".$_SESSION['for_bidding']['rfq_id']."'";
+			$q = $this->db->query($sql);
+			$customer_id = $q->result_array();
+			$customer_id = $customer_id[0]['customer_id'];
+			
+			if($customer_id){
+				$sql = "select * from `customers` where `id`='".$customer_id."'";
+				$q = $this->db->query($sql);
+				$customer = $q->result_array();
+			
+				$emailtos = array();
+				$email = array();
+				$email['name'] = $customer[0]['first_name']." ".$customer[0]['last_name'];
+				$email['email'] = $customer[0]['email'];
+				$emailtos[] = $email;
+				
+				$message .= "--\n\n";
+				$bidref = site_url("cs")."/rfq/".$_SESSION['for_bidding']['rfq_id']."/bid?bid_id=".$bid_id;
+				$message .= "Reference URL: <a href='".$bidref."'>".$bidref."</a><br />";
+			
+				$this->sendSubmittedBid($emailtos, $message);
+			}	
+					
 			echo "<script>window.parent.location='".site_url("lp/thankyou_for_bidding")."'</script>";
 		}
 		else{
@@ -651,6 +696,32 @@ class lp extends CI_Controller {
 		)
 
 		*/
+	}
+	
+	private function sendSubmittedBid($emailtos, $moremessage=""){
+	
+		$from = "noreply@seadex.com";
+		$fromname = "Seadex";
+
+		$subject = "A new bid had been placed for your RFQ!";
+		$template = array();
+		$template['data'] = array();
+		$template['data']['name'] = $toname;
+		$email_content = "
+Hello,
+
+A new bid had been placed for you RFQ:
+
+".$moremessage."
+
+Regards,
+The SeaDex team";
+		$template['data']['content'] = $email_content;
+		$template['data']['content'] = nl2br($template['data']['content']);
+		$template['slug'] = "seadex"; 
+		
+		send_email($from, $fromname, $emailtos, $subject, $message, $template);
+
 	}
 	
 	public function sendWelcome($emailtos){

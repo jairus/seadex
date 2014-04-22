@@ -48,7 +48,12 @@
 						  </td>
 						  <td>
 							<?php
-							  echo "USD ".number_format($rfqs[$i]['bids'][0]['total_bid_usd'],2,".", ",");
+							  if(isset($rfqs[$i]['bids'][0]['total_bid_usd'])){
+								echo "USD ".number_format($rfqs[$i]['bids'][0]['total_bid_usd'],2,".", ",");
+							  }
+							  else{
+								echo "-";
+							  }
 							?>
 						  </td>
 						   <td>

@@ -41,8 +41,8 @@ table th.startend{
 		<table class="table table-striped">
 		  <thead>
 			<tr>
-			  <th class="start">Bid #</th>
-			  <th width="13.3%">RFQ #</th>
+			  <th class="start">Bid&nbsp;#</th>
+			  <th width="13.3%">RFQ&nbsp;#</th>
 			  <th width="22.5%">Origin</th>
 			  <th width="22.5%">Destination</th>
 			  <th width="13.3%">My Bid (USD)</th>

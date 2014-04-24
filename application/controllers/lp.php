@@ -1007,7 +1007,10 @@ The SeaDex team";
 		`destination_port`,
 		`total_bid_usd`,
 		`dateadded`
-		from `bids` where `logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'";
+		from `bids` where 
+		`logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'
+		order by `id` desc
+		";
 		$q = $this->db->query($sql);
 		$bids = $q->result_array();
 		$data['bids'] = $bids;
@@ -1048,6 +1051,7 @@ The SeaDex team";
 			where 
 			`logistic_provider_id` = '".$_SESSION['logistic_provider']['id']."'
 		)
+		order by `id` desc
 		";
 		$q = $this->db->query($sql);
 		$bids = $q->result_array();

@@ -52,7 +52,7 @@
 			<table class="table table-striped">
 			  <thead>
 				<tr>
-				  <th class="startend">Search Filter</th>
+				  <th class="startend">RFQ Search Filter</th>
 				</tr>
 			  </thead>
 			  <tbody>

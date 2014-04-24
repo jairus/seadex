@@ -269,12 +269,14 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 							
 							$sql = "select * from `messages` where 
 							`from`='customer_".$rfq['userprofile']['id']."' and
-							`to`='logistic_provider_".$rfq['logistic_provider_id']."' 
+							`to`='logistic_provider_".$rfq['logistic_provider_id']."' and 
+							`rfq_id` = '".$rfq['id']."'
 							";
 							$q = $this->db->query($sql);
 							$message = $q->result_array();
 							echo nl2br($message[0]['message']);
 							?></div>
+							<div class="text-center" style="margin-bottom:10px; color:green">Date Accepted: <?php echo date("M d, Y",strtotime($rfq['dateaccepted'])); ?></div>
 							<?php
 						}
 						?>

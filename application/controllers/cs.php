@@ -150,6 +150,7 @@ class cs extends CI_Controller {
 						`to` = 'logistic_provider_".$bids[0]['logistic_provider_id']."',
 						`subject` = '".mysql_real_escape_string($subject)."',
 						`message` = '".mysql_real_escape_string($message)."',
+						`rfq_id` = '".mysql_real_escape_string($rfq[0]['id'])."',
 						`dateadded` = NOW()
 					";
 					$q = $this->db->query($sql);

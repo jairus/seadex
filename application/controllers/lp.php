@@ -92,6 +92,7 @@ class lp extends CI_Controller {
 		$rfqdata['id'] = $rfq[0]['id'];
 		$rfqdata['bid_id'] = $rfq[0]['bid_id'];
 		$rfqdata['logistic_provider_id'] = $rfq[0]['logistic_provider_id'];
+		$rfqdata['dateaccepted'] = $rfq[0]['dateaccepted'];
 		if($customer[0]['id']){
 			$rfqdata['userprofile'] = $customer[0];
 		}

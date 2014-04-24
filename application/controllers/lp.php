@@ -989,4 +989,78 @@ The SeaDex team";
 		$this->load->view('sitelayout/footer.php');
 	}
 	
+	public function mybids(){
+		if(!$_SESSION['logistic_provider']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
+		}
+		
+		$sql = "select 
+		`id`, 
+		`rfq_id`, 
+		`total_bid_usd`,
+		`origin_country`,
+		`origin_city`,
+		`origin_port`,
+		`destination_country`,
+		`destination_city`,
+		`destination_port`,
+		`total_bid_usd`,
+		`dateadded`
+		from `bids` where `logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'";
+		$q = $this->db->query($sql);
+		$bids = $q->result_array();
+		$data['bids'] = $bids;
+		
+		
+		
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('sitelayout/nav.php');
+		$content = $this->load->view('lp/mybids.php', $data, true);
+		$data['content'] = $content;
+		$content = $this->load->view('lp/content.php', $data);
+		$this->load->view('sitelayout/footer.php');
+	}
+	
+	public function acceptedbids(){
+		if(!$_SESSION['logistic_provider']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
+		}
+		
+		$sql = "select 
+		`id`, 
+		`rfq_id`, 
+		`total_bid_usd`,
+		`origin_country`,
+		`origin_city`,
+		`origin_port`,
+		`destination_country`,
+		`destination_city`,
+		`destination_port`,
+		`total_bid_usd`,
+		`dateadded`
+		from `bids` where `logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'
+		and `id` in (
+			select
+			`bid_id`
+			from `rfq`
+			where 
+			`logistic_provider_id` = '".$_SESSION['logistic_provider']['id']."'
+		)
+		";
+		$q = $this->db->query($sql);
+		$bids = $q->result_array();
+		$data['bids'] = $bids;
+		
+		
+		
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('sitelayout/nav.php');
+		$content = $this->load->view('lp/acceptedbids.php', $data, true);
+		$data['content'] = $content;
+		$content = $this->load->view('lp/content.php', $data);
+		$this->load->view('sitelayout/footer.php');
+	}
+	
 }

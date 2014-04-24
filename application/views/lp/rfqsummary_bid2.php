@@ -107,7 +107,18 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
 		</div>
 		<div class="col-md-6 text-right">
-			
+			<?php
+			if($_GET['accepted']){
+				?>
+				<input type="button" class="btn btn-default" style="margin:20px;" value="Back to My Accepted Bids" onclick="self.location='<?php echo site_url("lp") ?>/acceptedbids'">
+				<?php
+			}
+			else{
+				?>
+				<input type="button" class="btn btn-default" style="margin:20px;" value="Back to My Bids" onclick="self.location='<?php echo site_url("lp") ?>/mybids'">
+				<?php
+			}
+			?>
 		</div>
 	</div>
 	<div class="row">
@@ -407,7 +418,7 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 								?>
 								<tr>
 									<td>
-										<?php echo $bids[$i]['company_name'] ; ?>
+										<?php echo $_SESSION['logistic_provider']['company_name'] ; ?>
 									</td>
 									<td>
 										<?php 

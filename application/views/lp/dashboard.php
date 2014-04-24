@@ -266,7 +266,7 @@
 			<table class="table table-striped">
 			  <thead>
 				<tr>
-				  <th class="start">#</th>
+				  <th class="start">RFQ #</th>
 				  <th width="20%">Origin</th>
 				  <th width="20%">Destination</th>
 				  <th width="13.3%">Pickup Date</th>

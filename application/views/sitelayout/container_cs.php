@@ -5,7 +5,7 @@
 		<li><a href="<?php echo site_url(); ?>">Home</a></li>
 		<li><a href="<?php echo site_url("cs"); ?>">Consumer</a></li>
 		<?php
-		if(strtolower($page)=="sign-up"||strtolower($page)=="login"){
+		if(strtolower($page)=="sign-up"||strtolower($page)=="login"||strtolower($page)=="forgot password"){
 			?>
 			<li class="active"><?php echo $page; ?></li>
 			<?php

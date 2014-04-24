@@ -263,10 +263,11 @@
 			  <thead>
 				<tr>
 				  <th class="start">#</th>
-				  <th width="22.5%">Origin</th>
-				  <th width="22.5%">Destination</th>
+				  <th width="20%">Origin</th>
+				  <th width="20%">Destination</th>
 				  <th width="13.3%">Pickup Date</th>
 				  <th width="13.3%">Delivery Date</th>
+				  <th width="5%">Bids</th>
 				  <th width="13.3%">Date Added</th>
 				  <th class="end" width="13%"></th>
 				</tr>
@@ -311,6 +312,11 @@
 					  <td>
 						<?php
 						  echo date("M d, Y", strtotime($rfqs[$i]['destination_date']));
+						?>
+					  </td>
+					  <td>
+						<?php
+						   echo count($rfqs[$i]['bids']);
 						?>
 					  </td>
 					  <td>

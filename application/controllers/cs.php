@@ -188,7 +188,10 @@ class cs extends CI_Controller {
 	}
 	
 	private function sendAcceptBid($emailtos, $moremessage=""){
-	
+		if(!$_SESSION['customer']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
+		}
 		$from = "noreply@seadex.com";
 		$fromname = "Seadex";
 
@@ -215,6 +218,10 @@ The SeaDex team";
 
 	
 	public function acceptbid_success(){
+		if(!$_SESSION['customer']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
+		}
 		$this->load->view('sitelayout/header.php');
 		$this->load->view('sitelayout/nav.php');
 		$content = $this->load->view('cs/acceptbid_success.php', '', true);
@@ -229,6 +236,10 @@ The SeaDex team";
 	}
 	
 	public function dashboard(){
+		if(!$_SESSION['customer']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
+		}
 		$sql = "select * from `rfq` where 
 		`customer_id`='".$_SESSION['customer']['id']."' 
 		and `bid_id`<1 
@@ -255,6 +266,10 @@ The SeaDex team";
 	}
 	
 	public function completed_listings(){
+		if(!$_SESSION['customer']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
+		}
 		$sql = "select * from `rfq` where 
 		`customer_id`='".$_SESSION['customer']['id']."' 
 		and bid_id>0 
@@ -279,10 +294,47 @@ The SeaDex team";
 		$content = $this->load->view('cs/content.php', $data);
 		$this->load->view('sitelayout/footer.php');
 	}
+
+	
+	public function expired_listings(){
+		if(!$_SESSION['customer']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
+		}
+		$sql = "select * from `rfq` where 
+		`customer_id`='".$_SESSION['customer']['id']."' 
+		and bid_id<1
+		and UNIX_TIMESTAMP(`destination_date`)< ".(time()+(2*60*60*24))."
+		order by id desc";
+		$q = $this->db->query($sql);
+		$rfqs = $q->result_array();
+		
+		$t = count($rfqs);
+		for($i=0; $i<$t; $i++){
+			$sql = "select `id`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` where `rfq_id` = '".$rfqs[$i]['id']."' order by `total_bid_usd` asc";
+			$q = $this->db->query($sql);
+			$bids = $q->result_array();
+			$rfqs[$i]['bids'] = $bids;
+		}
+		
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('sitelayout/nav.php');
+		$data['rfqs'] = $rfqs;
+		$data['count'] = $count;
+		$content = $this->load->view('cs/completed_listings.php', $data, true);
+		$data['content'] = $content;
+		$content = $this->load->view('cs/content.php', $data);
+		$this->load->view('sitelayout/footer.php');
+	}
+	
 	
 	public function logout(){
+		if(!$_SESSION['customer']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
+		}
 		unset($_SESSION['customer']);
-		echo "<script>self.location='".site_url("consumers")."/'</script>";
+		echo "<script>self.location='".site_url("cs")."/'</script>";
 	}
 	public function login(){
 		if($_POST){
@@ -480,7 +532,153 @@ The SeaDex team";
 		send_email($from, $fromname, $emailtos, $subject, $message, $template);
 
 	}
+	
+	public function changepass(){
+		if(!$_SESSION['customer']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
+		}
+		
+		if($_POST){
+			if(!trim($_POST['password'])){
+				$_SESSION['changepass']['error'] = "Please enter a valid password!";
+			}
+			else if(trim($_POST['password'])!=trim($_POST['confirm_password'])){
+				$_SESSION['changepass']['error'] = "Password and Confirm Password don't match!";
+			}
+			else{
+				$sql = "update `customers` set
+				`password` = '".mysql_real_escape_string(md5(trim($_POST['password'])))."'
+				where `id`='".$_SESSION['customer']['id']."'
+				";
+				$this->db->query($sql);
+				$_SESSION['changepass']['success'] = "Successfully changed password!";
+			}
+			
+			
+		}
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('sitelayout/nav.php');
+		$content = $this->load->view('cs/changepass.php', $data, true);
+		$data['content'] = $content;
+		$content = $this->load->view('cs/content.php', $data);
+		$this->load->view('sitelayout/footer.php');
+	}
+	
+	
 
+	public function forgotpass($token=""){
+		if(!$token){
+			if($_POST){
+				$_SESSION['forgotpass']['email'] = $_POST['email'];
+				$sql = "select * from `customers` where lower(`email`) = '".mysql_real_escape_string(strtolower(trim($_POST['email'])))."'";
+				$q = $this->db->query($sql);
+				$customer = $q->result_array();
+				if($customer[0]['id']){
+					$_SESSION['forgotpass']['success'] = "A reset password e-mail has been sent to ".$_SESSION['forgotpass']['email'].".";
+					$token = time();
+					$sql = "insert into `forgotpass_tokens` set
+						`who_id` = 'customer_".$customer[0]['id']."',
+						`timestamp` = '".$token."'
+					";
+					$q = $this->db->query($sql);
+					$link = site_url("cs")."/forgotpass/".md5($token);
+					
+					$emailtos = array();
+					$email = array();
+					$email['name'] = $customer[0]['first_name']." ".$customer[0]['last_name'];
+					$email['email'] = $customer[0]['email'];
+					$emailtos[] = $email;
+					$this->sendForgotPass($emailtos, $link);
+					unset($_SESSION['forgotpass']['email']);
+				}
+				else{
+					$_SESSION['forgotpass']['error'] = "The specified E-mail address is not a registered SeaDex consumer.";
+				}
+				
+			}
+			$this->load->view('sitelayout/header.php');
+			$this->load->view('sitelayout/nav.php');
+			$content = $this->load->view('cs/forgotpass.php', '', true);
+			$data['content'] = $content;
+			$data['page'] = "Forgot Password";
+			$this->load->view('sitelayout/container_cs.php', $data);
+			$this->load->view('sitelayout/footer.php');
+		}
+		else{
+			
+			$sql = "select * from `forgotpass_tokens` where md5(`timestamp`) = '".mysql_real_escape_string($token)."' and `used`<1";
+			$q = $this->db->query($sql);
+			$token = $q->result_array();
+			$who_id = $token[0]['who_id'];
+			$who_id_str = $who_id;
+			$who_id = explode("_", $who_id);
+			if($who_id[0]=="customer" && $who_id[1]>0&&(time()-$token[0]['timestamp'])<(5*60)){
+				$sql = "select * from `customers` where `id`='".mysql_real_escape_string($who_id[1])."'";
+				$q = $this->db->query($sql);
+				$customer = $q->result_array();
+				if($customer[0]['id']){
+					if($_POST){
+						if(trim($_POST['password'])){
+							$sql = "update `customers` set `password` = '".mysql_real_escape_string(md5(trim($_POST['password'])))."' 
+							where `id`='".$customer[0]['id']."'
+							";
+							$q = $this->db->query($sql);
+							$sql = "update `forgotpass_tokens` set `used`=1 where `who_id`='".$who_id_str."'";
+							$q = $this->db->query($sql);
+							$_SESSION['customer']['email'] = $customer[0]['email'];
+							$_SESSION['forgotpass']['success'] = "Successfully updated the password for ".$customer[0]['email'].".
+							<a href='".site_url('cs')."'>Click here to login</a>
+							"; 
+						}
+						else{
+							$_SESSION['forgotpass']['error'] = "Please enter a valid password."; 
+						}
+					}
+					$_SESSION['forgotpass']['email'] = $customer[0]['email'];
+					$this->load->view('sitelayout/header.php');
+					$this->load->view('sitelayout/nav.php');
+					$content = $this->load->view('cs/newpass.php', '', true);
+					$data['content'] = $content;
+					$data['page'] = "Forgot Password";
+					$this->load->view('sitelayout/container_cs.php', $data);
+					$this->load->view('sitelayout/footer.php');
+				}
+			}
+			else{
+				?>
+				<script>
+				self.location = "<?php echo site_url("cs"); ?>";
+				</script>
+				<?php
+			}
+		}
+	}
+	
+	private function sendForgotPass($emailtos, $link){
+	
+		$from = "noreply@seadex.com";
+		$fromname = "Seadex";
+
+		$subject = "Consumer Login Password Reset!";
+		$template = array();
+		$template['data'] = array();
+		$template['data']['name'] = $toname;
+		$email_content = "Hello,
+
+Please visit the link below to reset your password:
+
+<a href='".$link."' target='_blank'>".$link."</a>
+
+Regards,
+The SeaDex team";
+		$template['data']['content'] = $email_content;
+		$template['data']['content'] = nl2br($template['data']['content']);
+		$template['slug'] = "seadex"; 
+		
+		send_email($from, $fromname, $emailtos, $subject, $message, $template);
+
+	}
 	
 	
 }

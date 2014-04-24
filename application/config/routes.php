@@ -46,6 +46,8 @@ $route['situation'] = "static_pages/situation";
 $route['situation/(:any)'] = "static_pages/situation/$1";
 $route['consumers'] = "static_pages/consumers";
 $route['consumers/(:any)'] = "static_pages/consumers/$1";
+$route['service_providers'] = "static_pages/service_providers";
+$route['service_providers/(:any)'] = "static_pages/service_providers/$1";
 $route['contact'] = "static_pages/contact";
 $route['contact/(:any)'] = "static_pages/contact/$1";
 

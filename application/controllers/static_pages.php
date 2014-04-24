@@ -25,7 +25,7 @@ class static_pages extends CI_Controller {
 	}
 	
 	public function consumers(){
-		if(!$_SESSION['customer']){
+		if(!$_SESSION['customer']['id']){
 			$data['title_tag'] = "Consumer";
 			$this->load->view('sitelayout/header.php', $data);
 			$this->load->view('sitelayout/nav.php');
@@ -37,6 +37,23 @@ class static_pages extends CI_Controller {
 			?>
 			<script>
 				self.location = "<?php echo site_url("cs"); ?>";
+			</script>
+			<?php
+		}
+	}
+	public function service_providers(){
+		if(!$_SESSION['logistic_provider']['id']){
+			$data['title_tag'] = "Consumer";
+			$this->load->view('sitelayout/header.php', $data);
+			$this->load->view('sitelayout/nav.php');
+			$this->load->view('static_pages/service_providers.php', $data);
+			$this->load->view('sitelayout/footer.php');
+			unset($_SESSION['rfq']);
+		}
+		else{
+			?>
+			<script>
+				self.location = "<?php echo site_url("lp"); ?>";
 			</script>
 			<?php
 		}

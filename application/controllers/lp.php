@@ -43,7 +43,7 @@ class lp extends CI_Controller {
 	
 	public function sa(){
 		$this->load->view('sitelayout/header.php');
-		$this->load->view('lp/nav.php');
+		$this->load->view('sitelayout/nav.php');
 		$content = $this->load->view('lp/sa.php', $data, true);
 		$data['content'] = $content;
 		$content = $this->load->view('lp/content.php', $data);
@@ -52,7 +52,7 @@ class lp extends CI_Controller {
 	
 	public function tor(){
 		$this->load->view('sitelayout/header.php');
-		$this->load->view('lp/nav.php');
+		$this->load->view('sitelayout/nav.php');
 		$content = $this->load->view('lp/tor.php', $data, true);
 		$data['content'] = $content;
 		$content = $this->load->view('lp/content.php', $data);
@@ -64,7 +64,7 @@ class lp extends CI_Controller {
 			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
 		}
 		$this->load->view('sitelayout/header.php');
-		$this->load->view('lp/nav.php');
+		$this->load->view('sitelayout/nav.php');
 		$data['account'] = $_SESSION['logistic_provider'];
 		$content = $this->load->view('lp/account.php', $data, true);
 		$data['content'] = $content;
@@ -98,7 +98,7 @@ class lp extends CI_Controller {
 		}
 		
 		$this->load->view('sitelayout/header.php');
-		$this->load->view('lp/nav.php');
+		$this->load->view('sitelayout/nav.php');
 		$data['rfq'] = $rfqdata;
 		if($action=='bid'){
 			if($_GET['bid_id']){
@@ -363,8 +363,16 @@ class lp extends CI_Controller {
 			$q = $this->db->query($sql);
 			$rfqs = $q->result_array();
 			
+			$t = count($rfqs);
+			for($i=0; $i<$t; $i++){
+				$sql = "select `id`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` where `rfq_id` = '".$rfqs[$i]['id']."' order by `total_bid_usd` asc";
+				$q = $this->db->query($sql);
+				$bids = $q->result_array();
+				$rfqs[$i]['bids'] = $bids;
+			}
+			
 			$this->load->view('sitelayout/header.php');
-			$this->load->view('lp/nav.php');
+			$this->load->view('sitelayout/nav.php');
 			$data['rfqs'] = $rfqs;
 			$data['count'] = $count;
 			$content = $this->load->view('lp/dashboard.php', $data, true);
@@ -831,6 +839,120 @@ The SeaDex team";
 
 	}
 
+	
+	public function forgotpass($token=""){
+		if(!$token){
+			if($_POST){
+				$_SESSION['forgotpass']['email'] = $_POST['email'];
+				$sql = "select * from `logistic_providers` where lower(`email`) = '".mysql_real_escape_string(strtolower(trim($_POST['email'])))."'";
+				$q = $this->db->query($sql);
+				$logistic_provider = $q->result_array();
+				if($logistic_provider[0]['id']){
+					$_SESSION['forgotpass']['success'] = "A reset password e-mail has been sent to ".$_SESSION['forgotpass']['email'].".";
+					$token = time();
+					$sql = "insert into `forgotpass_tokens` set
+						`who_id` = 'logistic_provider_".$logistic_provider[0]['id']."',
+						`timestamp` = '".$token."'
+					";
+					$q = $this->db->query($sql);
+					$link = site_url("lp")."/forgotpass/".md5($token);
+					
+					$emailtos = array();
+					$email = array();
+					$email['name'] = $logistic_provider[0]['company_name'];
+					$email['email'] = $logistic_provider[0]['email'];
+					$emailtos[] = $email;
+					$this->sendForgotPass($emailtos, $link);
+					unset($_SESSION['forgotpass']['email']);
+				}
+				else{
+					$_SESSION['forgotpass']['error'] = "The specified E-mail address is not a registered SeaDex Service Provider.";
+				}
+				
+			}
+			$this->load->view('sitelayout/header.php');
+			$this->load->view('sitelayout/nav.php');
+			$content = $this->load->view('lp/forgotpass.php', '', true);
+			$data['content'] = $content;
+			$data['page'] = "Forgot Password";
+			$this->load->view('sitelayout/container_lp.php', $data);
+			$this->load->view('sitelayout/footer.php');
+		}
+		else{
+			
+			$sql = "select * from `forgotpass_tokens` where md5(`timestamp`) = '".mysql_real_escape_string($token)."' and `used`<1";
+			$q = $this->db->query($sql);
+			$token = $q->result_array();
+			
+			$who_id = $token[0]['who_id'];
+			$who_id_str = $who_id;
+			$who_id = explode("_", $who_id);
+			if($who_id[0]=="logistic" && $who_id[2]>0&&(time()-$token[0]['timestamp'])<(5*60)){
+				$sql = "select * from `logistic_providers` where `id`='".mysql_real_escape_string($who_id[2])."'";
+				$q = $this->db->query($sql);
+				$logistic_provider = $q->result_array();
+				if($logistic_provider[0]['id']){
+					if($_POST){
+						if(trim($_POST['password'])){
+							$sql = "update `logistic_providers` set `password` = '".mysql_real_escape_string(md5(trim($_POST['password'])))."' 
+							where `id`='".$logistic_provider[0]['id']."'
+							";
+							$q = $this->db->query($sql);
+							$sql = "update `forgotpass_tokens` set `used`=1 where `who_id`='".$who_id_str."'";
+							$q = $this->db->query($sql);
+							$_SESSION['logistic_provider']['email'] = $logistic_provider[0]['email'];
+							$_SESSION['forgotpass']['success'] = "Successfully updated the password for ".$logistic_provider[0]['email'].".
+							<a href='".site_url('lp')."'>Click here to login</a>
+							"; 
+						}
+						else{
+							$_SESSION['forgotpass']['error'] = "Please enter a valid password."; 
+						}
+					}
+					$_SESSION['forgotpass']['email'] = $logistic_provider[0]['email'];
+					$this->load->view('sitelayout/header.php');
+					$this->load->view('sitelayout/nav.php');
+					$content = $this->load->view('lp/newpass.php', '', true);
+					$data['content'] = $content;
+					$data['page'] = "Forgot Password";
+					$this->load->view('sitelayout/container_lp.php', $data);
+					$this->load->view('sitelayout/footer.php');
+				}
+			}
+			else{
+				?>
+				<script>
+				self.location = "<?php echo site_url("lp"); ?>";
+				</script>
+				<?php
+			}
+		}
+	}
+	
+	private function sendForgotPass($emailtos, $link){
+	
+		$from = "noreply@seadex.com";
+		$fromname = "Seadex";
+
+		$subject = "Service Provider Login Password Reset!";
+		$template = array();
+		$template['data'] = array();
+		$template['data']['name'] = $toname;
+		$email_content = "Hello,
+
+Please visit the link below to reset your password:
+
+<a href='".$link."' target='_blank'>".$link."</a>
+
+Regards,
+The SeaDex team";
+		$template['data']['content'] = $email_content;
+		$template['data']['content'] = nl2br($template['data']['content']);
+		$template['slug'] = "seadex"; 
+		
+		send_email($from, $fromname, $emailtos, $subject, $message, $template);
+
+	}
 	
 	
 }

@@ -625,7 +625,27 @@ if($rfq['userprofile']['customer_type']){
 																	<span>Length:</span> <i><?php echo ($cargo['details']['packing']['length'][$i]+0)." ".$cargo['details']['packing']['length_unit'][$i]; ?></i><br />
 																	<span>Width:</span> <i><?php echo ($cargo['details']['packing']['width'][$i]+0)." ".$cargo['details']['packing']['width_unit'][$i]; ?></i><br />
 																	<span>Height:</span> <i><?php echo ($cargo['details']['packing']['height'][$i]+0)." ".$cargo['details']['packing']['height_unit'][$i]; ?></i><br />
-																	<span>Volume:</span> <i><?php echo ($cargo['details']['packing']['qty'][$i]+0)*($cargo['details']['packing']['height'][$i]+0)*($cargo['details']['packing']['width'][$i]+0)*($cargo['details']['packing']['length'][$i]+0)." cu ".$cargo['details']['packing']['height_unit'][$i]; ?></i><br />
+																	<span>Total Volume:</span> <i><?php 
+																	
+																	$volume = ($cargo['details']['packing']['height'][$i]+0)*($cargo['details']['packing']['width'][$i]+0)*($cargo['details']['packing']['length'][$i]+0); 
+																	$totalvolume = ($cargo['details']['packing']['qty'][$i]+0)*$volume;
+																	$print = $totalvolume." cu ".$cargo['details']['packing']['height_unit'][$i];
+																	
+																	if($cargo['details']['packing']['height_unit'][$i]=="cm"){
+																		$totalvolume = $totalvolume/1000000;
+																		$print = $totalvolume." cu m";
+																	}
+																	
+																	if($cargo['details']['packing']['height_unit'][$i]=="in"){
+																		$totalvolume = $totalvolume * 0.00057870;
+																		$print = $totalvolume." cu ft";
+																	}
+																	
+																	
+																	echo $print; 
+																	
+																	?>
+																	</i><br />
 																	</td>
 																</tr>
 																<?php
@@ -725,7 +745,27 @@ if($rfq['userprofile']['customer_type']){
 																	<span>Length:</span> <i><?php echo ($cargo['details']['packing']['length'][$i]+0)." ".$cargo['details']['packing']['length_unit'][$i]; ?></i><br />
 																	<span>Width:</span> <i><?php echo ($cargo['details']['packing']['width'][$i]+0)." ".$cargo['details']['packing']['width_unit'][$i]; ?></i><br />
 																	<span>Height:</span> <i><?php echo ($cargo['details']['packing']['height'][$i]+0)." ".$cargo['details']['packing']['height_unit'][$i]; ?></i><br />
-																	<span>Volume:</span> <i><?php echo ($cargo['details']['packing']['qty'][$i]+0)*($cargo['details']['packing']['height'][$i]+0)*($cargo['details']['packing']['width'][$i]+0)*($cargo['details']['packing']['length'][$i]+0)." cu ".$cargo['details']['packing']['height_unit'][$i]; ?></i><br />
+																	<span>Total Volume:</span> <i><?php 
+																	
+																	$volume = ($cargo['details']['packing']['height'][$i]+0)*($cargo['details']['packing']['width'][$i]+0)*($cargo['details']['packing']['length'][$i]+0); 
+																	$totalvolume = ($cargo['details']['packing']['qty'][$i]+0)*$volume;
+																	$print = $totalvolume." cu ".$cargo['details']['packing']['height_unit'][$i];
+																	
+																	if($cargo['details']['packing']['height_unit'][$i]=="cm"){
+																		$totalvolume = $totalvolume/1000000;
+																		$print = $totalvolume." cu m";
+																	}
+																	
+																	if($cargo['details']['packing']['height_unit'][$i]=="in"){
+																		$totalvolume = $totalvolume * 0.00057870;
+																		$print = $totalvolume." cu ft";
+																	}
+																	
+																	
+																	echo $print; 
+																	
+																	?>
+																	</i><br />
 																</td>
 															</tr>
 															<?php
@@ -775,7 +815,27 @@ if($rfq['userprofile']['customer_type']){
 																	<span>Length:</span> <i><?php echo ($cargo['details']['packing']['length'][$i]+0)." ".$cargo['details']['packing']['length_unit'][$i]; ?></i><br />
 																	<span>Width:</span> <i><?php echo ($cargo['details']['packing']['width'][$i]+0)." ".$cargo['details']['packing']['width_unit'][$i]; ?></i><br />
 																	<span>Height:</span> <i><?php echo ($cargo['details']['packing']['height'][$i]+0)." ".$cargo['details']['packing']['height_unit'][$i]; ?></i><br />
-																	<span>Volume:</span> <i><?php echo ($cargo['details']['packing']['qty'][$i]+0)*($cargo['details']['packing']['height'][$i]+0)*($cargo['details']['packing']['width'][$i]+0)*($cargo['details']['packing']['length'][$i]+0)." cu ".$cargo['details']['packing']['height_unit'][$i]; ?></i><br />
+																	<span>Total Volume:</span> <i><?php 
+																	
+																	$volume = ($cargo['details']['packing']['height'][$i]+0)*($cargo['details']['packing']['width'][$i]+0)*($cargo['details']['packing']['length'][$i]+0); 
+																	$totalvolume = ($cargo['details']['packing']['qty'][$i]+0)*$volume;
+																	$print = $totalvolume." cu ".$cargo['details']['packing']['height_unit'][$i];
+																	
+																	if($cargo['details']['packing']['height_unit'][$i]=="cm"){
+																		$totalvolume = $totalvolume/1000000;
+																		$print = $totalvolume." cu m";
+																	}
+																	
+																	if($cargo['details']['packing']['height_unit'][$i]=="in"){
+																		$totalvolume = $totalvolume * 0.00057870;
+																		$print = $totalvolume." cu ft";
+																	}
+																	
+																	
+																	echo $print; 
+																	
+																	?>
+																	</i><br />
 																<span>Weight:</span> <i><?php echo ($cargo['details']['packing']['weight'][$i]+0)." ".$cargo['details']['packing']['weight_unit'][$i]; ?></i>
 																</td>
 															</tr>

@@ -10,7 +10,7 @@
 		if(trim($_GET['message'])){
 			?>
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-12 text-center">
 				  <a style="color:red"><?php echo $_GET['message']; ?></a><br /><br />
 				</div>
 			</div>
@@ -40,7 +40,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-12 text-center">
-			  <!--<a href="<?php echo site_url("lp/forgotpassword")."/"; ?>">Forgot Password</a>&nbsp;&nbsp;&nbsp;-->
+			  <a href="<?php echo site_url("lp/forgotpass")."/"; ?>">Forgot Password</a>&nbsp;&nbsp;&nbsp;
 			  <a href="<?php echo site_url("lp/register")."/"; ?>">Sign-up for Free</a>
 			</div>
 		</div>

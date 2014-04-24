@@ -63,7 +63,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12 text-center">
-				  <!--<a href="<?php echo site_url("cs/forgotpassword")."/"; ?>">Forgot Password</a>&nbsp;&nbsp;&nbsp;-->
+				  <a href="<?php echo site_url("cs/forgotpass")."/"; ?>">Forgot Password</a>&nbsp;&nbsp;&nbsp;
 				  <a href="<?php echo site_url("cs/register")."/"; ?>">Sign-up for Free</a>
 				</div>
 			</div>

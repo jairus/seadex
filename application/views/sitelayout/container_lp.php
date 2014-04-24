@@ -3,9 +3,9 @@
 	<div class="container">
 	   <ol class="breadcrumb">
 		<li><a href="<?php echo site_url(); ?>">Home</a></li>
-		<li><a href="<?php echo site_url("lp"); ?>">Service Providers</a></li>
+		<li><a href="<?php echo site_url("service_providers"); ?>">Service Providers</a></li>
 		<?php
-		if(strtolower($page)=="sign-up"||strtolower($page)=="login"){
+		if(strtolower($page)=="sign-up"||strtolower($page)=="login"||strtolower($page)=="forgot password"){
 			?>
 			<li class="active"><?php echo $page; ?></li>
 			<?php

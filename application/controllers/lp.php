@@ -86,7 +86,6 @@ class lp extends CI_Controller {
 			$sql = "select * from `customers` where `id`='".mysql_real_escape_string($rfq[0]['customer_id'])."'";
 			$q = $this->db->query($sql);
 			$customer = $q->result_array();
-			
 		}
 		$rfqdata = unserialize(base64_decode($rfq[0]['data']));
 		$rfqdata['id'] = $rfq[0]['id'];
@@ -96,6 +95,8 @@ class lp extends CI_Controller {
 		if($customer[0]['id']){
 			$rfqdata['userprofile'] = $customer[0];
 		}
+		
+		
 		
 		$this->load->view('sitelayout/header.php');
 		$this->load->view('sitelayout/nav.php');
@@ -1009,6 +1010,13 @@ The SeaDex team";
 		`dateadded`
 		from `bids` where 
 		`logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'
+		and `id` not in (
+			select
+			`bid_id`
+			from `rfq`
+			where 
+			`logistic_provider_id` = '".$_SESSION['logistic_provider']['id']."'
+		)
 		order by `id` desc
 		";
 		$q = $this->db->query($sql);

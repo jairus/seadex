@@ -36,7 +36,7 @@ if($_SESSION['rfq_complete']||1){
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<button type="button" class="btn btn-default btn-lg" onclick='self.location="<?php echo site_url("rfq")."/"; ?>"'>Request for a new Quote</button>
+			<button type="button" class="btn btn-default btn-lg" onclick='self.location="<?php echo site_url("cs")."/"; ?>"'>Go to your RFQ Dashboard</button>
 		</div>
 	</div>
 </section>

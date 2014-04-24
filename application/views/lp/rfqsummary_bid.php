@@ -103,8 +103,11 @@ if($rfq['userprofile']['customer_type']){
 	<iframe name="ninjaframe" style="display:none ; width:500px; height:200px;"  ></iframe>
 	<form action="<?php echo site_url("lp/submit_bid"); ?>" method="post" enctype="multipart/form-data" target="ninjaframe">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-6">
 			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
+		</div>
+		<div class="col-md-6 text-right">
+			<input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
 		</div>
 	</div>
 	<div class="row">
@@ -1165,7 +1168,7 @@ if($rfq['userprofile']['customer_type']){
 					</tr>
 					<tr>
 						<td colspan=2 class="text-center">
-							<input type="submit" class="btn btn-default" style="margin:20px;" value="Submit Your Bid" onclick="return confirm('Are you sure you want to submit this bid?');" >
+							<input type="submit" class="btn btn-primary btn-lg" style="margin:20px;" value="Submit Your Bid" onclick="return confirm('Are you sure you want to submit this bid?');" >
 							<input type="button" class="btn btn-default" style="margin:20px;" value="Cancel" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfq['id']; ?>'">
 						</td>
 					</tr>

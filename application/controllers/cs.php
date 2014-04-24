@@ -329,12 +329,9 @@ The SeaDex team";
 	
 	
 	public function logout(){
-		if(!$_SESSION['customer']['id']){
-			$redirect = urlencode($_SERVER['REQUEST_URI']);
-			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
-		}
 		unset($_SESSION['customer']);
-		echo "<script>self.location='".site_url("cs")."/'</script>";
+		unset($_SESSION['logistic_provider']);
+		echo "<script>self.location='".site_url()."'</script>";
 	}
 	public function login(){
 		if($_POST){

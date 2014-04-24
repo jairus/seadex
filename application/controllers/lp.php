@@ -124,7 +124,8 @@ class lp extends CI_Controller {
 	
 	public function dashboard(){
 		if(!$_SESSION['logistic_provider']['id']){
-			$this->index();
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
 		}
 		else{
 			//$sql = "select * from `rfq` where `destination_timestamp_utc`>=".time()." order by `destination_timestamp_utc`, `destination_country` asc limit 50";
@@ -383,8 +384,9 @@ class lp extends CI_Controller {
 	}
 	
 	public function logout(){
+		unset($_SESSION['customer']);
 		unset($_SESSION['logistic_provider']);
-		echo "<script>self.location='".site_url("lp")."/'</script>";
+		echo "<script>self.location='".site_url()."'</script>";
 	}
 	public function login(){
 		if($_POST){
@@ -501,7 +503,8 @@ class lp extends CI_Controller {
 	}
 	public function submit_bid(){
 		if(!$_SESSION['logistic_provider']['id']){
-			$this->index();
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
 		}
 		
 		$bid = array();
@@ -954,5 +957,36 @@ The SeaDex team";
 
 	}
 	
+	public function changepass(){
+		if(!$_SESSION['logistic_provider']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
+		}
+		
+		if($_POST){
+			if(!trim($_POST['password'])){
+				$_SESSION['changepass']['error'] = "Please enter a valid password!";
+			}
+			else if(trim($_POST['password'])!=trim($_POST['confirm_password'])){
+				$_SESSION['changepass']['error'] = "Password and Confirm Password don't match!";
+			}
+			else{
+				$sql = "update `logistic_providers` set
+				`password` = '".mysql_real_escape_string(md5(trim($_POST['password'])))."'
+				where `id`='".$_SESSION['logistic_provider']['id']."'
+				";
+				$this->db->query($sql);
+				$_SESSION['changepass']['success'] = "Successfully changed password!";
+			}
+			
+			
+		}
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('sitelayout/nav.php');
+		$content = $this->load->view('lp/changepass.php', $data, true);
+		$data['content'] = $content;
+		$content = $this->load->view('lp/content.php', $data);
+		$this->load->view('sitelayout/footer.php');
+	}
 	
 }

@@ -45,6 +45,10 @@
 	  <div class="table-responsive">
 		<div class="row">
 		<div class="col-md-3">
+			
+			<?php
+			include_once(dirname(__FILE__)."/dash_menu.php");
+			?>
 			<table class="table table-striped">
 			  <thead>
 				<tr>

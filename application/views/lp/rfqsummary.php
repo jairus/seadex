@@ -51,7 +51,8 @@ if($rfq['userprofile']['contact_number']){
 			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
 		</div>
 		<div class="col-md-6 text-right">
-			<input type="button" class="btn btn-default" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
+			<input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
+			<input type="button" class="btn btn-primary btn-lg" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
 		</div>
 	</div>
 	<div class="row">
@@ -471,7 +472,8 @@ if($rfq['userprofile']['contact_number']){
 					</tr>
 					<tr>
 						<td colspan=2 class="text-center">
-							<input type="button" class="btn btn-default" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
+							<input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
+							<input type="button" class="btn btn-primary btn-lg" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
 						</td>
 					</tr>
 					<?php

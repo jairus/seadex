@@ -164,14 +164,16 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 									</td>
 									<td>
 										<?php
+										
 										if($_POST['total_bid_currency']){
 											$currency2 = explode(" ", $_POST['total_bid_currency'], 2);
 											$currency_short2 = $currency2[0];
 											$currency_long2 = $currency2[1];
-											$exchange_rate = @file_get_contents("http://rate-exchange.appspot.com/currency?from=".$currency_short."&to=".$currency_short2);
-											$exchange_rate = @json_decode($exchange_rate);
-											if(isset($exchange_rate->rate)){
-												$bid_equiv = $exchange_rate->rate * $bids[$i]['total_bid'];
+											//$exchange_rate = file_get_contents("http://rate-exchange.appspot.com/currency?from=".$currency_short."&to=".$currency_short2);
+											//$exchange_rate = file_get_contents("http://www.bloomberg.com/quote/".$currency_short.$currency_short2.":CUR");
+											$exchange_rate = exchange_rate($currency_short, $currency_short2);
+											if(isset($exchange_rate)){
+												$bid_equiv = $exchange_rate * $bids[$i]['total_bid'];
 												echo $currency_short2." ";
 												echo number_format($bid_equiv, 2, ".", ","); 
 												echo " (".$currency_long2.")";

@@ -519,5 +519,32 @@ function SDDecrypt($str){
 	return $cipher->decrypt(base64_decode($str));
 }
 
+function exchange_rate($curr1, $curr2){
+	$curr1 = trim(strtoupper($curr1));
+	$curr2 = trim(strtoupper($curr2));
+	if($curr1==$curr2){
+		return 1;
+	}
+	//get USD equiv of $curr1
+	if($curr1!="USD"){
+		$exchange_rate = file_get_contents("http://www.bloomberg.com/quote/".$curr1."USD:CUR");
+		$matches = array();
+		preg_match_all("/<meta itemprop=\"price\" content=\"(.*)\" \/>/iUs", $exchange_rate, $matches);
+		$exchange_rate_usd = str_replace(",", "", $matches[1][0]);
+		if($curr2=="USD"){
+			return $exchange_rate_usd;
+		}
+	}
+	else{
+		$exchange_rate_usd = 1;
+	}
+	//get equiv in other currency
+	$exchange_rate = file_get_contents("http://www.bloomberg.com/quote/USD".$curr2.":CUR");
+	$matches = array();
+	preg_match_all("/<meta itemprop=\"price\" content=\"(.*)\" \/>/iUs", $exchange_rate, $matches);
+	$exchange_rate_x = str_replace(",", "", $matches[1][0]);
+	$exchange_rate = $exchange_rate_usd * $exchange_rate_x;
+	return $exchange_rate;
+}
 
 ?>

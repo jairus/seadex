@@ -137,7 +137,7 @@ function alertX2(msg){
 					?><button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4?skip=true"); ?>'">Skip</button><?php
 				}
 				?>
-				<button type="button" class="btn btn-default" onclick="proceed()" >Submit</button>
+				<button type="button" class="btn btn-primary btn-lg" onclick="proceed()" >Submit</button>
 			</div>
 		</div>
 	</form>
@@ -173,7 +173,7 @@ function alertX2(msg){
 				?><button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4?skip=true"); ?>'">Skip</button><?php
 			}
 			?>
-			<button type="button" class="btn btn-default" onclick="loginSubmit()" >Submit</button>
+			<button type="button" class="btn btn-primary btn-lg" onclick="loginSubmit()" >Submit</button>
 			</div>
 		</div>
 	</form>
@@ -269,7 +269,7 @@ function alertX2(msg){
 				?><button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4?skip=true"); ?>'">Skip</button><?php
 			}
 			?>
-			<button type="button" class="btn btn-default" onclick="submitProfile()" >Submit</button>
+			<button type="button" class="btn btn-primary btn-lg" onclick="submitProfile()" >Submit</button>
 		</div>
 		<script>
 			custType("<?php echo $_SESSION['rfq']['customer_type']; ?>");

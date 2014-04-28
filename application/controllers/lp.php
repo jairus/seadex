@@ -541,11 +541,11 @@ class lp extends CI_Controller {
 		//convert to USD
 		$currency = explode(" ", $bid['total_bid_currency']);
 		$currency = $currency[0];
-		$exchange_rate = @file_get_contents("http://rate-exchange.appspot.com/currency?from=".$currency."&to=USD");
-		$exchange_rate = @json_decode($exchange_rate);
 		
-		if(isset($exchange_rate->rate)){
-			$bid['total_bid_usd'] = $exchange_rate->rate * $bid['total_bid'];
+		$exchange_rate = exchange_rate($currency, "USD");
+		
+		if(isset($exchange_rate)){
+			$bid['total_bid_usd'] = $exchange_rate * $bid['total_bid'];
 		}
 		
 		
@@ -1000,7 +1000,8 @@ The SeaDex team";
 		$sql = "select 
 		`id`, 
 		`rfq_id`, 
-		`total_bid_usd`,
+		`total_bid_currency`,
+		`total_bid`,
 		`origin_country`,
 		`origin_city`,
 		`origin_port`,
@@ -1043,7 +1044,8 @@ The SeaDex team";
 		$sql = "select 
 		`id`, 
 		`rfq_id`, 
-		`total_bid_usd`,
+		`total_bid_currency`,
+		`total_bid`,
 		`origin_country`,
 		`origin_city`,
 		`origin_port`,

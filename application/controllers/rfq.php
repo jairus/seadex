@@ -29,6 +29,7 @@ class rfq extends CI_Controller {
 	
 	private function flow($step=1, $type){
 		$data['type'] = $type;
+		$_SESSION['rfq']['cust_type'] = $type;
 		if($step==1){
 			if($_GET['change']){
 				$data['skip'] = true;
@@ -138,6 +139,7 @@ class rfq extends CI_Controller {
 		<?php
 	}
 	public function userprofile(){
+		$data['type'] = $_SESSION['rfq']['cust_type'];
 		if(!isset($_SESSION['rfq'])){
 			?>
 			<script>

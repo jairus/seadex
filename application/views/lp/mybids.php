@@ -45,7 +45,7 @@ table th.startend{
 			  <th width="13.3%">RFQ&nbsp;#</th>
 			  <th width="22.5%">Origin</th>
 			  <th width="22.5%">Destination</th>
-			  <th width="13.3%">My Bid (USD)</th>
+			  <th width="13.3%">My Bid</th>
 			  <th width="13.3%">Date Added</th>
 			  <th class="end" width="13%"></th>
 			</tr>
@@ -87,8 +87,11 @@ table th.startend{
 					  </td>
 					  <td>
 						<?php
-						  if(isset($bids[$i]['total_bid_usd'])){
-							echo "USD ".number_format($bids[$i]['total_bid_usd'],2,".", ",");
+						  if(isset($bids[$i]['total_bid'])){
+							$currency = explode(" ", $bids[$i]['total_bid_currency'], 2);
+							$currency_short = $currency[0];
+							$currency_long = $currency[1];
+							echo $currency_short." ".number_format($bids[$i]['total_bid'],2,".", ",");
 						  }
 						  else{
 							echo "-";

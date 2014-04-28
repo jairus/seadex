@@ -245,7 +245,7 @@ vehicle/boat. Bulk items such as engines, parts, presents, bicycles etc are good
 				?><button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4?skip=true"); ?>'">Skip</button><?php
 			}
 			?>
-			<button type="submit" class="btn btn-default">Continue</button>
+			<button type="submit" class="btn btn-primary btn-lg">Continue</button>
 		</div>
 	</form>
 </div>

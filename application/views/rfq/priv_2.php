@@ -8,11 +8,11 @@
 		<form action="<?php echo site_url("rfq/".$type."/3"); ?>" method="post" >
 			<?php
 			if($type=='priv'){
-				?><button type="submit" class="btn btn-default btn-lg" name="what_to_move" value="Household" >Household</button><?php
+				?><button type="submit" class="btn btn-primary btn-lg" name="what_to_move" value="Household" >Household</button><?php
 			}
 			?>
-			<button type="submit" class="btn btn-default btn-lg" name="what_to_move" value="Goods" >Goods</button>
-			<button type="submit" class="btn btn-default btn-lg" name="what_to_move" value="Vehicle or Boat" >Vehicle or Boat</button>
+			<button type="submit" class="btn btn-primary btn-lg" name="what_to_move" value="Goods" >Goods</button>
+			<button type="submit" class="btn btn-primary btn-lg" name="what_to_move" value="Vehicle or Boat" >Vehicle or Boat</button>
 		</form>
 	</div>
 </div>

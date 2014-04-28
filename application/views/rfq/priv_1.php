@@ -533,7 +533,7 @@
 			<div class="row">
 				<div class="col-md-12 text-center">
 					<button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq")."/"; ?>'">Back</button>
-					<button type="submit" class="btn btn-default">Continue</button>
+					<button type="submit" class="btn btn-primary btn-lg">Continue</button>
 				</div>
 			</div>
 		</form>

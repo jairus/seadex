@@ -47,12 +47,20 @@ if($rfq['userprofile']['contact_number']){
 ?>
 <div class="container-fluid" id="container" style="max-width:90%">
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-4">
 			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
 		</div>
-		<div class="col-md-6 text-right">
+		<div class="col-md-8 text-right">
 			<input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
-			<input type="button" class="btn btn-primary btn-lg" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
+			<input type="button" class="btn btn-primary btn-default" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
+			<?php
+			if($rfqprevid){
+				?><input type="button" class="btn btn-default" style="margin:20px;" value="Previous RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqprevid ?>'"><?php
+			}
+			if($rfqnextid){
+				?><input type="button" class="btn btn-default" style="margin:20px;" value="Next RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqnextid ?>'"><?php
+			}
+			?>
 		</div>
 	</div>
 	<div class="row">
@@ -473,7 +481,15 @@ if($rfq['userprofile']['contact_number']){
 					<tr>
 						<td colspan=2 class="text-center">
 							<input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
-							<input type="button" class="btn btn-primary btn-lg" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
+							<input type="button" class="btn btn-primary btn-default" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
+							<?php
+							if($rfqprevid){
+								?><input type="button" class="btn btn-default" style="margin:20px;" value="Previous RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqprevid ?>'"><?php
+							}
+							if($rfqnextid){
+								?><input type="button" class="btn btn-default" style="margin:20px;" value="Next RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqnextid ?>'"><?php
+							}
+							?>
 						</td>
 					</tr>
 					<?php

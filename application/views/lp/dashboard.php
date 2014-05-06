@@ -40,6 +40,9 @@
 				});
 			}
 		}
+		function saveFilter(){
+			jQuery(".savefilter").val(1);
+		}
 	</script>
 	  <h2 class="text-right">Customer RFQs</h2>
 	  <div class="table-responsive">
@@ -58,6 +61,41 @@
 			  <tbody>
 				<tr>
 				  <td>
+				  <?php
+				  $t = count($saved_search_filters);
+				  
+				  if($t){
+					  ?>
+					  <div class="row" style="padding-bottom:20px;">
+						<div class="col-md-12" style="padding-bottom:5px;">Saved Search Filters</div>
+						<?php
+						for($i=0; $i<$t; $i++){
+							?>
+							<form style="margin:0px;" method="post">
+							<div class="row" style="margin:4px;">
+								<?php
+								if($_SESSION['saved_search_filter_id']==$saved_search_filters[$i]['id']){
+									?>
+									<div class="col-md-10"><button type="submit" class="btn btn-active btn-xs" name="saved_search_filter_id" value="<?php echo $saved_search_filters[$i]['id']; ?>" style="width:100%; text-align:left"><?php echo strip_tags($saved_search_filters[$i]['filter_name']); ?></button></div>
+									<?php
+								}
+								else{
+									?>
+									<div class="col-md-10"><button type="submit" class="btn btn-default btn-xs" name="saved_search_filter_id" value="<?php echo $saved_search_filters[$i]['id']; ?>" style="width:100%; text-align:left"><?php echo strip_tags($saved_search_filters[$i]['filter_name']); ?></button></div>
+									<?php
+								}
+								?>
+								<div class="col-md-2"><button type="submit" class="btn btn-default btn-xs" name="delete_saved_search_filter_id" value="<?php echo $saved_search_filters[$i]['id']; ?>" style="width:100%;">x</button></div>
+							</div>
+							</form>
+							<?php
+						}
+						?>
+					  </div>
+					  <?php
+				  }
+				  ?>
+				  
 				  <select name="searchfilter" id="searchfilter" class="form-control">
 					<option value="Route Search">Route Search</option>
 					<option value="Country Search">Country Search</option>
@@ -87,10 +125,12 @@
 						jQuery("#searchfilter").change(function(){
 							setupSF(jQuery("#searchfilter").val());
 						});
+						jQuery(".savefilter").val("");
 						
 					</script>
 				  <div id="s1" style="padding-top:10px; display:none" class="searchfil">
 					<form method="post">
+					<input type="hidden" name="savefilter" class="savefilter">
 					<input type="hidden" name="type" value="Route Search">
 					Origin Country:
 					<?php
@@ -135,12 +175,31 @@
 						?>
 					</script>
 					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; " />
+					<input type="button" class="btn btn-default" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername1').show()" />
+					<div style="position:relative; display:none" id="filtername1">
+						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
+							<div class="text-left">Filter Name:</div>
+							<div class="row" style="padding-top:3px;">
+								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
+								<div class="col-md-12 text-left">
+								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername1').hide()">&nbsp;
+								<input type="submit" class="btn-default btn-xs" value="Save" onclick="saveFilter()"></div>
+							</div>
+						</div>
+					</div>
 					</form>
 				  </div>
 				  <div id="s2" style="padding-top:10px; display:none" class="searchfil">
 					<form method="post">
+					<input type="hidden" name="savefilter" class="savefilter">
 					<input type="hidden" name="type" value="Country Search">
 					Country:
+					&nbsp;&nbsp;
+					<input type="radio" name="tofrom" value="origin" <?php if($_SESSION['searchfilter']['tofrom']=="origin") echo "checked"; ?> > Origin
+					&nbsp;&nbsp;
+					<input type="radio" name="tofrom" value="destination" <?php if($_SESSION['searchfilter']['tofrom']=="destination") echo "checked"; ?>> Destination
+					&nbsp;&nbsp;
+					<input type="radio" name="tofrom" value="both" <?php if($_SESSION['searchfilter']['tofrom']=="both" || $_SESSION['searchfilter']['tofrom']=="") echo "checked"; ?>> Both
 					<?php
 					$data['select_name'] = "country";
 					$data['select_id'] = "country";
@@ -157,14 +216,39 @@
 					</script>
 					
 					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; " />
+					<input type="button" class="btn btn-default" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername2').show()" />
+					<div style="position:relative; display:none" id="filtername2">
+						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
+							<div class="text-left">Filter Name:</div>
+							<div class="row" style="padding-top:3px;">
+								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
+								<div class="col-md-12 text-left">
+								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername2').hide()">&nbsp;
+								<input type="submit" class="btn-default btn-xs" value="Save" onclick="saveFilter()"></div>
+							</div>
+						</div>
+					</div>
 					</form>
 				  </div>
 				  <div id="s3" style="padding-top:10px; display:none" class="searchfil">
 					<form method="post">
+					<input type="hidden" name="savefilter" class="savefilter">
 					<input type="hidden" name="type" value="Search by Keywords">
 					Keyword:
 					<input type="text" class="form-control" name="keyword" value="<?php echo htmlentitiesX($_SESSION['searchfilter']['keyword'])?>"  />
 					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; "  />
+					<input type="button" class="btn btn-default" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername3').show()" />
+					<div style="position:relative; display:none" id="filtername3">
+						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
+							<div class="text-left">Filter Name:</div>
+							<div class="row" style="padding-top:3px;">
+								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
+								<div class="col-md-12 text-left">
+								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername3').hide()">&nbsp;
+								<input type="submit" class="btn-default btn-xs" value="Save" onclick="saveFilter()"></div>
+							</div>
+						</div>
+					</div>
 					</form>
 				  </div>
 				  <div id="s4" style="padding-top:10px; display:none" class="searchfil">
@@ -174,12 +258,14 @@
 						}
 					</style>
 					<form method="post">
+					<input type="hidden" name="savefilter" class="savefilter">
 					<input type="hidden" name="type" value="Categories">
 					<div>
 						<!--
 						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="FCL" /> FCL</div>
 						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="LCL" /> LCL</div>
 						-->
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="General" />General</div>
 						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="Goods" /> Goods</div>
 						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="Vehicle" /> Vehicle</div>
 						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="Household" /> Household</div>
@@ -210,6 +296,18 @@
 						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Class 9:Miscellaneous dangerous substances and articles" /> Class 9:Miscellaneous dangerous substances and articles</div>
 					</div>
 					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; " />
+					<input type="button" class="btn btn-default" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername4').show()" />
+					<div style="position:relative; display:none" id="filtername4">
+						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
+							<div class="text-left">Filter Name:</div>
+							<div class="row" style="padding-top:3px;">
+								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
+								<div class="col-md-12 text-left">
+								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername4').hide()">&nbsp;
+								<input type="submit" class="btn-default btn-xs" value="Save" onclick="saveFilter()"></div>
+							</div>
+						</div>
+					</div>
 					</form>
 					<script>
 						jQuery(".imos").each(function(){
@@ -267,13 +365,14 @@
 			  <thead>
 				<tr>
 				  <th class="start">RFQ&nbsp;#</th>
-				  <th width="20%">Origin</th>
-				  <th width="20%">Destination</th>
+				  <th width="18%">Origin</th>
+				  <th width="18%">Destination</th>
 				  <th width="13.3%">Pickup Date</th>
 				  <th width="13.3%">Delivery Date</th>
-				  <th width="5%">Bids</th>
+				  <th width="2.5%">Views</th>
+				  <th width="2.5%">Bids</th>
 				  <th width="13.3%">Date Added</th>
-				  <th class="end" width="13%"></th>
+				  <th class="end" width="17%"></th>
 				</tr>
 			  </thead>
 			  <tbody>
@@ -320,6 +419,11 @@
 					  </td>
 					  <td>
 						<?php
+						   echo $rfqs[$i]['views'];
+						?>
+					  </td>
+					  <td>
+						<?php
 						   echo count($rfqs[$i]['bids']);
 						?>
 					  </td>
@@ -329,8 +433,8 @@
 					  ?>
 					  </td>
 					  <td>
-						<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']; ?>'" value="More" />
-						<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']."/bid"; ?>'" value="Bid" />
+						<input type="button" class="btn btn-sm btn-primary" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']; ?>'" value="More" />
+						<input type="button" class="btn btn-sm btn-primary" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']."/bid"; ?>'" value="Bid" />
 						<!--<input type="button" class="btn btn-sm" value="Bid" />-->
 					  </td>
 					</tr>

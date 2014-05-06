@@ -1,3 +1,6 @@
+<?php
+@session_start();
+?>
 <!-- Fixed navbar -->
         <div class="navbar navbar-default top-nav" id="top-nav" role="navigation">
           <div class="container">

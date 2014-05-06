@@ -63,6 +63,40 @@ class lp extends CI_Controller {
 			$redirect = urlencode($_SERVER['REQUEST_URI']);
 			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
 		}
+		
+		if($_POST){
+			if(!trim($_POST['company_name'])){
+				$_SESSION['account']['error'] = "Please enter a valid Company Name!";
+			}
+			else if(!trim($_POST['name'])){
+				$_SESSION['account']['error'] = "Please enter a valid Name!";
+			}
+			else{
+				$sql = "update `logistic_providers` set
+				`company_name` = '".mysql_real_escape_string(trim($_POST['company_name']))."',
+				`name` = '".mysql_real_escape_string(trim($_POST['name']))."',
+				`homepage` = '".mysql_real_escape_string(trim($_POST['homepage']))."',
+				`contact` = '".mysql_real_escape_string(trim($_POST['contact']))."',
+				`services` = '".mysql_real_escape_string(trim($_POST['services']))."',
+				`others` = '".mysql_real_escape_string(trim($_POST['others']))."'
+				where `id`='".$_SESSION['logistic_provider']['id']."'
+				";
+				$this->db->query($sql);
+				
+				$sql = "select * from `logistic_providers`
+				where `id`='".$_SESSION['logistic_provider']['id']."'
+				";
+				$q = $this->db->query($sql);
+				$lp = $q->result_array();
+				
+				$_SESSION['logistic_provider'] = $lp[0];
+				$_SESSION['account']['success'] = "Successfully updated your profile!";
+			}
+			
+			
+		}
+		
+		
 		$this->load->view('sitelayout/header.php');
 		$this->load->view('sitelayout/nav.php');
 		$data['account'] = $_SESSION['logistic_provider'];
@@ -77,47 +111,71 @@ class lp extends CI_Controller {
 		if(!$_SESSION['logistic_provider']['id']){
 			$redirect = urlencode($_SERVER['REQUEST_URI']);
 			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
+			return 0;
 		}
 		
 		$sql = "select * from `rfq` where `id`='".mysql_real_escape_string($id)."'";
 		$q = $this->db->query($sql);
 		$rfq = $q->result_array();
-		if($rfq[0]['customer_id']){
-			$sql = "select * from `customers` where `id`='".mysql_real_escape_string($rfq[0]['customer_id'])."'";
+		
+		if($rfq[0]['id']){
+			$sql = "select * from `rfq` where `id`>".$rfq[0]['id']." order by `id` asc  limit 1";
 			$q = $this->db->query($sql);
-			$customer = $q->result_array();
-		}
-		$rfqdata = unserialize(base64_decode($rfq[0]['data']));
-		$rfqdata['id'] = $rfq[0]['id'];
-		$rfqdata['id'] = $rfq[0]['id'];
-		$rfqdata['bid_id'] = $rfq[0]['bid_id'];
-		$rfqdata['logistic_provider_id'] = $rfq[0]['logistic_provider_id'];
-		$rfqdata['dateaccepted'] = $rfq[0]['dateaccepted'];
-		if($customer[0]['id']){
-			$rfqdata['userprofile'] = $customer[0];
-		}
-		
-		
-		
-		$this->load->view('sitelayout/header.php');
-		$this->load->view('sitelayout/nav.php');
-		$data['rfq'] = $rfqdata;
-		if($action=='bid'){
-			if($_GET['bid_id']){
-				$sql = "select * from `bids` where `id`='".mysql_real_escape_string($_GET['bid_id'])."' and `logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'";
+			$rfqnextid = $q->result_array();
+			$rfqnextid = $rfqnextid[0]['id'];
+			$sql = "select * from `rfq` where `id`<".$rfq[0]['id']." order by `id` desc limit 1";
+			$q = $this->db->query($sql);
+			$rfqprevid = $q->result_array();
+			$rfqprevid = $rfqprevid[0]['id'];
+			
+			if($rfq[0]['customer_id']){
+				$sql = "select * from `customers` where `id`='".mysql_real_escape_string($rfq[0]['customer_id'])."'";
 				$q = $this->db->query($sql);
-				$bids = $q->result_array();
-				$data['bids'] = $bids;
-				$this->load->view('lp/rfqsummary_bid2.php', $data);
+				$customer = $q->result_array();
+			}
+			$rfqdata = unserialize(base64_decode($rfq[0]['data']));
+			$rfqdata['id'] = $rfq[0]['id'];
+			$rfqdata['id'] = $rfq[0]['id'];
+			$rfqdata['bid_id'] = $rfq[0]['bid_id'];
+			$rfqdata['logistic_provider_id'] = $rfq[0]['logistic_provider_id'];
+			$rfqdata['views'] = $rfq[0]['views'];
+			$rfqdata['dateaccepted'] = $rfq[0]['dateaccepted'];
+			if($customer[0]['id']){
+				$rfqdata['userprofile'] = $customer[0];
+			}
+			
+			
+			
+			$this->load->view('sitelayout/header.php');
+			$this->load->view('sitelayout/nav.php');
+			$data['rfq'] = $rfqdata;
+			$data['rfqnextid'] = $rfqnextid;
+			$data['rfqprevid'] = $rfqprevid;		
+			
+			if($action=='bid'){
+				if($_GET['bid_id']){
+					$sql = "select * from `bids` where `id`='".mysql_real_escape_string($_GET['bid_id'])."' and `logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'";
+					$q = $this->db->query($sql);
+					$bids = $q->result_array();
+					$data['bids'] = $bids;
+					$this->load->view('lp/rfqsummary_bid2.php', $data);
+				}
+				else{
+					$this->load->view('lp/rfqsummary_bid.php', $data);
+				}
 			}
 			else{
-				$this->load->view('lp/rfqsummary_bid.php', $data);
+				//update rfq views
+				//echo $rfq[0]['views']."<br />";
+				//echo ($rfq[0]['views']*1)+1;
+				//echo "<br />";
+				$sql = "update `rfq` set `views` = '".(($rfq[0]['views']*1)+1)."' where `id`='".$rfq[0]['id']."'";
+				//echo $sql;
+				$this->db->query($sql);
+				$this->load->view('lp/rfqsummary.php', $data);
 			}
+			$this->load->view('sitelayout/footer.php');
 		}
-		else{
-			$this->load->view('lp/rfqsummary.php', $data);
-		}
-		$this->load->view('sitelayout/footer.php');
 	}
 	
 	public function rfqs(){
@@ -134,7 +192,23 @@ class lp extends CI_Controller {
 			//$sql = "select * from `rfq` where 1 order by `destination_timestamp_utc` desc, `destination_country` asc limit 50";
 			
 			if($_POST){
-				$_SESSION['searchfilter'] = $_POST;
+				if($_POST['saved_search_filter_id']){
+					$sql = "select * from `saved_search_filters` where `id`='".mysql_real_escape_string($_POST['saved_search_filter_id'])."'";
+					$q = $this->db->query($sql);
+					$r = $q->result_array();
+					if($r[0]['id']){
+						$_SESSION['saved_search_filter_id'] = $_POST['saved_search_filter_id'];
+						$_SESSION['searchfilter'] = unserialize(base64_decode($r[0]['data']));
+					}
+				}
+				else if($_POST['delete_saved_search_filter_id']){
+					$sql = "delete from `saved_search_filters` where `id`='".mysql_real_escape_string($_POST['delete_saved_search_filter_id'])."'";
+					$q = $this->db->query($sql);
+					unset($_SESSION['searchfilter']);
+				}
+				else{
+					$_SESSION['searchfilter'] = $_POST;
+				}
 				//redirect(site_url("lp")."?_refresh", "refresh");
 				
 				?>
@@ -146,6 +220,23 @@ class lp extends CI_Controller {
 				return 0;
 			}
 			if($_SESSION['searchfilter']['type']){
+				if($_SESSION['searchfilter']['savefilter']){
+					if(trim($_SESSION['searchfilter']['filtername'])==""){
+						$_SESSION['searchfilter']['filtername'] = "Search Query";
+					}
+					unset($_SESSION['searchfilter']['savefilter']);
+					$sql = "insert into `saved_search_filters` set
+						`logistic_provider_id`='".$_SESSION['logistic_provider']['id']."',
+						`filter_name` = '".mysql_real_escape_string($_SESSION['searchfilter']['filtername'])."',
+						`data` = '".mysql_real_escape_string(base64_encode(serialize($_SESSION['searchfilter'])))."',
+						`plaindata` = '".mysql_real_escape_string(print_r($_SESSION['searchfilter'],1))."'
+					";
+					$q = $this->db->query($sql);
+					$_SESSION['saved_search_filter_id'] = $this->db->insert_id();
+					
+				}
+				
+				
 				if($_SESSION['searchfilter']['type']=="Route Search"){
 					$origin_country = explode("-",$_SESSION['searchfilter']['origin']['country']);
 					$origin_country = trim($origin_country[1]);
@@ -196,6 +287,7 @@ class lp extends CI_Controller {
 					destination_time_zone,
 					destination_timestamp_utc,
 					destination_date_utc,
+					views,
 					dateadded
 					from `rfq` where ";
 					
@@ -206,11 +298,20 @@ class lp extends CI_Controller {
 					$country = explode("-",$_SESSION['searchfilter']['country']);
 					$country = trim($country[1]);
 					
+					if($_SESSION['searchfilter']['tofrom']=="origin"){
+						$sqlext = " `origin_country` = '".mysql_real_escape_string($country)."' ";
+					}
+					else if($_SESSION['searchfilter']['tofrom']=="destination"){
+						$sqlext = " `destination_country` = '".mysql_real_escape_string($country)."' ";
+					}
+					else{
+						$sqlext = " `origin_country` = '".mysql_real_escape_string($country)."' or 
+						`destination_country` = '".mysql_real_escape_string($country)."' ";
+					}
 					$sql_cnt = "select 
 					count(`id`) as cnt
 					from `rfq` where 
-					`origin_country` = '".mysql_real_escape_string($country)."' or 
-					`destination_country` = '".mysql_real_escape_string($country)."'
+					".$sqlext."
 					order by `id`";
 					
 					$sql = "select 
@@ -229,10 +330,10 @@ class lp extends CI_Controller {
 					destination_time_zone,
 					destination_timestamp_utc,
 					destination_date_utc,
+					views,
 					dateadded
 					from `rfq` where 
-					`origin_country` = '".mysql_real_escape_string($country)."' or 
-					`destination_country` = '".mysql_real_escape_string($country)."'
+					".$sqlext."
 					order by `id` desc limit 100";
 				}
 				else if($_SESSION['searchfilter']['type']=="Search by Keywords"){
@@ -260,6 +361,7 @@ class lp extends CI_Controller {
 					destination_time_zone,
 					destination_timestamp_utc,
 					destination_date_utc,
+					views,
 					dateadded
 					from `rfq` where 
 					lower(`data_plain`) like '%".mysql_real_escape_string(trim($keyword))."%'
@@ -304,6 +406,7 @@ class lp extends CI_Controller {
 						destination_time_zone,
 						destination_timestamp_utc,
 						destination_date_utc,
+						views,
 						dateadded
 						from `rfq` where ";
 						$sql .= implode($sql_arr, " or ");
@@ -331,6 +434,7 @@ class lp extends CI_Controller {
 					destination_time_zone,
 					destination_timestamp_utc,
 					destination_date_utc,
+					views,
 					dateadded
 					from `rfq` where 1 order by `id` desc limit 100";
 				}
@@ -356,6 +460,7 @@ class lp extends CI_Controller {
 				destination_time_zone,
 				destination_timestamp_utc,
 				destination_date_utc,
+				views,
 				dateadded
 				from `rfq` where 1 order by `id` desc limit 100";
 			}
@@ -373,6 +478,12 @@ class lp extends CI_Controller {
 				$bids = $q->result_array();
 				$rfqs[$i]['bids'] = $bids;
 			}
+			
+			$sql = "select `id`, `filter_name` from `saved_search_filters` where `logistic_provider_id`='".$_SESSION['logistic_provider']['id']."' order by `id` asc";
+			$q = $this->db->query($sql);
+			$saved_search_filters = $q->result_array();
+			$data['saved_search_filters'] = $saved_search_filters;
+			
 			
 			$this->load->view('sitelayout/header.php');
 			$this->load->view('sitelayout/nav.php');

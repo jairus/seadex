@@ -35,7 +35,14 @@
 				#cargo td{
 					font-weight:normal;
 				}
+				#map-canvas {
+					width: 100%;
+					height:200px;
+					margin: 0px;
+					padding: 0px
+				  }
 				</style>
+				
 				<?php
 					if(isset($_SESSION['rfq']['shipping_info'])){
 						?>
@@ -82,6 +89,44 @@
 								</tr>
 								-->
 							</table>
+							<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+							<script>
+							function initialize() {
+							  var myLatlng = new google.maps.LatLng(<?php echo $_SESSION['rfq']['shipping_info']['origin']['port_coords']['lat']; ?>,<?php echo $_SESSION['rfq']['shipping_info']['origin']['port_coords']['lon']; ?>);
+							  
+							  
+							  
+							  var mapOptions = {
+								zoom: 1,
+								center: myLatlng
+							  }
+							  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+							  
+							  var marker = new google.maps.Marker({
+								  position: myLatlng,
+								  map: map,
+								  title: "<?php echo htmlentitiesX($_SESSION['rfq']['shipping_info']['origin']['port_coords']['name']); ?>"
+							  });
+							  
+							  var myLatlng2 = new google.maps.LatLng(<?php echo $_SESSION['rfq']['shipping_info']['destination']['port_coords']['lat']; ?>,<?php echo $_SESSION['rfq']['shipping_info']['destination']['port_coords']['lon']; ?>);
+							  var marker2 = new google.maps.Marker({
+								  position: myLatlng2,
+								  map: map,
+								  title: "<?php echo htmlentitiesX($_SESSION['rfq']['shipping_info']['destination']['port_coords']['name']); ?>"
+							  });
+							 
+							}
+
+							google.maps.event.addDomListener(window, 'load', initialize);
+							</script>
+							<div id="map-canvas"></div>
+							
+							<?php
+							//echo "<pre>";
+							//print_r($_SESSION['rfq']['shipping_info']['origin']['port_coords']);
+							?>
+							
 						<?php
 					}
 					$t = count($_SESSION['rfq']['cargo']);

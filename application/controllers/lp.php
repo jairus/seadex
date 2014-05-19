@@ -145,6 +145,18 @@ class lp extends CI_Controller {
 			}
 			
 			
+			$sql = "select * from `ports` where `port_id`='".mysql_real_escape_string($rfqdata['shipping_info']['origin']['port_id'])."'";
+			$q = $this->db->query($sql);
+			$port_details = $q->result_array();
+			$rfqdata['shipping_info']['origin']['port_coords'] = $port_details[0];
+			
+			$sql = "select * from `ports` where `port_id`='".mysql_real_escape_string($rfqdata['shipping_info']['destination']['port_id'])."'";
+			$q = $this->db->query($sql);
+			$port_details = $q->result_array();
+			$rfqdata['shipping_info']['destination']['port_coords'] = $port_details[0];
+			
+			
+			
 			
 			$this->load->view('sitelayout/header.php');
 			$this->load->view('sitelayout/nav.php');

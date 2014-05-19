@@ -63,13 +63,27 @@ class rfq extends CI_Controller {
 				
 				$port  = $_SESSION['rfq']['shipping_info']['origin']['port'];
 				list($port_id, $port) = explode("--", urldecode($port));
+				$_SESSION['rfq']['shipping_info']['origin']['port_coords'] = array();
 				$_SESSION['rfq']['shipping_info']['origin']['port_id'] = trim(SDDecrypt($port_id));
 				$_SESSION['rfq']['shipping_info']['origin']['port'] = trim($port);
+				$sql = "select * from `ports` where `port_id`='".mysql_real_escape_string($_SESSION['rfq']['shipping_info']['origin']['port_id'])."'";
+				$q = $this->db->query($sql);
+				$port_details = $q->result_array();
+				$_SESSION['rfq']['shipping_info']['origin']['port_coords'] = $port_details[0];
+				
 				
 				$port  = $_SESSION['rfq']['shipping_info']['destination']['port'];
 				list($port_id, $port) = explode("--", urldecode($port));
+				
+				
+				$_SESSION['rfq']['shipping_info']['destination']['port_coords'] = array();
 				$_SESSION['rfq']['shipping_info']['destination']['port_id'] = trim(SDDecrypt($port_id));
 				$_SESSION['rfq']['shipping_info']['destination']['port'] = trim($port);
+				
+				$sql = "select * from `ports` where `port_id`='".mysql_real_escape_string($_SESSION['rfq']['shipping_info']['destination']['port_id'])."'";
+				$q = $this->db->query($sql);
+				$port_details = $q->result_array();
+				$_SESSION['rfq']['shipping_info']['destination']['port_coords'] = $port_details[0];
 				
 				$data['backbutton'] = true;
 			}

@@ -152,6 +152,48 @@ if($rfq['userprofile']['contact_number']){
 								</tr>
 								-->
 							</table>
+							<style>
+								#map-canvas {
+								width: 500px;
+								height:300px;
+								margin: auto;
+								padding: 0px
+							  }
+							</style>
+							<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+							<script>
+							function initialize() {
+							  var myLatlng = new google.maps.LatLng(<?php echo $rfq['shipping_info']['origin']['port_coords']['lat']; ?>,<?php echo $rfq['shipping_info']['origin']['port_coords']['lon']; ?>);
+							  
+							  //var myLatlngX = new google.maps.LatLng(<?php echo $rfq['shipping_info']['origin']['port_coords']['lat']-$rfq['shipping_info']['destination']['port_coords']['lat']; ?>,<?php echo $rfq['shipping_info']['origin']['port_coords']['lon']-$rfq['shipping_info']['destination']['port_coords']['lon']; ?>);
+							  
+							  var mapOptions = {
+								zoom: 2,
+								center: myLatlng
+							  }
+							  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+							  
+							  var marker = new google.maps.Marker({
+								  position: myLatlng,
+								  map: map,
+								  title: "<?php echo htmlentitiesX($rfq['shipping_info']['origin']['port_coords']['name']); ?>"
+							  });
+							  
+							  var myLatlng2 = new google.maps.LatLng(<?php echo $rfq['shipping_info']['destination']['port_coords']['lat']; ?>,<?php echo $rfq['shipping_info']['destination']['port_coords']['lon']; ?>);
+							  var marker2 = new google.maps.Marker({
+								  position: myLatlng2,
+								  map: map,
+								  title: "<?php echo htmlentitiesX($rfq['shipping_info']['destination']['port_coords']['name']); ?>"
+							  });
+							 
+							}
+
+							google.maps.event.addDomListener(window, 'load', initialize);
+							</script>
+							<div id="map-canvas" ></div>
+							
+							
 						</td>
 					</tr>
 					<?php
@@ -273,6 +315,7 @@ if($rfq['userprofile']['contact_number']){
 																	echo $print; 
 																	
 																	?></i><br />
+																	<span>Weight:</span> <i><?php echo ($cargo['details']['packing']['weight'][$i]+0)." ".$cargo['details']['packing']['weight_unit'][$i]; ?></i>
 																	</td>
 																</tr>
 																<?php
@@ -393,6 +436,7 @@ if($rfq['userprofile']['contact_number']){
 																	
 																	?>
 																	</i><br />
+																	<span>Weight:</span> <i><?php echo ($cargo['details']['packing']['weight'][$i]+0)." ".$cargo['details']['packing']['weight_unit'][$i]; ?></i>
 																</td>
 															</tr>
 															<?php

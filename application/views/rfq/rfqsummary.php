@@ -71,6 +71,10 @@
 									<td width="50%"><?php echo $_SESSION['rfq']['shipping_info']['origin']['date']; ?></td>
 									<td width="50%"><?php echo $_SESSION['rfq']['shipping_info']['destination']['date']; ?></td>
 								</tr>
+								<tr>
+									<td width="50%"><b>Alternate Pickup Date:</b> <?php echo $_SESSION['rfq']['shipping_info']['origin']['alternate_date']; ?></td>
+									<td width="50%"><b>Alternate Delivery Date:</b> <?php echo $_SESSION['rfq']['shipping_info']['destination']['alternate_date']; ?></td>
+								</tr>
 								<!--
 								<tr>
 									<td width="50%"><?php echo $_SESSION['rfq']['shipping_info']['origin']['time_zone']; ?> GMT</td>

@@ -236,8 +236,73 @@ class lp extends CI_Controller {
 					
 				}
 				
-				
-				if($_SESSION['searchfilter']['type']=="Route Search"){
+				if($_SESSION['searchfilter']['type']=="Custom Search"){
+					$country = explode("-",$_SESSION['searchfilter']['country']);
+					$country = trim($country[1]);
+					
+					if($_SESSION['searchfilter']['tofrom']=="origin"){
+						$sqlext = " `origin_country` = '".mysql_real_escape_string($country)."' ";
+					}
+					else if($_SESSION['searchfilter']['tofrom']=="destination"){
+						$sqlext = " `destination_country` = '".mysql_real_escape_string($country)."' ";
+					}
+					else{
+						$sqlext = " `origin_country` = '".mysql_real_escape_string($country)."' or 
+						`destination_country` = '".mysql_real_escape_string($country)."' ";
+					}
+					
+					
+					$categories = array();
+					$imos = array();
+					if(is_array($_SESSION['searchfilter']['categories'])){
+						$categories = $_SESSION['searchfilter']['categories'];
+					}
+					if(is_array($_SESSION['searchfilter']['imos'])){
+						$imos = $_SESSION['searchfilter']['imos'];
+					}
+					$arr = array_merge($categories, $imos);
+					
+					if(count($arr)){
+						foreach($arr as $value){
+							$sql_arr[] = " `data_plain` like '%".mysql_real_escape_string(trim($value))."%' ";
+						}
+						$sqlext2 .= implode($sql_arr, " or ");
+					}
+					else{
+						$sqlext2 = " 1 ";
+					}
+						
+					$sql_cnt = "select 
+					count(`id`) as cnt
+					from `rfq` where 
+					(".$sqlext.") and 
+					(".$sqlext2.")
+					order by `id`";
+					
+					$sql = "select 
+					id,
+					origin_country,
+					origin_city,
+					origin_port,
+					origin_date,
+					origin_time_zone,
+					origin_timestamp_utc,
+					origin_date_utc,
+					destination_country,
+					destination_city,
+					destination_port,
+					destination_date,
+					destination_time_zone,
+					destination_timestamp_utc,
+					destination_date_utc,
+					views,
+					dateadded
+					from `rfq` where 
+					(".$sqlext.") and 
+					(".$sqlext2.")
+					order by `id` desc limit 100";
+				}
+				else if($_SESSION['searchfilter']['type']=="Route Search"){
 					$origin_country = explode("-",$_SESSION['searchfilter']['origin']['country']);
 					$origin_country = trim($origin_country[1]);
 					$origin_port = explode("--",$_SESSION['searchfilter']['origin']['port']);
@@ -1100,6 +1165,145 @@ The SeaDex team";
 		$data['content'] = $content;
 		$content = $this->load->view('lp/content.php', $data);
 		$this->load->view('sitelayout/footer.php');
+	}
+	
+	public function myrates($action="", $rateid=""){
+		if(!$_SESSION['logistic_provider']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
+		}
+		if($action=="add"||$action=="rate"||$action=="delete"){
+			if($rateid){
+				$sql = "select * from `rates` where `id`='".mysql_real_escape_string($rateid)."' and `logistic_provider_id` = '".mysql_real_escape_string($_SESSION['logistic_provider']['id'])."'";
+				$q = $this->db->query($sql);
+				$rates = $q->result_array();
+				$rate = $rates[0];
+			}
+			if($action=="delete"&&$rate['id']){
+				$sql = "delete from `rates` where `id`='".$rate['id']."'";
+				$q = $this->db->query($sql);
+				echo "<script>self.location='".site_url("lp")."/myrates'</script>";
+				return 0;
+			}
+			if($_POST){
+				if($rate['id']){
+					$id = $rate['id'];
+					$rate = $_POST;
+					$rate['id'] = $id;
+				}
+				else{
+					$rate = $_POST;
+				}
+				$country = explode("-", urldecode($rate['origin']['country']));
+				$country_code = trim($country[0]);
+				$country = trim($country[1]);
+				$rate['origin_country'] = $country;
+				$rate['origin_country_code'] = $country_code;
+				
+				$country = explode("-", urldecode($rate['destination']['country']));
+				$country_code = trim($country[0]);
+				$country = trim($country[1]);
+				$rate['destination_country'] = $country;
+				$rate['destination_country_code'] = $country_code;
+				
+				
+				$port1 = explode("--", urldecode($rate['origin']['port']));
+				$port1_id = trim($port1[0]);
+				$port1 = trim($port1[1]);
+				$rate['origin_port_id']= $port1_id;
+				$rate['origin_port'] = $port1;
+				$port2 = explode("--", urldecode($rate['destination']['port']));
+				$port2_id = trim($port2[0]);
+				$port2 = trim($port2[1]);
+				$rate['destination_port_id'] = $port2_id;
+				$rate['destination_port'] = $port2;
+				
+				foreach($rate as $key=>$value){
+					if(!is_array($value)){
+						$rate[$key] = trim($value);
+					}
+				}
+				
+				if(!$rate['id']){
+					$sql = "insert into `rates` set 
+						`logistic_provider_id` = '".mysql_real_escape_string($_SESSION['logistic_provider']['id'])."',
+						`origin_country` = '".mysql_real_escape_string($rate['origin_country'])."',
+						`origin_country_code` = '".mysql_real_escape_string($rate['origin_country_code'])."',
+						`origin_port` = '".mysql_real_escape_string($rate['origin_port'])."',
+						`origin_port_id` = '".mysql_real_escape_string($rate['origin_port_id'])."',
+						`destination_country` = '".mysql_real_escape_string($rate['destination_country'])."',
+						`destination_country_code` = '".mysql_real_escape_string($rate['destination_country_code'])."',
+						`destination_port` = '".mysql_real_escape_string($rate['destination_port'])."',
+						`destination_port_id` = '".mysql_real_escape_string($rate['destination_port_id'])."',
+						`validity_date_from` = '".mysql_real_escape_string($rate['validity_date_from'])."',
+						`validity_date_to` = '".mysql_real_escape_string($rate['validity_date_to'])."',
+						`container_type` = '".mysql_real_escape_string($rate['container_type'])."',
+						`line_terms` = '".mysql_real_escape_string($rate['line_terms'])."',
+						`max_weight` = '".mysql_real_escape_string($rate['max_weight'])."',
+						`max_weight_unit` = '".mysql_real_escape_string($rate['max_weight_unit'])."',
+						`valid_for` = '".mysql_real_escape_string($rate['valid_for'])."',
+						`sales_rate` = '".mysql_real_escape_string($rate['sales_rate'])."',
+						`sales_rate_currency` = '".mysql_real_escape_string($rate['sales_rate_currency'])."',
+						`notes` = '".mysql_real_escape_string($rate['notes'])."',
+						`dateadded` = NOW()
+					";
+				}
+				else{
+					$sql = "update`rates` set 
+						`logistic_provider_id` = '".mysql_real_escape_string($_SESSION['logistic_provider']['id'])."',
+						`origin_country` = '".mysql_real_escape_string($rate['origin_country'])."',
+						`origin_country_code` = '".mysql_real_escape_string($rate['origin_country_code'])."',
+						`origin_port` = '".mysql_real_escape_string($rate['origin_port'])."',
+						`origin_port_id` = '".mysql_real_escape_string($rate['origin_port_id'])."',
+						`destination_country` = '".mysql_real_escape_string($rate['destination_country'])."',
+						`destination_country_code` = '".mysql_real_escape_string($rate['destination_country_code'])."',
+						`destination_port` = '".mysql_real_escape_string($rate['destination_port'])."',
+						`destination_port_id` = '".mysql_real_escape_string($rate['destination_port_id'])."',
+						`validity_date_from` = '".mysql_real_escape_string($rate['validity_date_from'])."',
+						`validity_date_to` = '".mysql_real_escape_string($rate['validity_date_to'])."',
+						`container_type` = '".mysql_real_escape_string($rate['container_type'])."',
+						`line_terms` = '".mysql_real_escape_string($rate['line_terms'])."',
+						`max_weight` = '".mysql_real_escape_string($rate['max_weight'])."',
+						`max_weight_unit` = '".mysql_real_escape_string($rate['max_weight_unit'])."',
+						`valid_for` = '".mysql_real_escape_string($rate['valid_for'])."',
+						`sales_rate` = '".mysql_real_escape_string($rate['sales_rate'])."',
+						`sales_rate_currency` = '".mysql_real_escape_string($rate['sales_rate_currency'])."',
+						`notes` = '".mysql_real_escape_string($rate['notes'])."'
+						
+						where `id`='".$rate['id']."'
+					";
+				}
+				$q = $this->db->query($sql);
+				echo "<script>self.location='".site_url("lp")."/myrates'</script>";
+				return 0;
+			}
+			$this->load->view('sitelayout/header.php');
+			$this->load->view('sitelayout/nav.php');
+			$data['rate'] = $rate;
+			$content = $this->load->view('lp/rate.php', $data, true);
+			$data['content'] = $content;
+			$content = $this->load->view('lp/content.php', $data);
+			$this->load->view('sitelayout/footer.php');
+		}
+		else {
+			$sql = "select 
+			*
+			from `rates` where 
+			`logistic_provider_id`='".$_SESSION['logistic_provider']['id']."' order by `id` desc
+			";
+			$q = $this->db->query($sql);
+			$rates = $q->result_array();
+			$data['rates'] = $rates;
+			
+			
+			
+			$this->load->view('sitelayout/header.php');
+			$this->load->view('sitelayout/nav.php');
+			$content = $this->load->view('lp/myrates.php', $data, true);
+			$data['content'] = $content;
+			$content = $this->load->view('lp/content.php', $data);
+			$this->load->view('sitelayout/footer.php');
+		}
 	}
 	
 	public function mybids(){

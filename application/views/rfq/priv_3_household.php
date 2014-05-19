@@ -149,7 +149,7 @@
 					
 				</div>
 				<label class="col-sm-3 control-label"></label>
-				<div class="col-sm-9 text-center"><button type="button" class="btn btn-default" onclick="populatePacking()">Add More</button></div>
+				<div class="col-sm-9 text-center"><button type="button" class="btn btn-sm" onclick="populatePacking()">Add More</button></div>
 			</div>
 			<div class="form-group dependents other" id="other">
 				<label class="col-sm-12 ">Please specify:</label>

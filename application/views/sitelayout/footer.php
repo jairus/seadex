@@ -70,6 +70,29 @@
 		}).on('changeDate', function(ev) {
 			delivery.hide();
 		}).data('datepicker');
+		
+		
+		
+		var validity_date_from = jQuery('[name="validity_date_from"]').datepicker({
+			onRender: function(date) {
+				return date.valueOf() < now.valueOf() ? 'disabled' : '';
+			}
+		}).on('changeDate', function(ev) {
+			if (ev.date.valueOf() > validity_date_to.date.valueOf()) {
+				var newDate = new Date(ev.date)
+				newDate.setDate(newDate.getDate() + 1);
+				delivery.setValue(newDate);
+			}
+			validity_date_from.hide();
+		}).data('datepicker');
+		
+		var validity_date_to = jQuery('[name="validity_date_to"]').datepicker({
+			onRender: function(date) {
+				return date.valueOf() <= validity_date_from.date.valueOf() ? 'disabled' : '';
+			}
+		}).on('changeDate', function(ev) {
+			validity_date_to.hide();
+		}).data('datepicker');
 	</script>
 	<script src="<?php echo site_url("media/scripts/_all.php?url=".urlencode(site_url("media")))?>"></script>
 	<!--

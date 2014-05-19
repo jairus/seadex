@@ -520,6 +520,12 @@ if($rfq['userprofile']['customer_type']){
 									</div>
 									</td>
 								</tr>
+								<tr>
+									<td width="25%"><b>Alternate Pickup Date:</b> <?php echo $rfq['shipping_info']['origin']['alternate_date']; ?></td>
+									<td width="25%"></td>
+									<td width="25%"><b>Alternate Delivery Date:</b> <?php echo $rfq['shipping_info']['destination']['alternate_date']; ?></td>
+									<td width="25%"></td>
+								</tr>
 								<!--
 								<tr>
 									<td width="50%"><?php echo $rfq['shipping_info']['origin']['time_zone']; ?> GMT</td>
@@ -1176,7 +1182,20 @@ if($rfq['userprofile']['customer_type']){
 					</tr>
 					<tr>
 						<td colspan=2 class="text-center">
-							<input type="submit" class="btn btn-primary btn-default" style="margin:20px;" value="Submit Your Bid" onclick="return confirm('Are you sure you want to submit this bid?');" >
+							<script>
+							function validateBid(){
+								if(jQuery("#total_bid").val()>0){
+									if(confirm('Are you sure you want to submit this bid?')){
+										return true;
+									}
+								}
+								else{
+									alert("Please input a valid bid value!");
+									return false;
+								}
+							}
+							</script>
+							<input type="submit" class="btn btn-primary btn-default" style="margin:20px;" value="Submit Your Bid" onclick="return validateBid();" >
 							<input type="button" class="btn btn-default" style="margin:20px;" value="Cancel" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfq['id']; ?>'">
 							<?php
 							if($rfqprevid){

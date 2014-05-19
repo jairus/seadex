@@ -19,7 +19,9 @@
 	function sameify(objx, val){
 		arr = objx.parent().parent().find(".form-control");
 		for(i=0; i<arr.length; i++){
-			arr[i].value = val;
+			if(arr[i].name!="packing[weight_unit][]"){
+				arr[i].value = val;
+			}
 		}
 	}
 </script>

@@ -97,6 +97,7 @@
 				  ?>
 				  
 				  <select name="searchfilter" id="searchfilter" class="form-control">
+				    <option value="Custom Search">Custom Search</option>
 					<option value="Route Search">Route Search</option>
 					<option value="Country Search">Country Search</option>
 					<option value="Search by Keywords">Search by Keywords</option>
@@ -106,7 +107,10 @@
 				  <script>
 						function setupSF(val){
 							jQuery(".searchfil").hide();
-							if(val=="Route Search"){
+							if(val=="Custom Search"){
+								jQuery("#s0").show();
+							}
+							else if(val=="Route Search"){
 								jQuery("#s1").show();
 							}
 							else if(val=="Country Search"){
@@ -128,6 +132,81 @@
 						jQuery(".savefilter").val("");
 						
 					</script>
+				  <div id="s0" style="padding-top:10px; display:none" class="searchfil">
+					<form method="post">
+					<input type="hidden" name="savefilter" class="savefilter">
+					<input type="hidden" name="type" value="Custom Search">
+					Country:
+					&nbsp;&nbsp;
+					<input type="radio" name="tofrom" value="origin" <?php if($_SESSION['searchfilter']['tofrom']=="origin") echo "checked"; ?> > Origin
+					&nbsp;&nbsp;
+					<input type="radio" name="tofrom" value="destination" <?php if($_SESSION['searchfilter']['tofrom']=="destination") echo "checked"; ?>> Destination
+					&nbsp;&nbsp;
+					<input type="radio" name="tofrom" value="both" <?php if($_SESSION['searchfilter']['tofrom']=="both" || $_SESSION['searchfilter']['tofrom']=="") echo "checked"; ?>> Both
+					<?php
+					$data['select_name'] = "country";
+					$data['select_id'] = "country";
+					$this->load->view("lp/country_select", $data);
+					?>
+					<script>
+						<?php
+						if($_SESSION['searchfilter']['country']){
+							?>
+							jQuery("#country").val("<?php echo $_SESSION['searchfilter']['country']; ?>");
+							<?php
+						}
+						?>
+					</script>
+					<div style="padding-top:5px">
+						<!--
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="FCL" /> FCL</div>
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="LCL" /> LCL</div>
+						-->
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="General" />General</div>
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="Goods" /> Goods</div>
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="Vehicle" /> Vehicle</div>
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="Household" /> Household</div>
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="Electrical Items" /> Electrical Items</div>
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="Special Care Items" /> Special Care Items</div>
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="Parcel Delivery" /> Parcel Delivery</div>
+						<div class="category"><input type="checkbox" name="categories[]" class="categories" value="Vehicle Parts" /> Vehicle Parts</div>
+						<div>IMO</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 1.1: Explosives with a mass explosion hazard" /> Subclass 1.1: Explosives with a mass explosion hazard</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 1.2: Explosives with a severe projection hazard" /> Subclass 1.2: Explosives with a severe projection hazard</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 1.3: Explosives with a fire" /> Subclass 1.3: Explosives with a fire</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 1.4: Minor fire or projection hazard" /> Subclass 1.4: Minor fire or projection hazard</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 1.5: An insensitive substance with a mass explosion hazard" /> Subclass 1.5: An insensitive substance with a mass explosion hazard</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 1.6: Extremely insensitive articles" /> Subclass 1.6: Extremely insensitive articles</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 2.1: Flammable Gas" /> Subclass 2.1: Flammable Gas</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 2.2: Non-Flammable Gases" /> Subclass 2.2: Non-Flammable Gases</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 2.3: Poisonous Gases" /> Subclass 2.3: Poisonous Gases</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Class 3:Flammable Liquids" /> Class 3:Flammable Liquids</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 4.1: Flammable solids" /> Subclass 4.1: Flammable solids</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 4.2: Spontaneously combustible solids" /> Subclass 4.2: Spontaneously combustible solids</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 4.3: Dangerous when wet" /> Subclass 4.3: Dangerous when wet</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 5.1: Oxidizing agent" /> Subclass 5.1: Oxidizing agent</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 5.2: Organic peroxide oxidizing agent" /> Subclass 5.2: Organic peroxide oxidizing agent</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 6.1: Poison" /> Subclass 6.1: Poison</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Subclass 6.2: Biohazard" /> Subclass 6.2: Biohazard</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Class 7:Radioactive substances" /> Class 7:Radioactive substances</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Class 8:Corrosive substances" /> Class 8:Corrosive substances</div>
+						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Class 9:Miscellaneous dangerous substances and articles" /> Class 9:Miscellaneous dangerous substances and articles</div>
+					</div>
+					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; " />
+					<input type="button" class="btn btn-default" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername0').show()" />
+					<div style="position:relative; display:none" id="filtername0">
+						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
+							<div class="text-left">Filter Name:</div>
+							<div class="row" style="padding-top:3px;">
+								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
+								<div class="col-md-12 text-left">
+								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername0').hide()">&nbsp;
+								<input type="submit" class="btn-default btn-xs" value="Save" onclick="saveFilter()"></div>
+							</div>
+						</div>
+					</div>
+					</form>
+				  </div>
 				  <div id="s1" style="padding-top:10px; display:none" class="searchfil">
 					<form method="post">
 					<input type="hidden" name="savefilter" class="savefilter">

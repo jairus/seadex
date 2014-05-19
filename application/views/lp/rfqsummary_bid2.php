@@ -396,6 +396,10 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 										?>
 									</td>
 								</tr>
+								<tr>
+									<td width="50%"><b>Alternate Pickup Date:</b> <?php echo $rfq['shipping_info']['origin']['alternate_date']; ?></td>
+									<td width="50%"><b>Alternate Delivery Date:</b> <?php echo $rfq['shipping_info']['destination']['alternate_date']; ?></td>
+								</tr>
 								<!--
 								<tr>
 									<td width="50%"><?php echo $rfq['shipping_info']['origin']['time_zone']; ?> GMT</td>

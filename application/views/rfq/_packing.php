@@ -14,7 +14,9 @@
 	function sameify(objx, val){
 		arr = objx.parent().parent().find(".form-control");
 		for(i=0; i<arr.length; i++){
-			arr[i].value = val;
+			if(arr[i].name!="packing[weight_unit][]"){
+				arr[i].value = val;
+			}
 		}
 	}
 </script>
@@ -22,7 +24,7 @@
 <div style="display:none" id="packing_details">
 	<table class="table table-bordered" id="packing_table" style="display:none">
 		<tr>
-			<th width="100%" colspan="3">
+			<th width="100%" colspan="4">
 			<div class="col-md-6">
 				<select type="text" class="form-control" id="packing_type" name="packing[name][]" onchange="packingType(this.value, this.title)">
 					<option value='Wooden crates'>Wooden crates</option>
@@ -53,43 +55,47 @@
 			</th>
 		</tr>	
 		<tr>
-			<th width="33%">
+			<th width="25%">
 			Length
 			<select class="form-control" onchange="sameify(jQuery(this),this.value)"  style="width:80px; display:inline" type="text" name="packing[length_unit][]" >
-				<option value='cm'>cm</option>
 				<option value='m'>m</option>
 				<option value='ft'>ft</option>
-				<option value='in'>in</option>
 			</select>
 			</th>
-			<th width="33%">
+			<th width="25%">
 			Width
-			<select class="form-control" onchange="sameify(jQuery(this),this.value)" style="width:80px; display:inline" type="text" name="packing[width_unit][]" >
-				<option value='cm'>cm</option>
+			<select class="form-control" onchange="sameify(jQuery(this),this.value)"  style="width:80px; display:inline" type="text" name="packing[width_unit][]" >
 				<option value='m'>m</option>
 				<option value='ft'>ft</option>
-				<option value='in'>in</option>
 			</select>
 			</th>
-			<th width="33%">
+			<th width="25%">
 			Height
-			<select class="form-control" onchange="sameify(jQuery(this),this.value)" style="width:80px; display:inline" type="text" name="packing[height_unit][]" >
-				<option value='cm'>cm</option>
+			<select class="form-control" onchange="sameify(jQuery(this),this.value)"  style="width:80px; display:inline" type="text" name="packing[height_unit][]" >
 				<option value='m'>m</option>
 				<option value='ft'>ft</option>
-				<option value='in'>in</option>
+			</select>
+			</th>
+			<th width="25%">
+			Weight
+			<select class="form-control"  style="width:80px; display:inline" type="text" name="packing[weight_unit][]" >
+				<option value='kg'>kg</option>
+				<option value='lbs'>lbs</option>
 			</select>
 			</th>
 		</tr>
 		<tr>
-			<td width="33%">
+			<td width="25%">
 				<input class="form-control" type="text" name="packing[length][]">
 			</td>
-			<td width="33%">
+			<td width="25%">
 				<input class="form-control" type="text" name="packing[width][]">
 			</td>
-			<td width="33%">
+			<td width="25%">
 				<input class="form-control" type="text" name="packing[height][]">
+			</td>
+			<td width="25%">
+				<input class="form-control" type="text" name="packing[weight][]">
 			</td>
 			
 		</tr>

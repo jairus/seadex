@@ -275,10 +275,12 @@ class rfq extends CI_Controller {
 				`origin_city` = '".mysql_real_escape_string($rfq_shipping_info['origin']['city'])."',
 				`origin_port` = '".mysql_real_escape_string($rfq_shipping_info['origin']['port'])."',
 				`origin_date` = '".mysql_real_escape_string($rfq_shipping_info['origin']['date'])."',
+				`origin_alternate_date` = '".mysql_real_escape_string($rfq_shipping_info['origin']['alternate_date'])."',
 				`destination_country` = '".mysql_real_escape_string($rfq_shipping_info['destination']['country'])."',
 				`destination_city` = '".mysql_real_escape_string($rfq_shipping_info['destination']['city'])."',
 				`destination_port` = '".mysql_real_escape_string($rfq_shipping_info['destination']['port'])."',
 				`destination_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['date'])."',
+				`destination_alternate_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['alternate_date'])."',
 				`customer_id` = '".mysql_real_escape_string($customer[0]['id'])."',
 				`dateadded` = NOW()
 				";
@@ -320,10 +322,12 @@ class rfq extends CI_Controller {
 				`origin_city` = '".mysql_real_escape_string($rfq_shipping_info['origin']['city'])."',
 				`origin_port` = '".mysql_real_escape_string($rfq_shipping_info['origin']['port'])."',
 				`origin_date` = '".mysql_real_escape_string($rfq_shipping_info['origin']['date'])."',
+				`origin_alternate_date` = '".mysql_real_escape_string($rfq_shipping_info['origin']['alternate_date'])."',
 				`destination_country` = '".mysql_real_escape_string($rfq_shipping_info['destination']['country'])."',
 				`destination_city` = '".mysql_real_escape_string($rfq_shipping_info['destination']['city'])."',
 				`destination_port` = '".mysql_real_escape_string($rfq_shipping_info['destination']['port'])."',
 				`destination_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['date'])."',
+				`destination_alternate_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['alternate_date'])."',
 				`customer_id` = '".mysql_real_escape_string($customer[0]['id'])."',
 				`dateadded` = NOW()
 				";
@@ -364,10 +368,12 @@ class rfq extends CI_Controller {
 				`origin_city` = '".mysql_real_escape_string($rfq_shipping_info['origin']['city'])."',
 				`origin_port` = '".mysql_real_escape_string($rfq_shipping_info['origin']['port'])."',
 				`origin_date` = '".mysql_real_escape_string($rfq_shipping_info['origin']['date'])."',
+				`origin_alternate_date` = '".mysql_real_escape_string($rfq_shipping_info['origin']['alternate_date'])."',
 				`destination_country` = '".mysql_real_escape_string($rfq_shipping_info['destination']['country'])."',
 				`destination_city` = '".mysql_real_escape_string($rfq_shipping_info['destination']['city'])."',
 				`destination_port` = '".mysql_real_escape_string($rfq_shipping_info['destination']['port'])."',
 				`destination_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['date'])."',
+				`destination_alternate_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['alternate_date'])."',
 				`customer_id` = '".mysql_real_escape_string($customer['id'])."',
 				`dateadded` = NOW()
 				";

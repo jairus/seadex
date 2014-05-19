@@ -1,5 +1,10 @@
+<?php
+if(!$currency_name){
+	$currency_name = "total_bid_currency";
+}
+?>
 <form method="post" id='currex'>
-<select id='currency' name="total_bid_currency" class="form-control" onchange="jQuery('#currex').submit()" >
+<select id='currency' name="<?php echo $currency_name; ?>" class="form-control" onchange="jQuery('#currex').submit()" >
 	<option selected="selected" value="USD United States Dollars">
 		USD United States Dollars
 	</option>
@@ -258,10 +263,10 @@
 </select>
 </form>
 <?php
-if($_POST['total_bid_currency']){
+if($_POST[$currency_name]){
 	?>
 	<script>
-		jQuery("#currency").val("<?php echo $_POST['total_bid_currency']; ?>");
+		jQuery("#currency").val("<?php echo $_POST[$currency_name]; ?>");
 	</script>
 	<?php
 }

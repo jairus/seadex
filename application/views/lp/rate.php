@@ -90,10 +90,6 @@ function moreAttachments(){
 		<div class="col-md-12 text-left">
 			<table class="table table-bordered">
 				<tr>
-					<th width="50%" colspan=2>Customer Type</th>
-					<td width="50%" colspan=2><?php echo ucfirst($rate['customer_type']); ?></td>
-				</tr>
-				<tr>
 					<td colspan=4>
 						<table class="table table-bordered">
 						<tr>

@@ -244,6 +244,7 @@ The SeaDex team";
 		$sql = "select * from `rfq` where 
 		`customer_id`='".$_SESSION['customer']['id']."' 
 		and `bid_id`<1 
+		and UNIX_TIMESTAMP(STR_TO_DATE(`destination_date`,'%m/%d/%Y'))> ".(time()+(2*60*60*24))."
 		order by id desc";
 		$q = $this->db->query($sql);
 		$rfqs = $q->result_array();
@@ -305,7 +306,7 @@ The SeaDex team";
 		$sql = "select * from `rfq` where 
 		`customer_id`='".$_SESSION['customer']['id']."' 
 		and bid_id<1
-		and UNIX_TIMESTAMP(`destination_date`)< ".(time()+(2*60*60*24))."
+		and UNIX_TIMESTAMP(STR_TO_DATE(`destination_date`,'%m/%d/%Y'))< ".(time()+(2*60*60*24))."
 		order by id desc";
 		$q = $this->db->query($sql);
 		$rfqs = $q->result_array();

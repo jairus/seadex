@@ -162,6 +162,24 @@
 			
 			moveType("Full house/home move");
 			populatePacking();
+			
+			function validateStep3(){
+				error= false;
+				if(jQuery("#packing_more_details").is(":visible")){
+					jQuery("#packing_more_details .packing_measurements").each(function(){
+						//alert(this.disabled)
+						val = jQuery.trim(jQuery(this).val());
+						if(!val){
+							error = true;
+						}
+					});
+					if(error){
+						alert("Please complete all measurements (length, width, height, weight).");
+						return false;
+					}
+				}
+				return true;
+			}
 		</script>
 		<div class="col-md-12 backbutton text-center">
 			<button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/2"); ?>'">Back</button>
@@ -170,7 +188,7 @@
 				?><button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4?skip=true"); ?>'">Skip</button><?php
 			}
 			?>
-			<button type="submit" class="btn btn-primary btn-lg">Continue</button>
+			<button type="submit" class="btn btn-primary btn-lg" onclick="return validateStep3(); ">Continue</button>
 		</div>
 	</form>
 </div>

@@ -97,16 +97,16 @@
 		</tr>
 		<tr>
 			<td width="25%">
-				<input class="form-control" type="text" name="packing[length][]">
+				<input class="form-control packing_measurements" type="text" name="packing[length][]">
 			</td>
 			<td width="25%">
-				<input class="form-control" type="text" name="packing[width][]">
+				<input class="form-control packing_measurements" type="text" name="packing[width][]">
 			</td>
 			<td width="25%">
-				<input class="form-control" type="text" name="packing[height][]">
+				<input class="form-control packing_measurements" type="text" name="packing[height][]">
 			</td>
 			<td width="25%">
-				<input class="form-control" type="text" name="packing[weight][]">
+				<input class="form-control packing_measurements" type="text" name="packing[weight][]">
 			</td>
 			
 		</tr>

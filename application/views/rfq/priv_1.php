@@ -1,5 +1,39 @@
 <div class='step'>
 	<script>
+	function validateStep1(){
+		origin_country = jQuery("#origin_country").val();
+		origin_port = jQuery("#origin_port").val();
+		origin_date = jQuery("#origin_date").val();
+		destination_country = jQuery("#destination_country").val();
+		destination_date = jQuery("#destination_date").val();
+		destination_port = jQuery("#destination_port").val();
+		if(!jQuery.trim(origin_country)){
+			alert("Please input the country of origin.");
+			return false;
+		}
+		else if(!jQuery.trim(origin_port)){
+			alert("Please input the port of origin.");
+			return false;
+		}
+		else if(!jQuery.trim(origin_date)){
+			alert("Please input a pickup date.");
+			return false;
+		}
+		else if(!jQuery.trim(destination_country)){
+			alert("Please input the country of destination.");
+			return false;
+		}
+		else if(!jQuery.trim(destination_port)){
+			alert("Please input the port of destination.");
+			return false;
+		}
+		else if(!jQuery.trim(destination_date)){
+			alert("Please input a delivery date.");
+			return false;
+		}
+		
+		//return true;
+	}
 	function getPorts(idx, country_code){
 		if(country_code){
 			jQuery.ajax({
@@ -67,7 +101,7 @@
 	}
 	</script>
 	<div class='formcontainer'>
-		<form class="form-horizontal" action="<?php echo site_url("rfq/".$type."/2"); if($skip){ echo "?skip=true"; } ?>" method="post" >
+		<form class="form-horizontal" action="<?php echo site_url("rfq/".$type."/2"); if($skip){ echo "?skip=true"; } ?>" method="post"  >
 			<input type="hidden" name="shipping_info" value="true">
 			<input type="hidden" name="estimated_days" id="estimated_days" value="">
 			<div class="row">
@@ -78,8 +112,8 @@
 					  <div class="form-group">
 						<label class="col-sm-3 control-label">Country</label>
 						<div class="col-sm-9">
-							<select class="form-control" name='origin[country]' onchange="getPorts('origin_port', this.value)">
-							<option>Select Country</option>
+							<select id="origin_country" class="form-control" name='origin[country]' onchange="getPorts('origin_port', this.value)">
+							<option value="">Select Country</option>
 							<option value="AL - Albania">Albania</option>
 							<option value="DZ - Algeria">Algeria</option>
 							<option value="AO - Angola">Angola</option>
@@ -309,8 +343,8 @@
 					  <div class="form-group">
 						<label class="col-sm-3 control-label">Country</label>
 						<div class="col-sm-9">
-						  <select class="form-control" name='destination[country]' onchange="getPorts('destination_port', this.value)">
-							<option>Select Country</option>
+						  <select class="form-control" id="destination_country" name='destination[country]' onchange="getPorts('destination_port', this.value)">
+							<option value="">Select Country</option>
 							<option value="AL - Albania">Albania</option>
 							<option value="DZ - Algeria">Algeria</option>
 							<option value="AO - Angola">Angola</option>
@@ -561,7 +595,7 @@
 			<div class="row">
 				<div class="col-md-12 text-center">
 					<button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq")."/"; ?>'">Back</button>
-					<button type="submit" class="btn btn-primary btn-lg">Continue</button>
+					<button type="submit" class="btn btn-primary btn-lg" onclick="return validateStep1();">Continue</button>
 				</div>
 			</div>
 		</form>

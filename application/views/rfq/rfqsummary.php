@@ -244,6 +244,16 @@
 															</tr>
 															<?php
 														}
+														if(trim($cargo['details']['additional_info'])){
+															?>
+															<tr>
+																<td colspan=2>
+																<?php
+																echo nl2br(strip_tags($cargo['details']['additional_info']));
+																?></td>
+															</tr>
+															<?php
+														}
 														echo "</table>";
 													}
 													else if($cargo['details']['cargo_details']=="goods"){
@@ -333,6 +343,16 @@
 																<?php
 															}
 														}
+														if(trim($cargo['details']['additional_info'])){
+															?>
+															<tr>
+																<td colspan=2>
+																<?php
+																echo nl2br(strip_tags($cargo['details']['additional_info']));
+																?></td>
+															</tr>
+															<?php
+														}
 														echo "</table>";
 													}
 													else if($cargo['details']['cargo_details']=="vehicle"){
@@ -383,6 +403,16 @@
 																</tr>
 																<?php
 															}
+														}
+														if(trim($cargo['details']['additional_info'])){
+															?>
+															<tr>
+																<td colspan=2>
+																<?php
+																echo nl2br(strip_tags($cargo['details']['additional_info']));
+																?></td>
+															</tr>
+															<?php
 														}
 														echo "</table>";
 													}

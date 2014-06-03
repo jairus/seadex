@@ -596,6 +596,17 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 														</tr>
 														<?php
 													}
+													if(trim($cargo['details']['additional_info'])){
+														?>
+														<tr>
+															<td colspan=2>
+															<b>Additional Information:</b><br />
+															<?php
+															echo nl2br(strip_tags($cargo['details']['additional_info']));
+															?></td>
+														</tr>
+														<?php
+													}
 													echo "</table>";
 												}
 												else if($cargo['details']['cargo_details']=="goods"){
@@ -706,6 +717,17 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 															<?php
 														}
 													}
+													if(trim($cargo['details']['additional_info'])){
+														?>
+														<tr>
+															<td colspan=2>
+															<b>Additional Information:</b><br />
+															<?php
+															echo nl2br(strip_tags($cargo['details']['additional_info']));
+															?></td>
+														</tr>
+														<?php
+													}
 													echo "</table>";
 												}
 												else if($cargo['details']['cargo_details']=="vehicle"){
@@ -776,6 +798,17 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 															</tr>
 															<?php
 														}
+													}
+													if(trim($cargo['details']['additional_info'])){
+														?>
+														<tr>
+															<td colspan=2>
+															<b>Additional Information:</b><br />
+															<?php
+															echo nl2br(strip_tags($cargo['details']['additional_info']));
+															?></td>
+														</tr>
+														<?php
 													}
 													echo "</table>";
 												}

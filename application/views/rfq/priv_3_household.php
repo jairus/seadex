@@ -157,6 +157,17 @@
 					<textarea name="other_specify" class="form-control" placeholder="e.g. Dimension: House square ft/m X factor for Cubic needed for shipment"></textarea>
 				</div>
 			</div>
+			<div class="form-group" id="additional_info">
+				<label class="col-sm-3 control-label">Additional Information:</label>
+				<div class="col-sm-9">
+					<textarea class="form-control" name="additional_info"></textarea>
+				</div>
+				<!--
+				<div class="col-sm-3">
+					<input type="button" class="form-control" value="Fetch Item Data" onclick="fetchItemData()" />
+				</div>
+				-->
+			</div>
 		</div>
 		<script>
 			

@@ -553,8 +553,15 @@ class lp extends CI_Controller {
 				$sql = "select `id`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` where `rfq_id` = '".$rfqs[$i]['id']."' order by `total_bid_usd` asc";
 				$q = $this->db->query($sql);
 				$bids = $q->result_array();
+				foreach($bids as $value){
+					if($value['logistic_provider_id']==$_SESSION['logistic_provider']['id']){
+						$rfqs[$i]["bidded"] = true;
+						break;
+					}
+				}
 				$rfqs[$i]['bids'] = $bids;
 			}
+
 			
 			$sql = "select `id`, `filter_name` from `saved_search_filters` where `logistic_provider_id`='".$_SESSION['logistic_provider']['id']."' order by `id` asc";
 			$q = $this->db->query($sql);
@@ -732,13 +739,16 @@ class lp extends CI_Controller {
 		
 		$exchange_rate = exchange_rate($currency, "USD");
 		
+		
+
+		
 		if(isset($exchange_rate)){
 			$bid['total_bid_usd'] = $exchange_rate * $bid['total_bid'];
 		}
 		
 		
 		if(!trim($bid['total_bid'])){
-			?><script>alert("Please specify your total bid price!");</script><?
+			?><script>alert("Please specify your total bid price!");</script><?php
 			return 0;
 		}
 		else if(!is_numeric($bid['total_bid'])){
@@ -746,7 +756,7 @@ class lp extends CI_Controller {
 			<script>
 			alert("Please enter a valid number for your total bid price. e.g. 1000.00");
 			window.parent.jQuery("#total_bid").focus();
-			</script><?
+			</script><?php
 			return 0;
 		}
 		$sql = "insert into `bids` set 
@@ -808,7 +818,7 @@ class lp extends CI_Controller {
 			echo "<script>window.parent.location='".site_url("lp/thankyou_for_bidding")."'</script>";
 		}
 		else{
-			?><script>alert("A database error has occured! Please try again.");</script><?
+			?><script>alert("A database error has occured! Please try again.");</script><?php
 		}
 		
 		//echo "<pre>";
@@ -1323,7 +1333,8 @@ The SeaDex team";
 			$redirect = urlencode($_SERVER['REQUEST_URI']);
 			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
 		}
-		
+		/*
+		//exclude accepted
 		$sql = "select 
 		`id`, 
 		`rfq_id`, 
@@ -1348,6 +1359,26 @@ The SeaDex team";
 		)
 		order by `id` desc
 		";
+		*/
+		
+		$sql = "select 
+		`id`, 
+		`rfq_id`, 
+		`total_bid_currency`,
+		`total_bid`,
+		`origin_country`,
+		`origin_city`,
+		`origin_port`,
+		`destination_country`,
+		`destination_city`,
+		`destination_port`,
+		`total_bid_usd`,
+		`dateadded`
+		from `bids` where 
+		`logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'
+		order by `id` desc
+		";
+		
 		$q = $this->db->query($sql);
 		$bids = $q->result_array();
 		$data['bids'] = $bids;

@@ -284,6 +284,7 @@ The SeaDex team";
 			$sql = "select `id`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` where `rfq_id` = '".$rfqs[$i]['id']."' order by `total_bid_usd` asc";
 			$q = $this->db->query($sql);
 			$bids = $q->result_array();
+			//echo "<pre>"; print_r($rfqs[$i]);
 			$rfqs[$i]['bids'] = $bids;
 		}
 		

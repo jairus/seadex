@@ -114,7 +114,7 @@ table th.startend{
 					0 rates found.
 					</td>
 				</tr>
-				<?
+				<?php
 			}
 			?>
 		  </tbody>

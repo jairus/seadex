@@ -117,7 +117,7 @@ table th.startend{
 					0 listings found.
 					</td>
 				</tr>
-				<?
+				<?php
 			}
 			?>
 		  </tbody>

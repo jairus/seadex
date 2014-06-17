@@ -1,3 +1,23 @@
+<style>
+.menu{
+	padding-left:15px;
+}
+.menu a:hover{
+	text-decoration:none;
+}
+.active{
+	border-radius: 3px;
+	background: #3BA7E4;
+	color: white;
+}
+.active a{
+	color: white;
+	font-weight: bold;
+}
+</style>
+<?php
+$method = $this->router->fetch_method();
+?>
 <table class="table table-striped">
   <thead>
 	<tr>
@@ -7,12 +27,12 @@
   <tbody>
 	<tr>
 	  <td>
-		<div class="menu"><a href="<?php echo site_url("lp"); ?>/rfqs">Customer RFQs</a></div>
-		<div class="menu"><a href="<?php echo site_url("lp"); ?>/mybids">My Bids</a></div>
-		<div class="menu"><a href="<?php echo site_url("lp"); ?>/myrates">My Rates</a></div>
-		<div class="menu"><a href="<?php echo site_url("lp"); ?>/acceptedbids">Accepted Bids</a></div>
-		<div class="menu"><a href="<?php echo site_url("lp"); ?>/changepass">Change Password</a></div>
-		<div class="menu"><a href="<?php echo site_url("lp"); ?>/account">Edit My Profile</a></div>
+		<div class="menu <?php if($method=="rfqs" || $method=="index"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/rfqs">Customer RFQs</a></div>
+		<div class="menu <?php if($method=="mybids"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/mybids">My Bids</a></div>
+		<div class="menu <?php if($method=="myrates"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/myrates">My Rates</a></div>
+		<div class="menu <?php if($method=="acceptedbids"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/acceptedbids">Accepted Bids</a></div>
+		<div class="menu <?php if($method=="changepass"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/changepass">Change Password</a></div>
+		<div class="menu <?php if($method=="account"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/account">Edit My Profile</a></div>
 	  </td>
 	</tr>
   </tbody>

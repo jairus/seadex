@@ -251,7 +251,12 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 										<div class="row">Message</div>
 										<div class="row"><textarea class="form-control" style="height:100px;" name="message" ><?php
 										
-										echo "Hello! I would like to inform you that I accepted your bid for my RFQ. Please don't hesitate to contact me on how to proceed from here and for further details.";
+										echo "Dear Sir, 
+
+I would like to inform you that I have accepted your proposal for my RFQ. I understand  that you have the right to inspect and confirm and re-quote  if needed. 
+
+I have read the documents (If attached) and will sign and fax or scan and email back to confirm.
+";
 										
 										?></textarea></div>
 										<div class="row" style="margin-top:10px;"><input type="submit" value="Proceed" class="form-control btn btn-primary" /></div>

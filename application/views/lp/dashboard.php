@@ -444,8 +444,8 @@
 			  <thead>
 				<tr>
 				  <th class="start">RFQ&nbsp;#</th>
-				  <th width="18%">Origin</th>
-				  <th width="18%">Destination</th>
+				  <th width="17%">Origin</th>
+				  <th width="17%">Destination</th>
 				  <th width="13.3%">Pickup Date</th>
 				  <th width="13.3%">Delivery Date</th>
 				  <!--
@@ -453,13 +453,14 @@
 				  <th width="2.5%">Bids</th>
 				  -->
 				  <th width="18.3%">Date Added</th>
-				  <th class="end" width="17%"></th>
+				  <th class="end" width="19%"></th>
 				</tr>
 			  </thead>
 			  <tbody>
 				<?php
 				$t = count($rfqs);
 				for($i=0; $i<$t; $i++){
+					
 					if(!trim($rfqs[$i]['origin_port'])){
 						//continue;
 					}
@@ -519,8 +520,19 @@
 					  </td>
 					  <td>
 						<input type="button" class="btn btn-sm btn-primary" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']; ?>'" value="More" />
-						<input type="button" class="btn btn-sm btn-primary" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']."/bid"; ?>'" value="Bid" />
-						<!--<input type="button" class="btn btn-sm" value="Bid" />-->
+						<?php
+						if($rfqs[$i]['bidded']){
+							?>
+							<input type="button" style='background: green' class="btn btn-sm btn-primary" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']."/bid"; ?>'" value="Bid ON" />
+							<?php
+						}
+						else{
+							?>
+							<input type="button" class="btn btn-sm btn-primary" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqs[$i]['id']."/bid"; ?>'" value="Bid" />
+							<!--<input type="button" class="btn btn-sm" value="Bid" />-->
+							<?php
+						}
+						?>
 					  </td>
 					</tr>
 					<?php

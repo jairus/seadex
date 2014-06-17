@@ -3,11 +3,11 @@
 			  <thead>
 				<tr>
 				  <th class="start">#</th>
-				  <th width="22.5%">Origin</th>
-				  <th width="22.5%">Destination</th>
-				  <th width="13.3%">Bids</th>
-				  <th width="13.3%">Lowest Bid (USD)</th>
-				  <th width="13.3%">Date Added</th>
+				  <th width="18%">Origin</th>
+				  <th width="18%">Destination</th>
+				  <th width="16.3%">Bids</th>
+				  <th width="16.3%">Lowest Bid (USD)</th>
+				  <th width="16.3%">Date Added</th>
 				  <th class="end" width="13%"></th>
 				</tr>
 			  </thead>
@@ -44,6 +44,11 @@
 						  <td>
 							<?php
 							  echo count($rfqs[$i]['bids']);
+							  if($rfqs[$i]['bid_id']){
+								?>
+								<a style="color:green">- Accepted a Bid </a>
+								<?php
+							  }
 							?>
 						  </td>
 						  <td>
@@ -75,7 +80,7 @@
 						0 listings found.
 						</td>
 					</tr>
-					<?
+					<?php
 				}
 				?>
 			  </tbody>

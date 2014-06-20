@@ -317,7 +317,7 @@ $template['slug'] = "startuplist-wrap";
 */
 function send_email($from, $fromname, $emailtos, $subject, $message, $template, $debug=false){
 	//$formvars['key'] ='00Zrp2gMZCMIA7OiTJFsHQ';
-	
+	return 0;
 	$formvars['template_name'] =  $template['slug'];
 	$formvars['template_content'] = array();
 	foreach($template['data'] as $key=>$value){

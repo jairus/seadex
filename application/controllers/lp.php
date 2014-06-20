@@ -310,6 +310,7 @@ class lp extends CI_Controller {
 					views,
 					dateadded
 					from `rfq` where 
+					`bid_id`=0 and 
 					(".$sqlext.") and 
 					(".$sqlext2.")
 					order by `id` desc limit 100";
@@ -366,7 +367,7 @@ class lp extends CI_Controller {
 					destination_date_utc,
 					views,
 					dateadded
-					from `rfq` where ";
+					from `rfq` where `bid_id`=0 and ";
 					
 					$sql .= $sql_ext." order by `id` desc limit 100";
 				}
@@ -409,7 +410,7 @@ class lp extends CI_Controller {
 					destination_date_utc,
 					views,
 					dateadded
-					from `rfq` where 
+					from `rfq` where `bid_id`=0 and 
 					".$sqlext."
 					order by `id` desc limit 100";
 				}
@@ -440,7 +441,7 @@ class lp extends CI_Controller {
 					destination_date_utc,
 					views,
 					dateadded
-					from `rfq` where 
+					from `rfq` where `bid_id`=0 and 
 					lower(`data_plain`) like '%".mysql_real_escape_string(trim($keyword))."%'
 					order by `id` desc limit 100";
 					
@@ -485,8 +486,8 @@ class lp extends CI_Controller {
 						destination_date_utc,
 						views,
 						dateadded
-						from `rfq` where ";
-						$sql .= implode($sql_arr, " or ");
+						from `rfq` where `bid_id`=0 and  ";
+						$sql .= "(".implode($sql_arr, " or ").")";
 						$sql .= " order by `id` desc limit 100";
 					}
 				}
@@ -513,7 +514,7 @@ class lp extends CI_Controller {
 					destination_date_utc,
 					views,
 					dateadded
-					from `rfq` where 1 order by `id` desc limit 100";
+					from `rfq` where `bid_id`=0 order by `id` desc limit 100";
 				}
 			}
 			else{
@@ -539,7 +540,7 @@ class lp extends CI_Controller {
 				destination_date_utc,
 				views,
 				dateadded
-				from `rfq` where 1 order by `id` desc limit 100";
+				from `rfq` where `bid_id`=0 order by `id` desc limit 100";
 			}
 			$q = $this->db->query($sql_cnt);
 			$count = $q->result_array();

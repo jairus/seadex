@@ -10,7 +10,7 @@
 </div>
 <div class="row">
 	<script>
-	function moveType(type){
+        function moveType(type){
 		jQuery(".dependents").hide();
 		jQuery(".dependents .form-control").attr("disabled", true);
 		if(type=="Full house/home move"){
@@ -40,6 +40,7 @@
 				<label class="col-sm-3 control-label">Type of move</label>
 				<div class="col-sm-9">
 					<select type="text" class="form-control" name='type_of_move' onchange="moveType(this.value)">
+                                            <option value="">Please select</option>
 						<option value='Full house/home move' >Full house/home move</option>
 						<option value='Pieces of Furniture'>Pieces of Furniture</option>
 						<option value='Other'>Other</option>
@@ -50,6 +51,7 @@
 				<label class="col-sm-3 control-label">Size</label>
 				<div class="col-sm-9">
 					<select type="text" class="form-control" name='fullhouse_size' >
+                                            <option value="">Please select</option>
 						<option value='Studio Apartment (600 sq ft / 320 cu ft or 56 sq m / 9 cu m)'>Studio Apartment (600 sq ft / 320 cu ft or 56 sq m / 9 cu m)</option>
 						<option value='1 Bedroom (800 sq ft / 432 cu ft or 74 sq m / 12 cu m)'>1 Bedroom (800 sq ft / 432 cu ft or 74 sq m / 12 cu m)</option>
 						<option value='1-2 Bedroom (1,200 sq ft / 720 cu ft or 111 sq m / 20 cu m)'>1-2 Bedroom (1,200 sq ft / 720 cu ft or 111 sq m / 20 cu m)</option>
@@ -70,7 +72,7 @@
 					jQuery("#container_size .form-control").attr("disabled", false)
 				}
 				else{
-					jQuery("#packing").show();
+					if(jQuery("select[name='in_container']").val() == 'No') jQuery("#packing").show();
 					jQuery("#packing .form-control").attr("disabled", false)
 					jQuery("#packing_more").show();
 					jQuery("#packing_more .form-control").attr("disabled", false)
@@ -81,8 +83,9 @@
 				<label class="col-sm-3 control-label">Goods already in container?</label>
 				<div class="col-sm-9">
 					<select type="text" class="form-control" name='in_container' onchange="inContainer(this.value)" >
+                                            <option value="">Please select</option>
 						<option value='Yes'>Yes</option>
-						<option value='No' selected>No</option>
+						<option value='No'>No</option>
 					</select>
 				</div>
 			</div>
@@ -106,6 +109,7 @@
 					}
 					</script>
 					<select type="text" class="form-control" name='container_size' id="container_size_select" onchange="containerSize(this.value)" >
+                                                <option value="">Please select</option>
 						<option value='20 ft'>20 ft / 6 m</option>
 						<option value='40 ft'>40 ft / 12 m</option>
 						<option value='45 ft'>45 ft / 13.7 m</option>
@@ -175,6 +179,52 @@
 			populatePacking();
 			
 			function validateStep3(){
+                            
+                             /* @start :
+                             * Include checking on fields.
+                             * 
+                             * @author tuso@programmerspride.com
+                             * */
+                            var type_of_move = jQuery("select[name='type_of_move']");
+                            var fullhouse_size = jQuery("select[name='fullhouse_size']");
+                            var in_container = jQuery("select[name='in_container']");
+                            var container_size_select = jQuery('#container_size_select');
+                            
+                            if(! jQuery.trim(type_of_move.val())) {
+                                
+                                alert("Please select the type of move.");
+                                type_of_move.focus();
+                                return false;
+                            } else {
+                                
+                                if(type_of_move.val() == 'Full house/home move') {
+                                    
+                                    if(! jQuery.trim(fullhouse_size.val())) {
+                                        
+                                        alert("Please select the size.");
+                                        fullhouse_size.focus();
+                                        return false;
+                                    }
+                                    
+                                } else if(type_of_move.val() == 'Pieces of Furniture') {
+                                    
+                                    if(! jQuery.trim(in_container.val())) {
+                                
+                                        alert("Please select when goods already in container?");
+                                        in_container.focus();
+                                        return false;
+                                    } else if(jQuery.trim(in_container.val().toLowerCase()) === 'yes') {
+
+                                        if(! jQuery.trim(container_size_select.val())) {
+
+                                            alert("Please select container size.");
+                                            container_size_select.focus();
+                                            return false;
+                                        }
+                                    }
+                                }
+                            } // @end.
+                            
 				error= false;
 				if(jQuery("#packing_more_details").is(":visible")){
 					jQuery("#packing_more_details .packing_measurements").each(function(){

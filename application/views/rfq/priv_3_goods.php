@@ -22,7 +22,8 @@ vehicle/boat. Bulk items such as engines, parts, presents, bicycles etc are good
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Category</label>
 				<div class="col-sm-9">
-					<select type="text" class="form-control" name='type_of_goods'>
+					<select type="text" class="form-control" name='type_of_goods'>                                                
+                                                <option value="">Please select</option>
 						<option value="General">General</option>
 						<option value="Electrical Items">Electrical Items</option>
 						<option value="Special Care Items">Special Care Items</option>
@@ -65,6 +66,7 @@ vehicle/boat. Bulk items such as engines, parts, presents, bicycles etc are good
 				<div class="col-sm-9">
 					<!--<input type="text" class="form-control" name="imo_code" placeholder="e.g. Class 3: Flammable liquids" />-->
 					<select name="imo_code" class="form-control" id="imo_code">
+                                                <option value="">Please select</option>
 						<option value="Subclass 1.1: Explosives with a mass explosion hazard">Subclass 1.1: Explosives with a mass explosion hazard</option>
 						<option value="Subclass 1.2: Explosives with a severe projection hazard">Subclass 1.2: Explosives with a severe projection hazard</option>
 						<option value="Subclass 1.3: Explosives with a fire">Subclass 1.3: Explosives with a fire</option>
@@ -113,8 +115,9 @@ vehicle/boat. Bulk items such as engines, parts, presents, bicycles etc are good
 				<label class="col-sm-3 control-label">Goods already in container?</label>
 				<div class="col-sm-9">
 					<select type="text" class="form-control" name='in_container' onchange="inContainer(this.value)" >
+                                                <option value="">Please select</option>
 						<option value='Yes'>Yes</option>
-						<option value='No'selected>No</option>
+						<option value='No'>No</option>
 					</select>
 				</div>
 			</div>
@@ -139,6 +142,7 @@ vehicle/boat. Bulk items such as engines, parts, presents, bicycles etc are good
 					}
 					</script>
 					<select type="text" class="form-control" name='container_size' id="container_size_select" onchange="containerSize(this.value)" >
+                                                <option value="">Please select</option>
 						<option value='20 ft'>20 ft / 6 m</option>
 						<option value='40 ft'>40 ft / 12 m</option>
 						<option value='45 ft'>45 ft / 13.7 m</option>
@@ -175,6 +179,7 @@ vehicle/boat. Bulk items such as engines, parts, presents, bicycles etc are good
 				<label class="col-sm-3 control-label">Is item listed on</label>
 				<div class="col-sm-9">
 					<select type="text" class="form-control" name='item_in' onchange="itemIn(this.value)" >
+                                                <option value="">Please select</option>
 						<option value="E-bay">E-bay</option>
 						<option value="Finn.no">Finn.no</option>
 						<option value="Alibaba">Alibaba</option>
@@ -249,6 +254,44 @@ vehicle/boat. Bulk items such as engines, parts, presents, bicycles etc are good
 			inContainer("No");
 			populatePacking();
 			function validateStep3(){
+                            
+                            /* @start :
+                             * Include checking on fields.
+                             * 
+                             * @author tuso@programmerspride.com
+                             * */
+                            var category = jQuery("select[name='type_of_goods']");
+                            var is_dangerous = jQuery("input[name='dangerous']:checked").val().toLowerCase();
+                            var imo_code = jQuery("select[name='imo_code']");
+                            var in_container = jQuery("select[name='in_container']");
+                            var container_size_select = jQuery('#container_size_select');
+                            
+                            if(! jQuery.trim(category.val())) {
+                                
+                                alert("Please select category.");
+                                category.focus();
+                                return false;
+                            } else if(is_dangerous === 'yes' && ! jQuery.trim(imo_code.val())) {
+                                
+                                alert("Please select IMO code.");
+                                imo_code.focus();
+                                return false;
+                            } else if(! jQuery.trim(in_container.val())) {
+                                
+                                alert("Please select when goods already in container?");
+                                in_container.focus();
+                                return false;
+                            } else if(jQuery.trim(in_container.val().toLowerCase()) === 'yes') {
+                                
+                                if(! jQuery.trim(container_size_select.val())) {
+                                    
+                                    alert("Please select container size.");
+                                    container_size_select.focus();
+                                    return false;
+                                }
+                            } // @end.
+                            
+                            
 				error= false;
 				if(jQuery("#packing_more_details").is(":visible")){
 					jQuery("#packing_more_details .packing_measurements").each(function(){
@@ -263,7 +306,7 @@ vehicle/boat. Bulk items such as engines, parts, presents, bicycles etc are good
 						return false;
 					}
 				}
-				
+
 				return true;
 			}
 		</script>

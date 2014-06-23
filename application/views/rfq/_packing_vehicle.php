@@ -31,6 +31,7 @@
 			<th width="100%" colspan="4">
 			<div class="col-md-6">
 				<select type="text" class="form-control" id="packing_type" name="packing[name][]" onchange="packingType(this.value, this.title)">
+                                        <option value="">Please select</option>
 					<optgroup label="Trailer">
 						<option value='Trailer - Registered'>Trailer - Registered</option>
 						<option value='Trailer - Unregistered'>Trailer - Unregistered</option>
@@ -46,6 +47,7 @@
 			</div>
 			<div class="col-md-3">
 				<select type="text" class="form-control" name="packing[qty][]" style="width:80px; display:inline">
+                                    <option value="">Select</option>
 					<?php
 					for($i=1; $i<=100; $i++){
 						?><option value='<?php echo $i; ?>'><?php echo $i; ?></option><?php
@@ -69,6 +71,7 @@
 			<th width="25%">
 			Length
 			<select class="form-control" onchange="sameify(jQuery(this),this.value)"  style="width:80px; display:inline" type="text" name="packing[length_unit][]" >
+                                <option value="">Select</option>
 				<option value='m'>m</option>
 				<option value='ft'>ft</option>
 			</select>
@@ -76,6 +79,7 @@
 			<th width="25%">
 			Width
 			<select class="form-control" onchange="sameify(jQuery(this),this.value)"  style="width:80px; display:inline" type="text" name="packing[width_unit][]" >
+                                <option value="">Select</option>
 				<option value='m'>m</option>
 				<option value='ft'>ft</option>
 			</select>
@@ -83,6 +87,7 @@
 			<th width="25%">
 			Height
 			<select class="form-control" onchange="sameify(jQuery(this),this.value)"  style="width:80px; display:inline" type="text" name="packing[height_unit][]" >
+                                <option value="">Select</option>
 				<option value='m'>m</option>
 				<option value='ft'>ft</option>
 			</select>
@@ -90,6 +95,7 @@
 			<th width="25%">
 			Weight
 			<select class="form-control"  style="width:80px; display:inline" type="text" name="packing[weight_unit][]" >
+                                <option value="">Select</option>
 				<option value='kg'>kg</option>
 				<option value='lbs'>lbs</option>
 			</select>

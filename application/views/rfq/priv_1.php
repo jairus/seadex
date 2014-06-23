@@ -7,6 +7,9 @@
 		destination_country = jQuery("#destination_country").val();
 		destination_date = jQuery("#destination_date").val();
 		destination_port = jQuery("#destination_port").val();
+                
+                var receiving_co = jQuery("select[name='type_of_company_to_quote']");
+                
 		if(!jQuery.trim(origin_country)){
 			alert("Please input the country of origin.");
 			return false;
@@ -31,20 +34,46 @@
 			alert("Please input a delivery date.");
 			return false;
 		}
-		
-		//return true;
+                /* @start :
+                 * Added checking for the receiving company.
+                 * 
+                 * @author tuso@programmerspride.com
+                 * */
+		else if(! jQuery.trim(receiving_co.val())) {
+                        alert("Please choose a receiving company.");
+                        receiving_co.focus(); // At least focus it to the subject.
+			return false;
+                } // @end.
 	}
 	function getPorts(idx, country_code){
+            
+                /* @start :
+                 * Always clear so that it will be dependent on the value of Country.
+                 * When Country is blank, it should be blank also and won't carry
+                 * the previous selection's value/s.
+                 * 
+                 * @edit    tuso@programmerspride.com
+                 * @date    6/20/2014
+                 * */
+                jQuery("#"+ idx).html(''); // @end.
+                
 		if(country_code){
 			jQuery.ajax({
 			  type: "POST",
 			  url: "<?php echo site_url("rfq/getPorts"); ?>/"+escape(country_code),
 			  data: "",
 			  success: function(msg){
-				jQuery("#"+idx).html(msg);
+                              
+                                /* @start :
+                                 * Include "Please select" option.
+                                 * 
+                                 * @edit    tuso@programmerspride.com
+                                 * @date    6/20/2014
+                                 * */
+                                
+				jQuery("#"+ idx).html('<option value="">Please select</option>' + msg); // @end.
 				calcDate();
-			  },
-			  //dataType: dataType
+			  }
 			});
 		}
 	}
@@ -113,7 +142,7 @@
 						<label class="col-sm-3 control-label">Country</label>
 						<div class="col-sm-9">
 							<select id="origin_country" class="form-control" name='origin[country]' onchange="getPorts('origin_port', this.value)">
-							<option value="">Select Country</option>
+							<option value="">Please select</option>
 							<option value="AL - Albania">Albania</option>
 							<option value="DZ - Algeria">Algeria</option>
 							<option value="AO - Angola">Angola</option>
@@ -287,6 +316,7 @@
 						<label class="col-sm-3 control-label">Alternative Pickup Date</label>
 						<div class="col-sm-9" style="position:relative">
 						  <select name="origin[alternate_date]" class="form-control">
+                                                  <option value="">Please select</option>
 						  <option value="">None</option>
 						  <option value="1 week from selected date">1 week from selected date </option>
 						  <option value="2 weeks from selected date">2 weeks from selected date</option>
@@ -344,7 +374,7 @@
 						<label class="col-sm-3 control-label">Country</label>
 						<div class="col-sm-9">
 						  <select class="form-control" id="destination_country" name='destination[country]' onchange="getPorts('destination_port', this.value)">
-							<option value="">Select Country</option>
+							<option value="">Please select</option>
 							<option value="AL - Albania">Albania</option>
 							<option value="DZ - Algeria">Algeria</option>
 							<option value="AO - Angola">Angola</option>
@@ -518,6 +548,7 @@
 						<label class="col-sm-3 control-label">Alternative Delivery Date</label>
 						<div class="col-sm-9" style="position:relative">
 						  <select name="destination[alternate_date]" class="form-control">
+                                                  <option value="">Please select</option>
 						  <option value="">None</option>
 						  <option value="1 week from selected date">1 week from selected date </option>
 						  <option value="2 weeks from selected date">2 weeks from selected date</option>
@@ -581,9 +612,10 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group">
-						<label class="col-sm-12 text-center">Type of company to you want receive quotes from</label>
+						<label class="col-sm-12 text-center">Type of company you want to receive quotes from</label>
 						<div class="col-sm-12">
 						  <select type="text" class="form-control" name='type_of_company_to_quote' >
+                                                        <option value="">Please select</option>
 							<option value='Professional Movers'>Professional Movers (Packing, Filling the Container, Pickup and Delivery)</option>
 							<option value='Freight Forwarders'>Freight Forwarders (Pickup and Delivery)</option>
 							<option value='Professional Movers & Freight Forwarders'>Both</option>

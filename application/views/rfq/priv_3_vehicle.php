@@ -31,6 +31,7 @@
 				<label class="col-sm-3 control-label">Type of Vehicle/Boat</label>
 				<div class="col-sm-9">
 					<select type="text" class="form-control" name='type_of_vehicle' onchange="vehicleType(this.value)">
+                                                <option value="">Please select</option>
 						<optgroup label="Land Vehicle">
 							<option value="Personal Car">Personal Car</option>
 							<option value="Truck">Truck</option>
@@ -70,8 +71,9 @@
 				<label class="col-sm-3 control-label">Vehicle already in container?</label>
 				<div class="col-sm-9">
 					<select type="text" class="form-control" name='in_container' onchange="inContainer(this.value)" >
-						<option value='Yes'>Yes</option>
-						<option value='No' selected>No</option>
+						<option value="">Please select</option>
+                                                <option value='Yes'>Yes</option>
+						<option value='No'>No</option>
 					</select>
 				</div>
 			</div>
@@ -96,6 +98,7 @@
 					}
 					</script>
 					<select type="text" class="form-control" name='container_size' id="container_size_select" onchange="containerSize(this.value)" >
+                                                <option value="">Please select</option>
 						<option value='20 ft'>20 ft / 6 m</option>
 						<option value='40 ft'>40 ft / 12 m</option>
 						<option value='45 ft'>45 ft / 13.7 m</option>
@@ -168,6 +171,36 @@
 		<script>
 			populatePacking();
 			function validateStep3(){
+                            
+                            /* @start :
+                             * Include checking on fields.
+                             * 
+                             * @author tuso@programmerspride.com
+                             * */
+                            var type_of_vehicle = jQuery("select[name='type_of_vehicle']");
+                            var in_container = jQuery("select[name='in_container']");
+                            var container_size_select = jQuery('#container_size_select');
+                            
+                            if(! jQuery.trim(type_of_vehicle.val())) {
+                                
+                                alert("Please select type of vehicle.");
+                                type_of_vehicle.focus();
+                                return false;
+                            } else if(! jQuery.trim(in_container.val())) {
+                                
+                                alert("Please select when goods already in container?");
+                                in_container.focus();
+                                return false;
+                            } else if(jQuery.trim(in_container.val().toLowerCase()) === 'yes') {
+                                
+                                if(! jQuery.trim(container_size_select.val())) {
+                                    
+                                    alert("Please select container size.");
+                                    container_size_select.focus();
+                                    return false;
+                                }
+                            } // @end.
+                            
 				error= false;
 				if(jQuery("#packing_more_details").is(":visible")){
 					jQuery("#packing_more_details .packing_measurements").each(function(){

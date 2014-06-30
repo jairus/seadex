@@ -82,6 +82,10 @@ class cs extends CI_Controller {
 			$rfqdata['bid_id'] = $rfq[0]['bid_id'];
 			$rfqdata['logistic_provider_id'] = $rfq[0]['logistic_provider_id'];
 			$rfqdata['dateaccepted'] = $rfq[0]['dateaccepted'];
+			$rfqdata['datecancelled'] = $rfq[0]['datecancelled'];
+			$rfqdata['cancel_reason'] = $rfq[0]['cancel_reason'];
+			
+			//print_r($rfqdata);
 			if($customer[0]['id']){
 				$rfqdata['userprofile'] = $customer[0];
 			}
@@ -182,6 +186,33 @@ class cs extends CI_Controller {
 					<?php
 				}
 			}
+			else if($action=="cancel"){
+				if($_POST){
+					$sql = "update `rfq` set
+					`bid_id` = '-1',
+					`cancel_reason` = '".mysql_real_escape_string($_POST['cancel_reason'])."',
+					`datecancelled` = NOW()
+					where
+					`id`='".$rfq[0]['id']."'
+					and `bid_id` < 1
+					;
+					";
+					$q = $this->db->query($sql);
+				}
+				$sql = "select `bids`.`id`, `company_name`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` 
+				left join `logistic_providers`
+				on (`bids`.`logistic_provider_id` = `logistic_providers`.`id`)
+				where `bids`.`rfq_id` = '".$rfq[0]['id']."' order by `bids`.`total_bid_usd` asc";
+				$q = $this->db->query($sql);
+				$bids = $q->result_array();
+				$this->load->view('sitelayout/header.php');
+				$this->load->view('sitelayout/nav.php');
+				$data['rfq'] = $rfqdata;
+				$data['bids'] = $bids;
+				$data['cancel'] = true;
+				$this->load->view('cs/rfqsummary.php', $data);
+				$this->load->view('sitelayout/footer.php');
+			}
 		}
 		else{
 			//echo "here";
@@ -243,7 +274,7 @@ The SeaDex team";
 		}
 		$sql = "select * from `rfq` where 
 		`customer_id`='".$_SESSION['customer']['id']."' 
-		and `bid_id`<1 
+		and `bid_id`=0
 		and UNIX_TIMESTAMP(STR_TO_DATE(`destination_date`,'%m/%d/%Y'))> ".(time()+(2*60*60*24))."
 		order by id desc";
 		$q = $this->db->query($sql);
@@ -293,6 +324,36 @@ The SeaDex team";
 		$data['rfqs'] = $rfqs;
 		$data['count'] = $count;
 		$content = $this->load->view('cs/completed_listings.php', $data, true);
+		$data['content'] = $content;
+		$content = $this->load->view('cs/content.php', $data);
+		$this->load->view('sitelayout/footer.php');
+	}
+	public function cancelled_listings(){
+		if(!$_SESSION['customer']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
+		}
+		$sql = "select * from `rfq` where 
+		`customer_id`='".$_SESSION['customer']['id']."' 
+		and bid_id<0 
+		order by id desc";
+		$q = $this->db->query($sql);
+		$rfqs = $q->result_array();
+		
+		$t = count($rfqs);
+		for($i=0; $i<$t; $i++){
+			$sql = "select `id`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` where `rfq_id` = '".$rfqs[$i]['id']."' order by `total_bid_usd` asc";
+			$q = $this->db->query($sql);
+			$bids = $q->result_array();
+			//echo "<pre>"; print_r($rfqs[$i]);
+			$rfqs[$i]['bids'] = $bids;
+		}
+		
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('sitelayout/nav.php');
+		$data['rfqs'] = $rfqs;
+		$data['count'] = $count;
+		$content = $this->load->view('cs/cancelled_listings.php', $data, true);
 		$data['content'] = $content;
 		$content = $this->load->view('cs/content.php', $data);
 		$this->load->view('sitelayout/footer.php');

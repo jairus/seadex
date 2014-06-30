@@ -48,7 +48,11 @@ if($rfq['userprofile']['contact_number']){
 <div class="container-fluid" id="container" style="max-width:90%">
 	<div class="row">
 		<div class="col-md-6">
-			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
+			<h2><?php
+			if($cancel){
+				echo "<a style='color:red'>Cancel</a> ";
+			}
+			?>RFQ # <?php echo $rfq['id'] ?></h2>
 		</div>
 		<div class="col-md-6 text-right">
 			<h2><a href="<?php echo site_url("cs") ?>">Back to Dashboard</a></h2>
@@ -57,6 +61,60 @@ if($rfq['userprofile']['contact_number']){
 	<div class="row">
 		<div class="col-md-12 text-left">
 			<table class="table table-bordered">
+				<?php
+				if($cancel){
+					?>
+					<tr>
+						<th colspan=2 class="text-center" style="background:#f0f0f0; color:red">
+						CANCEL
+						</th>
+					</tr>
+					<tr>
+						<td colspan=2 class="text-center">
+							<script>
+							function cancelRFQ(){
+								if(confirm("Are you sure you want to cancel this RFQ?")){
+									return true;
+								}
+								return false;
+							}
+							</script>
+							<form method="post" action='<?php echo site_url("cs/rfq/".$rfq['id']."/cancel"); ?>' style="width:300px; margin:auto" id="cancelform">
+							
+							Reason for cancellation:
+							<select class="form-control" style="margin:10px;" name="cancel_reason">
+								<option value="Freight Cancelled">Freight Cancelled</option>
+								<option value="Deal is Done">Deal is Done</option>
+								<option value="Others">Others</option>
+							</select>
+							
+							<input type="submit" class="btn btn-primary btn-lg" style='background:red' value="CANCEL THIS RFQ" onclick="return cancelRFQ();" >
+							
+							</form>
+						</td>
+					</tr>
+					<?php
+				}
+				else if($rfq['bid_id']==-1){ //if cancelled
+					?>
+					<tr>
+						<th colspan=2 class="text-center" style="background:#f0f0f0; color:red">
+						CANCELED RFQ
+						</th>
+					</tr>
+					<tr>
+						<td colspan=2 class="text-center">
+							<form method="post" action='<?php echo site_url("cs/rfq/".$rfq['id']."/cancel"); ?>' style="width:300px; margin:auto" id="cancelform">
+							
+							Date of cancellation: <?php echo date("M d,Y", strtotime($rfq['datecancelled'])); ?><br />
+							Reason for cancellation: <?php echo $rfq['cancel_reason']; ?>
+							
+							</form>
+						</td>
+					</tr>
+					<?php
+				}
+				?>
 				<tr>
 					<th colspan=2 class="text-center" style="background:#f0f0f0">
 					Bids

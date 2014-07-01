@@ -35,7 +35,9 @@ $method = $this->router->fetch_method();
 			  <div class="menu <?php if($method=="index"){ echo "active"; }?>"><a href="<?php echo site_url("cs"); ?>">Active Listings</a></div>
 			  <div class="menu <?php if($method=="completed_listings"){ echo "active"; }?>"><a href="<?php echo site_url("cs"); ?>/completed_listings">Completed Listings</a></div>
 			  <div class="menu <?php if($method=="expired_listings"){ echo "active"; }?>"><a href="<?php echo site_url("cs"); ?>/expired_listings">Expired Listings</a></div>
+			  <div class="menu <?php if($method=="cancelled_listings"){ echo "active"; }?>"><a href="<?php echo site_url("cs"); ?>/cancelled_listings">Cancelled Listings</a></div>
 			  <div class="menu <?php if($method=="changepass"){ echo "active"; }?>"><a href="<?php echo site_url("cs"); ?>/changepass">Change Password</a></div>
+			  
 			  <!--
 			  <div class="menu">Expired Listings </div>
 			  <div class="menu">Change Password</div>

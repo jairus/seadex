@@ -5,10 +5,10 @@
 				  <th class="start">#</th>
 				  <th width="18%">Origin</th>
 				  <th width="18%">Destination</th>
-				  <th width="16.3%">Bids</th>
-				  <th width="16.3%">Lowest Bid (USD)</th>
-				  <th width="16.3%">Date Added</th>
-				  <th class="end" width="13%"></th>
+				  <th width="14.3%">Bids</th>
+				  <th width="14.3%">Lowest Bid (USD)</th>
+				  <th width="14.3%">Date Added</th>
+				  <th class="end" width="19%"></th>
 				</tr>
 			  </thead>
 			  <tbody>
@@ -44,7 +44,7 @@
 						  <td>
 							<?php
 							  echo count($rfqs[$i]['bids']);
-							  if($rfqs[$i]['bid_id']){
+							  if($rfqs[$i]['bid_id']>0){
 								?>
 								<a style="color:green">- Accepted a Bid </a>
 								<?php
@@ -67,7 +67,25 @@
 							?>
 						  </td>
 						  <td>
-							<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("cs/rfq")."/".$rfqs[$i]['id']."/bids";; ?>'" value="Bids" />
+							<?php
+							if($rfqs[$i]['bid_id']==-1){ //if cancelled listing
+								?>
+								<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("cs/rfq")."/".$rfqs[$i]['id']."/bids";; ?>'" value="Cancelled: <?php echo date("M d,Y", strtotime($rfqs[$i]['datecancelled']));?>" />
+								
+								<?php
+							}
+							else if($rfqs[$i]['bid_id']==0){
+								?>
+								<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("cs/rfq")."/".$rfqs[$i]['id']."/bids";; ?>'" value="Bids" />
+								<input type="button" class="btn btn-sm" style="background:red; color: white" onclick="self.location='<?php echo site_url("cs/rfq")."/".$rfqs[$i]['id']."/cancel";; ?>'" value="Cancel RFQ" />
+								<?php
+							}
+							else{
+								?>
+								<input type="button" class="btn btn-sm" onclick="self.location='<?php echo site_url("cs/rfq")."/".$rfqs[$i]['id']."/bids";; ?>'" value="Bids" />
+								<?php
+							}
+							?>
 						  </td>
 						</tr>
 						<?php

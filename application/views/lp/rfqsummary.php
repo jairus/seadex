@@ -14,12 +14,49 @@
 body{
 	background:#f0f0f0;
 }
+
+tr.contact_info { display: none }
 </style>
 <script>
 function bid(){
 	self.location="<?php echo site_url("lp/rfq")."/".$rfq['id']."/bid"; ?>";
 }
+
+/* @start:  Toggle contact information.
+ * @author: tuso@programmerspride.com
+ * */
+jQuery(function() {
+    jQuery('#contact_info_trigger').click(function() {
+        var ctr = 0; var trigger = jQuery(this);
+        jQuery('tr.contact_info').toggle(400, function() {
+            ctr++;
+            if(ctr == 1) { // Perform only once.
+                if(jQuery('tr.contact_info :first').is(':hidden')) trigger.removeClass('btn-primary');
+                else {
+                    trigger.addClass('btn-primary');
+                    app.view();
+                }
+            }
+        });
+    });
+    
+    var app = {
+        
+        // Logs the view activity in the DBase.
+        view : function() {
+            jQuery.ajax({
+                type : 'POST',
+                data : {
+                    rfq_id : '<?php echo $rfq['id']?>',
+                    t : (new Date).getTime()
+                },
+                url : '<?php echo site_url('activity/async_contact_views')?>'
+            });
+        }
+    };
+}); // @end.
 </script>
+
 <?php 
 //echo "<pre>";
 //print_r($rfq);
@@ -51,6 +88,7 @@ if($rfq['userprofile']['contact_number']){
 			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
 		</div>
 		<div class="col-md-8 text-right">
+                        <input type="button" class="btn btn-default" style="margin:20px;" value="View Contact" id="contact_info_trigger" />
 			<input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
 			<input type="button" class="btn btn-primary btn-default" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
 			<?php
@@ -66,44 +104,44 @@ if($rfq['userprofile']['contact_number']){
 	<div class="row">
 		<div class="col-md-12 text-left">
 			<table class="table table-bordered">
-				<tr>
+				<tr class="contact_info">
 					<th width="50%">Customer Type</th>
 					<td width="50%"><?php echo ucfirst($rfq['customer_type']); ?></td>
 				</tr>
-				<tr>
+				<tr class="contact_info">
 					<th width="50%">E-mail</th>
 					<td width="50%"><?php echo $rfq['userprofile']['email']; ?></td>
 				</tr>
 				<?php
 				if($rfq['userprofile']['company_name']){
 					?>
-					<tr>
+					<tr class="contact_info">
 						<th width="50%">Company Name</th>
 						<td width="50%"><?php echo $rfq['userprofile']['company_name']; ?></td>
 					</tr>
 					<?php
 				}
 				?>
-				<tr>
+				<tr class="contact_info">
 					<th width="50%">First Name</th>
 					<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
 				</tr>
-				<tr>
+				<tr class="contact_info">
 					<th width="50%">Last Name</th>
 					<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
 				</tr>
-				<tr>
+				<tr class="contact_info">
 					<th width="50%">Country</th>
 					<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
 				</tr>
-				<tr>
+				<tr class="contact_info">
 					<th width="50%">Contact Number</th>
 					<td width="50%"><?php echo $rfq['userprofile']['contactnumber']; ?></td>
 				</tr>
 				<?php
 				if(isset($rfq['shipping_info']['type_of_company_to_quote'])){
 					?>
-					<tr>
+					<tr class="contact_info">
 						<th width="50%">RFQ for</th>
 						<td width="50%">
 						<?php echo $rfq['shipping_info']['type_of_company_to_quote']; ?>

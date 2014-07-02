@@ -198,6 +198,12 @@ class cs extends CI_Controller {
 					;
 					";
 					$q = $this->db->query($sql);
+					?>
+					<script>
+					self.location="<?php echo site_url("cs"); ?>/cancelled_listings";
+					</script>
+					<?php
+					exit();
 				}
 				$sql = "select `bids`.`id`, `company_name`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` 
 				left join `logistic_providers`

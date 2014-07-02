@@ -62,7 +62,7 @@ if($rfq['userprofile']['contact_number']){
 		<div class="col-md-12 text-left">
 			<table class="table table-bordered">
 				<?php
-				if($cancel){
+				if($cancel&&$rfq['bid_id']!=-1){
 					?>
 					<tr>
 						<th colspan=2 class="text-center" style="background:#f0f0f0; color:red">

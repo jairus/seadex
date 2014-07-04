@@ -418,6 +418,14 @@ The SeaDex team";
 			}
 			else{
 				$_SESSION['customer'] = $r[0];
+                                
+                                /* @start:  Logs user.
+                                 * @author  tuso@programmerspride.com
+                                 * */
+                                $this->load->model('activity_model', '', true);
+                                $this->activity_model->user_logs($_SESSION, 'customer');
+                                // @end.
+                                
 				echo "<script>self.location='".site_url("cs")."/'</script>";
 				return 0;
 			}

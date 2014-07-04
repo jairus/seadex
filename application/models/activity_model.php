@@ -7,6 +7,23 @@ class Activity_model extends CI_Model {
         parent::__construct();        
     }
     
+    public function user_logs($session, $type) {
+        
+        $types = array('logistic_provider', 'customer');
+        if(empty($session[$type]) || $type == '' || ! in_array($type, $types)) return;
+        
+        $user = $session[$type];
+        
+        $sql = "INSERT INTO user_logs SET user_id=?,`type`=?,ip=?,browser=?,referer=?,created=NOW()";
+        $this->db->query($sql, array(
+            $user['id'],
+            $type,
+            $_SERVER['REMOTE_ADDR'],
+            $_SERVER['HTTP_USER_AGENT'],
+            $_SERVER['HTTP_REFERER']
+        ));
+    }
+    
     public function save_contact_views($input, $viewed_by) {
         
         if(empty($input)) return;

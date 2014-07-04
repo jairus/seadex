@@ -600,8 +600,16 @@ class lp extends CI_Controller {
 				echo "<script>self.location='".site_url("lp/?message=Invalid Login")."'</script>";
 				return 0;
 			}
-			else{
+			else{                            
 				$_SESSION['logistic_provider'] = $r[0];
+                                
+                                /* @start:  Logs user.
+                                 * @author  tuso@programmerspride.com
+                                 * */
+                                $this->load->model('activity_model', '', true);
+                                $this->activity_model->user_logs($_SESSION, 'logistic_provider');
+                                // @end.
+                                
 				echo "<script>self.location='".site_url("lp")."/'</script>";
 				return 0;
 			}

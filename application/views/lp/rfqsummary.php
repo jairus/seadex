@@ -88,8 +88,7 @@ if($rfq['userprofile']['contact_number']){
 			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
 		</div>
 		<div class="col-md-8 text-right">
-                        <input type="button" class="btn btn-default" style="margin:20px;" value="View Contact" id="contact_info_trigger" />
-			<input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
+                        <input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
 			<input type="button" class="btn btn-primary btn-default" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
 			<?php
 			if($rfqprevid){
@@ -104,6 +103,7 @@ if($rfq['userprofile']['contact_number']){
 	<div class="row">
 		<div class="col-md-12 text-left">
 			<table class="table table-bordered">
+                            <tr><td colspan="2" style="text-align: center"><input type="button" class="btn btn-default" style="margin:20px;" value="View Contact" id="contact_info_trigger" /></td></tr>
 				<tr class="contact_info">
 					<th width="50%">Customer Type</th>
 					<td width="50%"><?php echo ucfirst($rfq['customer_type']); ?></td>

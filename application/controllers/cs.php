@@ -4,7 +4,9 @@ date_default_timezone_set ("UTC");
 class cs extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
+                
 		$this->load->database();
+                $this->load->model('cs_model', '', true);
 	}
 	
 	
@@ -404,32 +406,32 @@ The SeaDex team";
 		echo "<script>self.location='".site_url()."'</script>";
 	}
 	public function login(){
-		if($_POST){
-			$sql = "select * from `customers` where 
-			`email` = '".mysql_real_escape_string($_POST['email'])."' and 
-			`password` = '".mysql_real_escape_string(md5(trim($_POST['password'])))."'
-			";
-			$q = $this->db->query($sql);
-			$r = $q->result_array();
-			if(!$r[0]['id']){
-				$_SESSION['customer']['email'] = $_POST['email'];
-				echo "<script>self.location='".site_url("cs/?message=Invalid Login")."'</script>";
-				return 0;
-			}
-			else{
-				$_SESSION['customer'] = $r[0];
-                                
-                                /* @start:  Logs user.
-                                 * @author  tuso@programmerspride.com
-                                 * */
-                                $this->load->model('activity_model', '', true);
-                                $this->activity_model->user_logs($_SESSION, 'customer');
-                                // @end.
-                                
-				echo "<script>self.location='".site_url("cs")."/'</script>";
-				return 0;
-			}
-		}
+            
+            if(! empty($this->input->post())) {
+
+                $user = $this->cs_model->doLogin($this->input->post('email'), $this->input->post('password'));
+
+                if(empty($user)){
+
+                    $_SESSION['customer']['email'] = $this->input->post('email');
+                    $url = 'cs/?message=Invalid Login';
+
+                } else {
+
+                    $_SESSION['customer'] = $user;
+
+                    /* @start:  Logs user.
+                     * @author  tuso@programmerspride.com
+                     * */
+                    $this->load->model('activity_model', '', true);
+                    $this->activity_model->user_logs($_SESSION, 'customer');
+                    // @end.
+                    
+                    $url = 'cs';
+                }
+
+                redirect(site_url($url));
+            }
 	}
 	public function register(){
 		if($_POST['register']){

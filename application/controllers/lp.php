@@ -5,6 +5,8 @@ class lp extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->database();
+                
+                $this->load->model('lp_model', '', true);
 	}
 	
 	
@@ -58,53 +60,32 @@ class lp extends CI_Controller {
 		$content = $this->load->view('lp/content.php', $data);
 		$this->load->view('sitelayout/footer.php');
 	}
+        
 	public function account(){
-		if(!$_SESSION['logistic_provider']['id']){
-			$redirect = urlencode($_SERVER['REQUEST_URI']);
-			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
-		}
-		
-		if($_POST){
-			if(!trim($_POST['company_name'])){
-				$_SESSION['account']['error'] = "Please enter a valid Company Name!";
-			}
-			else if(!trim($_POST['name'])){
-				$_SESSION['account']['error'] = "Please enter a valid Name!";
-			}
-			else{
-				$sql = "update `logistic_providers` set
-				`company_name` = '".mysql_real_escape_string(trim($_POST['company_name']))."',
-				`name` = '".mysql_real_escape_string(trim($_POST['name']))."',
-				`homepage` = '".mysql_real_escape_string(trim($_POST['homepage']))."',
-				`contact` = '".mysql_real_escape_string(trim($_POST['contact']))."',
-				`services` = '".mysql_real_escape_string(trim($_POST['services']))."',
-				`others` = '".mysql_real_escape_string(trim($_POST['others']))."'
-				where `id`='".$_SESSION['logistic_provider']['id']."'
-				";
-				$this->db->query($sql);
-				
-				$sql = "select * from `logistic_providers`
-				where `id`='".$_SESSION['logistic_provider']['id']."'
-				";
-				$q = $this->db->query($sql);
-				$lp = $q->result_array();
-				
-				$_SESSION['logistic_provider'] = $lp[0];
-				$_SESSION['account']['success'] = "Successfully updated your profile!";
-			}
-			
-			
-		}
-		
-		
-		$this->load->view('sitelayout/header.php');
-		$this->load->view('sitelayout/nav.php');
-		$data['account'] = $_SESSION['logistic_provider'];
-		$content = $this->load->view('lp/account.php', $data, true);
-		$data['content'] = $content;
-		$content = $this->load->view('lp/content.php', $data);
-		$this->load->view('sitelayout/footer.php');
-		
+            
+            $user_id = (int) $_SESSION['logistic_provider']['id'];
+            if(! $user_id) redirect(site_url('lp') . '/?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+
+            if(! empty($this->input->post())) {
+                
+                if(! trim($this->input->post('name'))) {
+                    
+                    $_SESSION['account']['error'] = 'Please enter a valid Name!';
+                    
+		} else {
+                    
+                    $this->lp_model->doAccountUpdate($user_id, $this->input->post());
+                    $_SESSION['account']['success'] = "Successfully updated your profile!";
+                }
+            }
+            
+            $this->load->view('sitelayout/header.php');
+            $this->load->view('sitelayout/nav.php');
+            $data['account'] = $_SESSION['logistic_provider'];
+            $content = $this->load->view('lp/account.php', $data, true);
+            $data['content'] = $content;
+            $content = $this->load->view('lp/content.php', $data);
+            $this->load->view('sitelayout/footer.php');		
 	}
 	
 	public function rfq($id, $action=''){
@@ -587,7 +568,32 @@ class lp extends CI_Controller {
 		echo "<script>self.location='".site_url()."'</script>";
 	}
 	public function login(){
-		if($_POST){
+            
+            if(! empty($this->input->post())) {
+                
+                $this->load->model('global_model', '', true);
+                $user = $this->global_model->doLogin($this->input->post('email'), $this->input->post('password'), 'logistic_provider');
+                $url = 'lp';
+                
+                if(empty($user)){
+
+                    $_SESSION['logistic_provider']['email'] = $this->input->post('email');
+                    $url .= '/?message=Invalid Login';
+
+                } else {
+
+                    $_SESSION['logistic_provider'] = $user;
+
+                    /* @start:  Logs user. */
+                    $this->load->model('activity_model', '', true);
+                    $this->activity_model->user_logs($_SESSION, 'logistic_provider');
+                    // @end.
+                }
+
+                redirect(site_url($url));
+            }
+            
+		/*if($_POST){
 			$sql = "select * from `logistic_providers` where 
 			`email` = '".mysql_real_escape_string($_POST['email'])."' and 
 			`password` = '".mysql_real_escape_string(md5(trim($_POST['password'])))."' and 
@@ -606,17 +612,17 @@ class lp extends CI_Controller {
                                 /* @start:  Logs user.
                                  * @author  tuso@programmerspride.com
                                  * */
-                                $this->load->model('activity_model', '', true);
+                                /*$this->load->model('activity_model', '', true);
                                 $this->activity_model->user_logs($_SESSION, 'logistic_provider');
                                 // @end.
                                 
 				echo "<script>self.location='".site_url("lp")."/'</script>";
 				return 0;
 			}
-		}
+		}*/
 	}
 	public function register(){
-		if($_POST['register']){
+		if($_POST['register']){                    
 			foreach($_POST as $key=>$value){
 				$_POST[$key] = trim($value);
 			}
@@ -651,6 +657,7 @@ class lp extends CI_Controller {
 			}
 			
 			if(!$error){
+                            
 				$sql = "insert into `logistic_providers` set
 				`company_name` = '".mysql_real_escape_string($_POST['company_name'])."',
 				`name` = '".mysql_real_escape_string($_POST['name'])."',
@@ -659,6 +666,21 @@ class lp extends CI_Controller {
 				`dateadded` = NOW()
 				";
 				$q = $this->db->query($sql);
+                            
+                            if(($user_id = $this->db->insert_id()) > 0) {
+                                /* @start   : Add Company then add User under it.
+                                 * @author  : tuso@programmerspride.com
+                                 * */
+                                $this->load->model('global_model', '', true);
+                                // Save the company if don't exists yet.
+                                $company_id = $this->global_model->doCompanySave($this->input->post('company_name'));                            
+                                // If User not under Company yet, which really is since a new User.
+                                if(! $this->global_model->getCompanyUser($company_id, $user_id)) {
+                                    // Add User under this Company.
+                                    $this->global_model->doCompanyUserSave($company_id, $user_id, 'logistic_provider');
+                                } // @end.
+                            }
+                            
 				$emailtos = array();
 				$email = array();
 				$email['name'] = $_POST['name'];
@@ -673,9 +695,13 @@ class lp extends CI_Controller {
 			}
 		}
 		else{
+                        
+                    $this->load->model('global_model', '', true);
+                    $data['companies'] = $this->global_model->getCompanies('*');
+                    
 			$this->load->view('sitelayout/header.php');
 			$this->load->view('sitelayout/nav.php');
-			$content = $this->load->view('lp/register.php', '', true);
+			$content = $this->load->view('lp/register.php', $data, true);
 			$data['content'] = $content;
 			$data['page'] = "Sign-up";
 			$this->load->view('sitelayout/container_lp.php', $data);
@@ -1317,17 +1343,11 @@ The SeaDex team";
 			$this->load->view('sitelayout/footer.php');
 		}
 		else {
-			$sql = "select 
-			*
-			from `rates` where 
-			`logistic_provider_id`='".$_SESSION['logistic_provider']['id']."' order by `id` desc
-			";
-			$q = $this->db->query($sql);
-			$rates = $q->result_array();
-			$data['rates'] = $rates;
-			
-			
-			
+                    
+                    $this->load->model('lp_model', '', true);
+                    $rates = $this->lp_model->getRates();
+                    $data['rates'] = $rates;
+                    	
 			$this->load->view('sitelayout/header.php');
 			$this->load->view('sitelayout/nav.php');
 			$content = $this->load->view('lp/myrates.php', $data, true);
@@ -1402,6 +1422,21 @@ The SeaDex team";
 		$this->load->view('sitelayout/footer.php');
 	}
 	
+        public function mycompany() {
+            
+            $this->load->view('sitelayout/header.php');
+            $this->load->view('sitelayout/nav.php');
+            
+            $data['company'] = $_SESSION['logistic_provider']['company'];
+            
+            $content = $this->load->view('lp/mycompany.php', $data, true);
+            $data['content'] = $content;
+            
+            $content = $this->load->view('lp/content.php', $data);
+            $this->load->view('sitelayout/footer.php');
+                
+        }
+        
 	public function acceptedbids(){
 		if(!$_SESSION['logistic_provider']['id']){
 			$redirect = urlencode($_SERVER['REQUEST_URI']);

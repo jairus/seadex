@@ -79,13 +79,7 @@
 								<div class="col-sm-9">
 								  <?php echo $_SESSION['logistic_provider']['email']; ?>
 								</div>
-							  </div>
-							  <div class="form-group">
-								<label class="col-sm-3 control-label">Company Name</label>
-								<div class="col-sm-9">
-								  <input type="text" class="form-control" name='company_name' value="<?php echo htmlentitiesX($_SESSION['logistic_provider']['company_name']); ?>" />
-								</div>
-							  </div>
+							  </div>							 
 							  <div class="form-group">
 								<label class="col-sm-3 control-label">Your Name</label>
 								<div class="col-sm-9">

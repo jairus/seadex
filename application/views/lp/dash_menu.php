@@ -33,6 +33,7 @@ $method = $this->router->fetch_method();
 		<div class="menu <?php if($method=="acceptedbids"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/acceptedbids">Accepted Bids</a></div>
 		<div class="menu <?php if($method=="changepass"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/changepass">Change Password</a></div>
 		<div class="menu <?php if($method=="account"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/account">Edit My Profile</a></div>
+                <div class="menu <?php if($method=="mycompany"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/mycompany">My Company</a></div>
 	  </td>
 	</tr>
   </tbody>

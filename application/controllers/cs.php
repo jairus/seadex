@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 @session_start();
 date_default_timezone_set ("UTC");
-class cs extends CI_Controller {
+class cs extends CI_Controller {    
 	public function __construct(){
 		parent::__construct();
                 
@@ -280,14 +280,9 @@ The SeaDex team";
 			$redirect = urlencode($_SERVER['REQUEST_URI']);
 			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
 		}
-		$sql = "select * from `rfq` where 
-		`customer_id`='".$_SESSION['customer']['id']."' 
-		and `bid_id`=0
-		and UNIX_TIMESTAMP(STR_TO_DATE(`destination_date`,'%m/%d/%Y'))> ".(time()+(2*60*60*24))."
-		order by id desc";
-		$q = $this->db->query($sql);
-		$rfqs = $q->result_array();
-		
+                
+                $rfqs = $this->cs_model->getRFQs();
+                
 		$t = count($rfqs);
 		for($i=0; $i<$t; $i++){
 			$sql = "select `id`, `logistic_provider_id`, `total_bid_currency`, `total_bid`, `total_bid_usd` from `bids` where `rfq_id` = '".$rfqs[$i]['id']."' order by `total_bid_usd` asc";
@@ -408,26 +403,24 @@ The SeaDex team";
 	public function login(){
             
             if(! empty($this->input->post())) {
-
-                $user = $this->cs_model->doLogin($this->input->post('email'), $this->input->post('password'));
-
+                
+                $this->load->model('global_model', '', true);
+                $user = $this->global_model->doLogin($this->input->post('email'), $this->input->post('password'), 'customer');
+                $url = 'cs';
+                
                 if(empty($user)){
 
                     $_SESSION['customer']['email'] = $this->input->post('email');
-                    $url = 'cs/?message=Invalid Login';
+                    $url .= '/?message=Invalid Login';
 
                 } else {
 
                     $_SESSION['customer'] = $user;
 
-                    /* @start:  Logs user.
-                     * @author  tuso@programmerspride.com
-                     * */
+                    /* @start:  Logs user. */
                     $this->load->model('activity_model', '', true);
                     $this->activity_model->user_logs($_SESSION, 'customer');
                     // @end.
-                    
-                    $url = 'cs';
                 }
 
                 redirect(site_url($url));

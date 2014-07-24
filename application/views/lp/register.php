@@ -71,7 +71,23 @@ function alertX(msg){
 			  <div class="form-group">
 				<label class="col-sm-3 control-label">Company Name</label>
 				<div class="col-sm-9">
-				  <input type="text" class="form-control" name='company_name' id="company_name">
+                                <input<?php echo (empty($companies) ? '' : ' list="companies"' )?> type="text" class="form-control" name='company_name' id="company_name">
+                                  
+                                <?php
+                                if(! empty($companies)) {
+
+                                    ?>
+                                    <datalist id="companies">
+                                        <?php
+                                        foreach($companies as $company) {
+                                            ?><option value="<?php echo $company->name?>"><?php
+                                        }
+                                        unset($company);
+                                    ?>
+                                    </datalist>
+                                    <?php
+                                }
+                                ?>
 				</div>
 			  </div>
 			   <div class="form-group">

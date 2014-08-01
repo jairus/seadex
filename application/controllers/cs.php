@@ -402,7 +402,7 @@ The SeaDex team";
 	}
 	public function login(){
             
-            if(! empty($this->input->post())) {
+            if($this->input->post()) {
                 
                 $this->load->model('global_model', '', true);
                 $user = $this->global_model->doLogin($this->input->post('email'), $this->input->post('password'), 'customer');

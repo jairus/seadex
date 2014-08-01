@@ -66,7 +66,7 @@ class lp extends CI_Controller {
             $user_id = (int) $_SESSION['logistic_provider']['id'];
             if(! $user_id) redirect(site_url('lp') . '/?redirect=' . urlencode($_SERVER['REQUEST_URI']));
 
-            if(! empty($this->input->post())) {
+            if($this->input->post()) {
                 
                 if(! trim($this->input->post('name'))) {
                     
@@ -569,7 +569,7 @@ class lp extends CI_Controller {
 	}
 	public function login(){
             
-            if(! empty($this->input->post())) {
+            if($this->input->post()) {
                 
                 $this->load->model('global_model', '', true);
                 $user = $this->global_model->doLogin($this->input->post('email'), $this->input->post('password'), 'logistic_provider');

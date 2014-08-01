@@ -104,13 +104,12 @@ class Global_model extends CI_Model {
             if($query->num_rows()) {
                 // Collect all Users under this Company.
                 foreach($query->result() as $row) { $response[] = $row->user_id; }
-            }
-            
-            // Worst case, but $user_ids will always contain the currently logged User's ID.
-            if(empty($user_ids)) $response[] = $_SESSION[$type]['id'];
-            
-            if($implode) $response = implode(',', $response); 
+            }            
         }
+        
+        // Will always contain the currently logged User's ID.
+        if(empty($response)) $response[] = $_SESSION[$type]['id'];
+        if($implode) $response = implode(',', $response); 
         
         return $response;
     }

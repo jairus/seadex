@@ -2,11 +2,15 @@
 @session_start();
 date_default_timezone_set ("UTC");
 class lp extends CI_Controller {
+    
+    var $user_id = 0;
+    
 	public function __construct(){
 		parent::__construct();
 		$this->load->database();
                 
-                $this->load->model('lp_model', '', true);
+            $this->load->model('lp_model', '', true);                
+            $this->user_id = (int) $_SESSION['logistic_provider']['id']; // Initialize current User ID from session.
 	}
 	
 	
@@ -63,8 +67,9 @@ class lp extends CI_Controller {
         
 	public function account(){
             
-            $user_id = (int) $_SESSION['logistic_provider']['id'];
-            if(! $user_id) redirect(site_url('lp') . '/?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+            if(! $this->user_id) { // Security check.
+                redirect(site_url('lp') . '/?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+            }
 
             if($this->input->post()) {
                 
@@ -567,60 +572,34 @@ class lp extends CI_Controller {
 		unset($_SESSION['logistic_provider']);
 		echo "<script>self.location='".site_url()."'</script>";
 	}
-	public function login(){
-            
-            if($this->input->post()) {
-                
-                $this->load->model('global_model', '', true);
-                $user = $this->global_model->doLogin($this->input->post('email'), $this->input->post('password'), 'logistic_provider');
-                $url = 'lp';
-                
-                if(empty($user)){
+        
+    public function login(){
 
-                    $_SESSION['logistic_provider']['email'] = $this->input->post('email');
-                    $url .= '/?message=Invalid Login';
+        if($this->input->post()) {
 
-                } else {
+            $this->load->model('global_model', '', true);
+            $user = $this->global_model->doLogin($this->input->post('email'), $this->input->post('password'), 'logistic_provider');
+            $url = 'lp';
 
-                    $_SESSION['logistic_provider'] = $user;
+            if(empty($user)){
 
-                    /* @start:  Logs user. */
-                    $this->load->model('activity_model', '', true);
-                    $this->activity_model->user_logs($_SESSION, 'logistic_provider');
-                    // @end.
-                }
+                $_SESSION['logistic_provider']['email'] = $this->input->post('email');
+                $url .= '/?message=Invalid Login';
 
-                redirect(site_url($url));
+            } else {
+
+                $_SESSION['logistic_provider'] = $user;
+
+                /* @start:  Logs user. */
+                $this->load->model('activity_model', '', true);
+                $this->activity_model->user_logs($_SESSION, 'logistic_provider');
+                // @end.
             }
-            
-		/*if($_POST){
-			$sql = "select * from `logistic_providers` where 
-			`email` = '".mysql_real_escape_string($_POST['email'])."' and 
-			`password` = '".mysql_real_escape_string(md5(trim($_POST['password'])))."' and 
-			`active` = 1 
-			";
-			$q = $this->db->query($sql);
-			$r = $q->result_array();
-			if(!$r[0]['id']){
-				$_SESSION['logistic_provider']['email'] = $_POST['email'];
-				echo "<script>self.location='".site_url("lp/?message=Invalid Login")."'</script>";
-				return 0;
-			}
-			else{                            
-				$_SESSION['logistic_provider'] = $r[0];
-                                
-                                /* @start:  Logs user.
-                                 * @author  tuso@programmerspride.com
-                                 * */
-                                /*$this->load->model('activity_model', '', true);
-                                $this->activity_model->user_logs($_SESSION, 'logistic_provider');
-                                // @end.
-                                
-				echo "<script>self.location='".site_url("lp")."/'</script>";
-				return 0;
-			}
-		}*/
-	}
+
+            redirect(site_url($url));
+        }
+    }
+        
 	public function register(){
 		if($_POST['register']){                    
 			foreach($_POST as $key=>$value){
@@ -670,14 +649,13 @@ class lp extends CI_Controller {
                             if(($user_id = $this->db->insert_id()) > 0) {
                                 /* @start   : Add Company then add User under it.
                                  * @author  : tuso@programmerspride.com
-                                 * */
-                                $this->load->model('global_model', '', true);
+                                 * */                                
                                 // Save the company if don't exists yet.
-                                $company_id = $this->global_model->doCompanySave($this->input->post('company_name'));                            
+                                list($company_id, $created_by) = $this->lp_model->doCompanySave($user_id, $this->input->post('company_name'));                            
                                 // If User not under Company yet, which really is since a new User.
-                                if(! $this->global_model->getCompanyUser($company_id, $user_id)) {
+                                if(! $this->lp_model->getCompanyUser($company_id, $user_id)) {
                                     // Add User under this Company.
-                                    $this->global_model->doCompanyUserSave($company_id, $user_id, 'logistic_provider');
+                                    $this->lp_model->doCompanyUserSave(array($company_id, $created_by), $user_id);
                                 } // @end.
                             }
                             
@@ -696,8 +674,7 @@ class lp extends CI_Controller {
 		}
 		else{
                         
-                    $this->load->model('global_model', '', true);
-                    $data['companies'] = $this->global_model->getCompanies('*');
+                    $data['companies'] = $this->lp_model->getCompanies('*');
                     
 			$this->load->view('sitelayout/header.php');
 			$this->load->view('sitelayout/nav.php');
@@ -1357,127 +1334,132 @@ The SeaDex team";
 		}
 	}
 	
-	public function mybids(){
-		if(!$_SESSION['logistic_provider']['id']){
-			$redirect = urlencode($_SERVER['REQUEST_URI']);
-			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
-		}
-		/*
-		//exclude accepted
-		$sql = "select 
-		`id`, 
-		`rfq_id`, 
-		`total_bid_currency`,
-		`total_bid`,
-		`origin_country`,
-		`origin_city`,
-		`origin_port`,
-		`destination_country`,
-		`destination_city`,
-		`destination_port`,
-		`total_bid_usd`,
-		`dateadded`
-		from `bids` where 
-		`logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'
-		and `id` not in (
-			select
-			`bid_id`
-			from `rfq`
-			where 
-			`logistic_provider_id` = '".$_SESSION['logistic_provider']['id']."'
-		)
-		order by `id` desc
-		";
-		*/
-		
-		$sql = "select 
-		`id`, 
-		`rfq_id`, 
-		`total_bid_currency`,
-		`total_bid`,
-		`origin_country`,
-		`origin_city`,
-		`origin_port`,
-		`destination_country`,
-		`destination_city`,
-		`destination_port`,
-		`total_bid_usd`,
-		`dateadded`
-		from `bids` where 
-		`logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'
-		order by `id` desc
-		";
-		
-		$q = $this->db->query($sql);
-		$bids = $q->result_array();
-		$data['bids'] = $bids;
-		
-		
-		
-		$this->load->view('sitelayout/header.php');
-		$this->load->view('sitelayout/nav.php');
-		$content = $this->load->view('lp/mybids.php', $data, true);
-		$data['content'] = $content;
-		$content = $this->load->view('lp/content.php', $data);
-		$this->load->view('sitelayout/footer.php');
-	}
-	
-        public function mycompany() {
-            
-            $this->load->view('sitelayout/header.php');
-            $this->load->view('sitelayout/nav.php');
-            
-            $data['company'] = $_SESSION['logistic_provider']['company'];
-            
-            $content = $this->load->view('lp/mycompany.php', $data, true);
-            $data['content'] = $content;
-            
-            $content = $this->load->view('lp/content.php', $data);
-            $this->load->view('sitelayout/footer.php');
-                
+    public function mybids(){
+
+        if(! $this->user_id) { // Security check.
+            redirect(site_url('lp') . '/?redirect=' . urlencode($_SERVER['REQUEST_URI']));
         }
         
-	public function acceptedbids(){
-		if(!$_SESSION['logistic_provider']['id']){
-			$redirect = urlencode($_SERVER['REQUEST_URI']);
-			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
-		}
-		
-		$sql = "select 
-		`id`, 
-		`rfq_id`, 
-		`total_bid_currency`,
-		`total_bid`,
-		`origin_country`,
-		`origin_city`,
-		`origin_port`,
-		`destination_country`,
-		`destination_city`,
-		`destination_port`,
-		`total_bid_usd`,
-		`dateadded`
-		from `bids` where `logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'
-		and `id` in (
-			select
-			`bid_id`
-			from `rfq`
-			where 
-			`logistic_provider_id` = '".$_SESSION['logistic_provider']['id']."'
-		)
-		order by `id` desc
-		";
-		$q = $this->db->query($sql);
-		$bids = $q->result_array();
-		$data['bids'] = $bids;
-		
-		
-		
-		$this->load->view('sitelayout/header.php');
-		$this->load->view('sitelayout/nav.php');
-		$content = $this->load->view('lp/acceptedbids.php', $data, true);
-		$data['content'] = $content;
-		$content = $this->load->view('lp/content.php', $data);
-		$this->load->view('sitelayout/footer.php');
-	}
-	
+        $data['bids'] = $this->lp_model->getBids('my');
+
+        $this->load->view('sitelayout/header.php');
+        $this->load->view('sitelayout/nav.php');
+        $content = $this->load->view('lp/mybids.php', $data, true);
+        $data['content'] = $content;
+        $content = $this->load->view('lp/content.php', $data);
+        $this->load->view('sitelayout/footer.php');
+    }
+    
+    private function add_colleague() {
+        
+        $response = $data = $this->input->post();
+        unset($data['add_colleague']);
+        
+        array_walk($data, function(&$value, &$key) {
+            $value = trim($value);
+        }); extract($data);
+        
+        $this->load->library('string');
+        
+        if($user_name == '') $response['error'] = 'Please enter a valid name !';
+        elseif($user_email == '') $response['error'] = 'Please enter a valid email !';
+        elseif($user_email != '' && (! $this->string->is_email($user_email))) $response['error'] = 'Please enter a valid email format !';
+        elseif($user_password == '') $response['error'] = 'Please enter a valid password !';
+        
+        if(empty($response['error'])) { 
+            $response = array_merge($response, $this->lp_model->doCompanyUserAdd($data));
+            unset($response['user_name']);
+            unset($response['user_email']);
+            unset($response['user_password']);
+        }
+        
+        return $response;
+    }
+    
+    public function mycompany() {
+
+        if(! $this->user_id) { // Security check.
+            redirect(site_url('lp') . '/?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+        }
+
+        $data['main'] = (int) $_SESSION['logistic_provider']['main'];
+        
+        if($this->input->post()) {
+            
+            if($this->input->post('add_colleague')) { // As it says.
+                
+                $data = array_merge($data, $this->add_colleague());
+                
+            } elseif($this->input->post('confirm_colleague')) { // As it says.
+                
+                $this->lp_model->doCompanyUserConfirm($this->input->post('user_id'));
+                
+            } elseif($this->input->post('approve_colleague')) { // As it says.
+                
+                $this->lp_model->doCompanyUserApprove($this->input->post('user_id'));
+            }
+            
+            // Updating a company.
+            if($this->input->post('update')) {
+                // Save the company if don't exists yet.
+                list($company_id, $created_by) = $this->lp_model->doCompanySave($this->user_id, $this->input->post('company_name'), $data['main']);
+                // If User not under Company yet.
+                if(! $this->lp_model->getCompanyUser($company_id, $this->user_id)) {
+                    // Add User under this Company.
+                    $this->lp_model->doCompanyUserSave(array($company_id, $created_by), $this->user_id, $data['main']);                
+                } // @end.
+
+                // Re-assign since it may got updated.
+                $data['main'] = (int) $_SESSION['logistic_provider']['main'];
+
+                $this->lp_model->doCompanyOfUserUpdate($company_id);
+            }
+        }
+        
+        $this->load->view('sitelayout/header.php');
+        $this->load->view('sitelayout/nav.php');
+
+        $data['companies'] = $this->lp_model->getCompanies('*'); // Get the list of all available Companies.
+        $data['company'] = $_SESSION['logistic_provider']['company']; // Get the current company detail of this User.
+        
+        if($data['main']) $data['colleagues'] = $this->lp_model->getCompanyUsers($data['company']['id']);
+        
+        $content = $this->load->view('lp/mycompany.php', $data, true);
+        $data['content'] = $content;
+
+        $content = $this->load->view('lp/content.php', $data);
+        $this->load->view('sitelayout/footer.php');                
+    }
+    
+    public function cobids() {
+        
+        if(! $this->user_id) { // Security check.
+            redirect(site_url('lp') . '/?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+        }
+        
+        $data['bids'] = $this->lp_model->getBids('co');
+
+        $this->load->view('sitelayout/header.php');
+        $this->load->view('sitelayout/nav.php');
+        $content = $this->load->view('lp/cobids.php', $data, true);
+        $data['content'] = $content;
+        $content = $this->load->view('lp/content.php', $data);
+        $this->load->view('sitelayout/footer.php');
+    }
+    
+    public function acceptedbids() {
+
+        if(! $this->user_id) { // Security check.
+            redirect(site_url('lp') . '/?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+        }
+
+        $data['bids'] = $this->lp_model->getBids('a');
+
+        $this->load->view('sitelayout/header.php');
+        $this->load->view('sitelayout/nav.php');
+        $content = $this->load->view('lp/acceptedbids.php', $data, true);
+        $data['content'] = $content;
+        $content = $this->load->view('lp/content.php', $data);
+        $this->load->view('sitelayout/footer.php');
+    }	
 }

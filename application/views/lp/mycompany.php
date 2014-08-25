@@ -73,7 +73,7 @@ if($main) {
 				<div class="col-md-12">
                                     
                                     <?php
-                                    if(! $company['approved']) {
+                                    if((! $main) && (! $company['approved']) && $company['name'] != '') {
                                         
                                         ?>
                                         <div class="text-center" style="border: 1px solid #CCC; background: #FFF; border-radius: 5px; margin-bottom: 10px; padding: 5px; color: #009900">Note: You are not yet approved by the Admin of this company. Once approved, you may now see listings of their bids and rates.</div>

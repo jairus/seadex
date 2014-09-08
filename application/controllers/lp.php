@@ -202,7 +202,7 @@ class lp extends CI_Controller {
 										`dateadded` = NOW()
 									";
 									$this->db->query($sql);
-									$data['message'] = $credits." SeaDex Credits have been deducted to your account";
+									$data['message'] = $credits." SeaDex Credits have been deducted from your account";
 									$data['view'] = 1;
 								}
 								else{
@@ -257,7 +257,7 @@ class lp extends CI_Controller {
 									`dateadded` = NOW()
 								";
 								$this->db->query($sql);
-								$data['message'] = $credits." SeaDex Credits have been deducted to your account";
+								$data['message'] = $credits." SeaDex Credits have been deducted from your account";
 								$data['view'] = 1;
 							}
 							else{

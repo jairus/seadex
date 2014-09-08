@@ -115,3 +115,18 @@
             </div>
           </div>
         </div>
+		<script>
+		  // Login window
+		  var showLoginButton = $('#show-login');
+		  var loginPopup = $('#login-popup');
+ 
+		  showLoginButton.on('click', function(e) {
+			loginPopup.show();
+			e.preventDefault();
+		  });
+
+		  loginPopup.on('click', '.popup-close', function(e) {
+			loginPopup.hide();
+			e.preventDefault();
+		  });
+		</script>

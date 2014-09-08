@@ -210,6 +210,7 @@ class lp extends CI_Controller {
 								}
 							}
 							$data['viewcontact'] = "View Customer Contact Details = ".$credits." SeaDex Credits";
+							$data['buy'] = "Your current SeaDex Credits: ".$lp[0]['credits'].". <a href='".site_url("lp/buycredits")."'>Buy more here</a>.";
 						}
 					}
 					$this->load->view('lp/rfqsummary_bid.php', $data);
@@ -265,6 +266,7 @@ class lp extends CI_Controller {
 							}
 						}
 						$data['viewcontact'] = "View Customer Contact Details = ".$credits." SeaDex Credits";
+						$data['buy'] = "Your current SeaDex Credits: ".$lp[0]['credits'].". <a href='".site_url("lp/buycredits")."'>Buy more here</a>.";
 					}
 				}
 				//update rfq views

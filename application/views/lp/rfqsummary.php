@@ -162,6 +162,11 @@ if($rfq['userprofile']['contact_number']){
 					?>
 					<tr><td colspan="2" style="text-align: center">
 					<input type="button" class="btn btn-default" style="margin:20px;" value="<?php echo $viewcontact; ?>" id="contact_info_trigger" />
+					<?php
+					if(isset($buy)){
+						echo "<div style='padding-bottom:20px'>".$buy."</div>";
+					}
+					?>
 					</td></tr>
 					<?php
 				}

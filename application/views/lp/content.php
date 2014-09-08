@@ -26,8 +26,10 @@ body{
 }
 </style>
 <div class="container-fluid" id="container" style="max-width:90%">
+  <?php include_once(dirname(__FILE__)."/credits.php"); ?>
   <div class="row">
 	<div class="col-md-12 main">
+	  
 	  <?php echo $content; ?>
 	</div>
   </div>

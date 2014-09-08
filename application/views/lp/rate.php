@@ -68,10 +68,12 @@ function moreAttachments(){
 
 ?>
 <div class="container-fluid" id="container" style="max-width:90%">
+	<?php include_once(dirname(__FILE__)."/credits.php"); ?>
 	<iframe name="ninjaframe" style="display:none ; width:500px; height:200px;"  ></iframe>
 	<form action="<?php echo site_url("lp/myrates/add")."/".$rate['id']; ?>" method="post" enctype="multipart/form-data" target="">
 	<div class="row">
 		<div class="col-md-4">
+			
 			<?php
 			if($rate['id']){
 				?><h2>RATE <?php echo $rate['id'] ?></h2>

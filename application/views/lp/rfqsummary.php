@@ -14,8 +14,9 @@
 body{
 	background:#f0f0f0;
 }
-
+/*
 tr.contact_info { display: none }
+*/
 </style>
 <script>
 function bid(){
@@ -27,7 +28,22 @@ function bid(){
  * */
 jQuery(function() {
     jQuery('#contact_info_trigger').click(function() {
-        var ctr = 0; var trigger = jQuery(this);
+		<?php
+		if($credits>0){
+			?>
+			if(confirm("Viewing this contact will cost <?php echo $credits; ?> SeaDex Credits. Are you sure you want to view the contact details?")){
+				self.location='?view';
+			}
+			<?php
+		}
+		else{
+			?>
+			self.location='?view';
+			<?php
+		}
+		?>
+        /*
+		var ctr = 0; var trigger = jQuery(this);
         jQuery('tr.contact_info').toggle(400, function() {
             ctr++;
             if(ctr == 1) { // Perform only once.
@@ -38,6 +54,7 @@ jQuery(function() {
                 }
             }
         });
+		*/
     });
     
     var app = {
@@ -54,6 +71,14 @@ jQuery(function() {
             });
         }
     };
+	
+	<?php
+	if(isset($view)){
+		?>
+		app.view();
+		<?php
+	}
+	?>
 }); // @end.
 </script>
 
@@ -83,9 +108,10 @@ if($rfq['userprofile']['contact_number']){
 }
 ?>
 <div class="container-fluid" id="container" style="max-width:90%">
+	<?php include_once(dirname(__FILE__)."/credits.php"); ?>
 	<div class="row">
 		<div class="col-md-4">
-			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
+			
 		</div>
 		<div class="col-md-8 text-right">
                         <input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
@@ -100,54 +126,100 @@ if($rfq['userprofile']['contact_number']){
 			?>
 		</div>
 	</div>
+	<style>
+	.contact_info{
+		display:auto;
+	}
+	</style>
 	<div class="row">
 		<div class="col-md-12 text-left">
 			<table class="table table-bordered">
-                            <tr><td colspan="2" style="text-align: center"><input type="button" class="btn btn-default" style="margin:20px;" value="View Contact" id="contact_info_trigger" /></td></tr>
-				<tr class="contact_info">
-					<th width="50%">Customer Type</th>
-					<td width="50%"><?php echo ucfirst($rfq['customer_type']); ?></td>
-				</tr>
-				<tr class="contact_info">
-					<th width="50%">E-mail</th>
-					<td width="50%"><?php echo $rfq['userprofile']['email']; ?></td>
+				<tr>
+					<th colspan=2 class="text-center"  style="background:#f0f0f0">
+						RFQ # <?php echo $rfq['id'] ?>
+					</th>
 				</tr>
 				<?php
-				if($rfq['userprofile']['company_name']){
+				if($message){
 					?>
-					<tr class="contact_info">
-						<th width="50%">Company Name</th>
-						<td width="50%"><?php echo $rfq['userprofile']['company_name']; ?></td>
-					</tr>
+					<tr><td colspan="2" style="text-align: center; color:green">
+					<?php 
+					echo $message;
+					?>
+					</td></tr>
+					<?php
+				}
+				if($error){
+					?>
+					<tr><td colspan="2" style="text-align: center; color:red">
+					<?php 
+					echo $error;
+					?>
+					</td></tr>
+					<?php
+				}
+				if(!isset($view)){
+					?>
+					<tr><td colspan="2" style="text-align: center">
+					<input type="button" class="btn btn-default" style="margin:20px;" value="<?php echo $viewcontact; ?>" id="contact_info_trigger" />
+					</td></tr>
 					<?php
 				}
 				?>
-				<tr class="contact_info">
-					<th width="50%">First Name</th>
-					<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
-				</tr>
-				<tr class="contact_info">
-					<th width="50%">Last Name</th>
-					<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
-				</tr>
-				<tr class="contact_info">
-					<th width="50%">Country</th>
-					<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
-				</tr>
-				<tr class="contact_info">
-					<th width="50%">Contact Number</th>
-					<td width="50%"><?php echo $rfq['userprofile']['contactnumber']; ?></td>
-				</tr>
+				
 				<?php
-				if(isset($rfq['shipping_info']['type_of_company_to_quote'])){
+				if(isset($view)){
 					?>
+					<tr>
+						<th colspan=2 class="text-center"  style="background:#f0f0f0">
+						Customer Contact Information
+						</th>
+					</tr>
 					<tr class="contact_info">
-						<th width="50%">RFQ for</th>
-						<td width="50%">
-						<?php echo $rfq['shipping_info']['type_of_company_to_quote']; ?>
-						</td>
+						<th width="50%">Customer Type</th>
+						<td width="50%"><?php echo ucfirst($rfq['customer_type']); ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">E-mail</th>
+						<td width="50%"><?php echo $rfq['userprofile']['email']; ?></td>
 					</tr>
 					<?php
+					if($rfq['userprofile']['company_name']){
+						?>
+						<tr class="contact_info">
+							<th width="50%">Company Name</th>
+							<td width="50%"><?php echo $rfq['userprofile']['company_name']; ?></td>
+						</tr>
+						<?php
+					}
+					?>
+					<tr class="contact_info">
+						<th width="50%">First Name</th>
+						<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Last Name</th>
+						<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Country</th>
+						<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Contact Number</th>
+						<td width="50%"><?php echo $rfq['userprofile']['contactnumber']; ?></td>
+					</tr>
+					<?php
+					if(isset($rfq['shipping_info']['type_of_company_to_quote'])){
+						?>
+						<tr class="contact_info">
+							<th width="50%">RFQ for</th>
+							<td width="50%">
+							<?php echo $rfq['shipping_info']['type_of_company_to_quote']; ?>
+							</td>
+						</tr>
+						<?php
+					}
 				}
 				if(isset($rfq['shipping_info'])){
 					?>
@@ -328,6 +400,11 @@ if($rfq['userprofile']['contact_number']){
 																	</th>
 																</tr>
 																<tr>
+																	<?php
+																	if($cargo['details']['packing']['qty'][$i]==0){
+																		$cargo['details']['packing']['qty'][$i]= 1;
+																	}
+																	?>
 																	<td colspan=2>
 																	<span>Quantity:</span> <i><?php echo $cargo['details']['packing']['qty'][$i]; ?></i><br />
 																	<span>Length:</span> <i><?php echo ($cargo['details']['packing']['length'][$i]+0)." ".$cargo['details']['packing']['length_unit'][$i]; ?></i><br />
@@ -460,6 +537,11 @@ if($rfq['userprofile']['contact_number']){
 															</tr>
 															<tr>
 																<td colspan=2>
+																<?php
+																	if($cargo['details']['packing']['qty'][$i]==0){
+																		$cargo['details']['packing']['qty'][$i]= 1;
+																	}
+																?>
 																<span>Quantity:</span> <i><?php echo $cargo['details']['packing']['qty'][$i]; ?></i><br />
 																	<span>Length:</span> <i><?php echo ($cargo['details']['packing']['length'][$i]+0)." ".$cargo['details']['packing']['length_unit'][$i]; ?></i><br />
 																	<span>Width:</span> <i><?php echo ($cargo['details']['packing']['width'][$i]+0)." ".$cargo['details']['packing']['width_unit'][$i]; ?></i><br />
@@ -542,6 +624,11 @@ if($rfq['userprofile']['contact_number']){
 															</tr>
 															<tr>
 																<td colspan=2>
+																<?php
+																	if($cargo['details']['packing']['qty'][$i]==0){
+																		$cargo['details']['packing']['qty'][$i]= 1;
+																	}
+																?>
 																<span>Quantity:</span> <i><?php echo $cargo['details']['packing']['qty'][$i]; ?></i><br />
 																	<span>Length:</span> <i><?php echo ($cargo['details']['packing']['length'][$i]+0)." ".$cargo['details']['packing']['length_unit'][$i]; ?></i><br />
 																	<span>Width:</span> <i><?php echo ($cargo['details']['packing']['width'][$i]+0)." ".$cargo['details']['packing']['width_unit'][$i]; ?></i><br />

@@ -149,7 +149,9 @@ class lp extends CI_Controller {
 			$data['rfq'] = $rfqdata;
 			$data['rfqnextid'] = $rfqnextid;
 			$data['rfqprevid'] = $rfqprevid;		
-			
+			//cost price
+			$credits = 2;
+				
 			if($action=='bid'){
 				if($_GET['bid_id']){
 					$sql = "select * from `bids` where `id`='".mysql_real_escape_string($_GET['bid_id'])."' and `logistic_provider_id`='".$_SESSION['logistic_provider']['id']."'";
@@ -159,10 +161,112 @@ class lp extends CI_Controller {
 					$this->load->view('lp/rfqsummary_bid2.php', $data);
 				}
 				else{
+				
+					$data['credits'] = $credits;
+				
+					//get lp
+					$sql = "select * from `logistic_providers` where `id`='".$_SESSION['logistic_provider']['id']."'";
+					$q = $this->db->query($sql);
+					$lp = $q->result_array();
+					
+					//check if this rfq is already bought 
+					$sql = "select * from `transactions` where 
+					`lpid`='".$_SESSION['logistic_provider']['id']."' and 
+					`rfqid`='".$rfq[0]['id']."' and `action`='view'";
+					$q = $this->db->query($sql);
+					$transaction = $q->result_array();
+					
+					if(isset($_GET['view'])&&$transaction[0]['id']){
+						$data['view'] = 1;
+					}
+					else{
+						//if bought already
+						if($transaction[0]['id']||$credits==0){
+							$data['viewcontact'] = "View Contact";
+							$data['view'] = 1;
+						}
+						else{
+							
+							if(isset($_GET['view'])){
+								if($lp[0]['credits']>$credits){
+									$sql = "update `logistic_providers` set
+										`credits` = `credits` - ".$credits."
+										where `id` = '".$_SESSION['logistic_provider']['id']."'
+									";
+									$this->db->query($sql);
+									$sql = "insert into transactions set
+										`lpid` = '".$_SESSION['logistic_provider']['id']."',
+										`rfqid` = '".$rfq[0]['id']."',
+										`action` = 'view',
+										`credits` = ".$credits.",
+										`dateadded` = NOW()
+									";
+									$this->db->query($sql);
+									$data['message'] = $credits." SeaDex Credits have been deducted to your account";
+									$data['view'] = 1;
+								}
+								else{
+									$data['error'] = "You don't have enough credits to view this contact information. To buy more credits click <a href='".site_url("lp/buycredits")."'>here</a>.";
+								}
+							}
+							$data['viewcontact'] = "View Customer Contact Details = ".$credits." SeaDex Credits";
+						}
+					}
 					$this->load->view('lp/rfqsummary_bid.php', $data);
 				}
 			}
 			else{
+				
+				$data['credits'] = $credits;
+				
+				//get lp
+				$sql = "select * from `logistic_providers` where `id`='".$_SESSION['logistic_provider']['id']."'";
+				$q = $this->db->query($sql);
+				$lp = $q->result_array();
+				
+				//check if this rfq is already bought 
+				$sql = "select * from `transactions` where 
+				`lpid`='".$_SESSION['logistic_provider']['id']."' and 
+				`rfqid`='".$rfq[0]['id']."' and `action`='view'";
+				$q = $this->db->query($sql);
+				$transaction = $q->result_array();
+				
+				if(isset($_GET['view'])&&$transaction[0]['id']){
+					$data['view'] = 1;
+				}
+				else{
+					//if bought already
+					if($transaction[0]['id']||$credits==0){
+						$data['viewcontact'] = "View Contact";
+						$data['view'] = 1;
+					}
+					else{
+						
+						if(isset($_GET['view'])){
+							if($lp[0]['credits']>$credits){
+								$sql = "update `logistic_providers` set
+									`credits` = `credits` - ".$credits."
+									where `id` = '".$_SESSION['logistic_provider']['id']."'
+								";
+								$this->db->query($sql);
+								$sql = "insert into transactions set
+									`lpid` = '".$_SESSION['logistic_provider']['id']."',
+									`rfqid` = '".$rfq[0]['id']."',
+									`action` = 'view',
+									`credits` = ".$credits.",
+									`dateadded` = NOW()
+								";
+								$this->db->query($sql);
+								$data['message'] = $credits." SeaDex Credits have been deducted to your account";
+								$data['view'] = 1;
+							}
+							else{
+								$data['error'] = "You don't have enough credits to view this contact information. To buy more credits click <a href='".site_url("lp/buycredits")."'>here</a>.";
+							}
+						}
+						$data['viewcontact'] = "View Customer Contact Details = ".$credits." SeaDex Credits";
+					}
+				}
 				//update rfq views
 				//echo $rfq[0]['views']."<br />";
 				//echo ($rfq[0]['views']*1)+1;
@@ -1462,4 +1566,73 @@ The SeaDex team";
         $content = $this->load->view('lp/content.php', $data);
         $this->load->view('sitelayout/footer.php');
     }	
+	
+	public function buycredits() {
+
+        if(! $this->user_id) { // Security check.
+            redirect(site_url('lp') . '/?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+        }
+
+		$sql = "insert into `buyattempts` set
+				`user_id` = '".$this->user_id."',
+				`credits` = '100',
+				`value` = '100',
+				`dateadded` = NOW()
+				";
+		$q = $this->db->query($sql);
+		$buyattemptid = $this->db->insert_id();
+		$data['buyattemptid'] = $buyattemptid;		
+		
+		$sql = "select * from `logistic_providers` where `id`='".$this->user_id."'";
+		$q = $this->db->query($sql);
+		$lpx = $q->result_array();
+		$data['credits'] = $lpx[0]['credits'];		
+		
+        $this->load->view('sitelayout/header.php');
+        $this->load->view('sitelayout/nav.php');
+        $content = $this->load->view('lp/buycredits.php', $data, true);
+        $data['content'] = $content;
+        $content = $this->load->view('lp/content.php', $data);
+        $this->load->view('sitelayout/footer.php');
+    }
+	
+	public function ipn(){
+		$str = print_r($_GET, 1);
+		$str .= print_r($_POST, 1);
+		$str .= print_r($_SERVER, 1);
+
+		$req = "";
+		foreach ($_POST as $key => $value) { 
+			$value = urlencode(stripslashes($value));
+			$req .= "&$key=$value";
+		}
+
+		$url = "https://www.paypal.com/cgi-bin/webscr?cmd=_notify-validate".$req;
+		$str .= "\n\n".$url;
+		$ppvalidate = @file_get_contents($url);
+		$str .= "\n\n".$ppvalidate;
+		
+		file_put_contents(dirname(__FILE__)."/_ipn/".trim($_GET['f']).".txt", $str);
+		if(trim($_GET['f'])&&trim(strtoupper($ppvalidate))=="VERIFIED"){
+			
+			$sql = "select * from `buyattempts` where `id`='".mysql_real_escape_string($_GET['f'])."'";
+			$q = $this->db->query($sql);
+			$buyattempts = $q->result_array();
+			$user_id = $buyattempts[0]['user_id'];
+			$credits = $buyattempts[0]['credits']+0;
+			
+			$sql = "update `buyattempts` set `status` = 'PAYPAL - VERIFIED', `query_string`='".mysql_real_escape_string($req)."' where `id`='".mysql_real_escape_string($_GET['f'])."'";
+			$q = $this->db->query($sql);
+			
+			
+			$sql = "update `logistic_providers` set `credits` = `credits`+ ".$credits." where `id`='".$user_id."'";
+			$q = $this->db->query($sql);
+			
+			
+		}
+		else{
+			$sql = "update `buyattempts` set `status` = 'PAYPAL - ".$ppvalidate."', `query_string`='".mysql_real_escape_string($req)."' where `id`='".mysql_real_escape_string($_GET['f'])."'";
+			$q = $this->db->query($sql);
+		}
+	}
 }

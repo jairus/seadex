@@ -102,6 +102,7 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 
 ?>
 <div class="container-fluid" id="container" style="max-width:90%">
+	<?php include_once(dirname(__FILE__)."/credits.php"); ?>
 	<div class="row">
 		<div class="col-md-6">
 			<h2>BID # <?php echo $bids[0]['id'] ?> - RFQ # <?php echo $bids[0]['rfq_id'] ?></h2>

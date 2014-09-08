@@ -34,7 +34,6 @@
 				  -->
                 </ul>
               </div>
-
             </div><!--/.nav-collapse -->
 
             <div class="login-popup" id="login-popup">

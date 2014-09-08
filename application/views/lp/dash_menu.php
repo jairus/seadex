@@ -35,6 +35,8 @@ $method = $this->router->fetch_method();
 		<div class="menu <?php if($method=="changepass"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/changepass">Change Password</a></div>
 		<div class="menu <?php if($method=="account"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/account">Edit My Profile</a></div>
                 <div class="menu <?php if($method=="mycompany"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/mycompany">My Company</a></div>
+				
+		<div class="menu <?php if($method=="buycredits"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/buycredits">Credits</a></div>
                 <?php /*if($_SESSION['logistic_provider']['main']) {?><div class="menu <?php if($method=="colleagues"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/colleagues">Colleagues</a></div><?php }*/?>
 	  </td>
 	</tr>

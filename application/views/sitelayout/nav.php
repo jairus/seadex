@@ -20,20 +20,30 @@
             <div class="navbar-collapse collapse">
               <div class="navbar-right">
                 <ul class="nav navbar-nav">
-                  <li><a href="<?php echo site_url("rfq")."/"; ?>">Request for quotation</a></li>
-				  <li><a href="<?php echo site_url("about")."/"; ?>">About</a></li>
-                  <li><a href="<?php echo site_url("situation")."/"; ?>">Situation</a></li>
-                  <li><a href="<?php echo site_url("consumers")."/"; ?>">Consumers</a></li>
-                  <li><a href="<?php echo site_url("service_providers")."/"; ?>">Service providers</a></li>
-                  <li><a href="<?php echo site_url("contact")."/"; ?>">Contact</a></li>
 				  <?php
+				  if(!$_SESSION['logistic_provider']['id']&&!$_SESSION['customer']['id']){
+					  ?>
+					  <li><a href="<?php echo site_url("rfq")."/"; ?>">Request for quotation</a></li>
+					  <li><a href="<?php echo site_url("about")."/"; ?>">About</a></li>
+					  <li><a href="<?php echo site_url("situation")."/"; ?>">Situation</a></li>
+					  <li><a href="<?php echo site_url("consumers")."/"; ?>">Consumers</a></li>
+					  <li><a href="<?php echo site_url("service_providers")."/"; ?>">Service providers</a></li>
+					  <?php
+				  }
 				  if($_SESSION['customer']['id']){
 					?>
+					<li><a href="<?php echo site_url("rfq")."/"; ?>">Request for quotation</a></li>
+					<li><a href="<?php echo site_url("about")."/"; ?>">About</a></li>
+                    <li><a href="<?php echo site_url("contact")."/"; ?>">Contact Seadex</a></li>
+					<li><a href="<?php echo site_url("cs")."/"; ?>">Consumer Dashboard</a></li>
 					<li><a href="<?php echo site_url("cs")."/logout"; ?>">Logout</a></li>
 					<?php
 				  }
 				  else if($_SESSION['logistic_provider']['id']){
 					?>
+					<li><a href="<?php echo site_url("about")."/"; ?>">About</a></li>
+                    <li><a href="<?php echo site_url("contact")."/"; ?>">Contact Seadex</a></li>
+					<li><a href="<?php echo site_url("lp")."/"; ?>">Service Provider Dashboard</a></li>
 					<li><a href="<?php echo site_url("lp")."/logout"; ?>">Logout</a></li>
 					<?php
 				  }

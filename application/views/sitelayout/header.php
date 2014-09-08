@@ -67,6 +67,11 @@
 	ga('send', 'pageview');
 
 	</script>
+	<style>
+	a:link, a:visited{
+		color: #0E202E
+	}
+	</style>
   </head>
   <body class="js">
 	<script>

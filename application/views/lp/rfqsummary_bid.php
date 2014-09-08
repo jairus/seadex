@@ -166,13 +166,13 @@ if($rfq['userprofile']['customer_type']){
 
 		</div>
 		<div class="col-md-8 text-right">
-                        <input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
+                        <input type="button" class="btn btn-default" style="margin:20px;  margin-top:0px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
 			<?php
 			if($rfqprevid){
-				?><input type="button" class="btn btn-default" style="margin:20px;" value="Previous RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqprevid ?>'"><?php
+				?><input type="button" class="btn btn-default" style="margin:20px;  margin-top:0px;" value="Previous RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqprevid ?>'"><?php
 			}
 			if($rfqnextid){
-				?><input type="button" class="btn btn-default" style="margin:20px;" value="Next RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqnextid ?>'"><?php
+				?><input type="button" class="btn btn-default" style="margin:20px;  margin-top:0px;" value="Next RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqnextid ?>'"><?php
 			}
 			?>
 		</div>

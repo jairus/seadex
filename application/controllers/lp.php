@@ -748,6 +748,7 @@ class lp extends CI_Controller {
 				`name` = '".mysql_real_escape_string($_POST['name'])."',
 				`email` = '".mysql_real_escape_string($_POST['email'])."',
 				`password` = '".mysql_real_escape_string(md5(trim($_POST['password'])))."',
+				`credits` = '10',
 				`dateadded` = NOW()
 				";
 				$q = $this->db->query($sql);

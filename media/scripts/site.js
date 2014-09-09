@@ -14,6 +14,7 @@
     e.preventDefault();
   });
 
+
   // Fixed Navbar
   var navbar = $('#top-nav');
   var navbarLogo = $('#top-nav .navbar-brand > img');

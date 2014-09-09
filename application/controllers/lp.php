@@ -1569,27 +1569,38 @@ The SeaDex team";
         $this->load->view('sitelayout/footer.php');
     }	
 	
-	public function buycredits() {
+	public function buycredits($amount="") {
 
         if(! $this->user_id) { // Security check.
             redirect(site_url('lp') . '/?redirect=' . urlencode($_SERVER['REQUEST_URI']));
         }
-
-		$sql = "insert into `buyattempts` set
-				`user_id` = '".$this->user_id."',
-				`credits` = '100',
-				`value` = '100',
-				`dateadded` = NOW()
-				";
-		$q = $this->db->query($sql);
-		$buyattemptid = $this->db->insert_id();
-		$data['buyattemptid'] = $buyattemptid;		
 		
+		if($amount){
+			if($amount==50){
+				$data['amount'] = $amount;
+				$credits = $amount;
+				$cost = 49;
+			}
+			else{
+				$data['amount'] = 100;
+				$credits = 100;
+				$cost = 99;
+			}
+			$sql = "insert into `buyattempts` set
+					`user_id` = '".$this->user_id."',
+					`credits` = '".$credits."',
+					`value` = '".$cost."',
+					`dateadded` = NOW()
+					";
+			$q = $this->db->query($sql);
+			$buyattemptid = $this->db->insert_id();
+			$data['buyattemptid'] = $buyattemptid;		
+		}
 		$sql = "select * from `logistic_providers` where `id`='".$this->user_id."'";
 		$q = $this->db->query($sql);
 		$lpx = $q->result_array();
-		$data['credits'] = $lpx[0]['credits'];		
-		
+		$data['credits'] = $lpx[0]['credits'];
+			
         $this->load->view('sitelayout/header.php');
         $this->load->view('sitelayout/nav.php');
         $content = $this->load->view('lp/buycredits.php', $data, true);
@@ -1597,6 +1608,7 @@ The SeaDex team";
         $content = $this->load->view('lp/content.php', $data);
         $this->load->view('sitelayout/footer.php');
     }
+	
 	
 	public function ipn(){
 		$str = print_r($_GET, 1);
@@ -1613,28 +1625,30 @@ The SeaDex team";
 		$str .= "\n\n".$url;
 		$ppvalidate = @file_get_contents($url);
 		$str .= "\n\n".$ppvalidate;
-		
+		 
 		file_put_contents(dirname(__FILE__)."/_ipn/".trim($_GET['f']).".txt", $str);
-		if(trim($_GET['f'])&&trim(strtoupper($ppvalidate))=="VERIFIED"){
+		
+		$sql = "select * from `buyattempts` where `id`='".mysql_real_escape_string($_GET['f'])."' and `status`=''";
+		$q = $this->db->query($sql);
+		$buyattempts = $q->result_array();
 			
-			$sql = "select * from `buyattempts` where `id`='".mysql_real_escape_string($_GET['f'])."'";
-			$q = $this->db->query($sql);
-			$buyattempts = $q->result_array();
-			$user_id = $buyattempts[0]['user_id'];
-			$credits = $buyattempts[0]['credits']+0;
-			
-			$sql = "update `buyattempts` set `status` = 'PAYPAL - VERIFIED', `query_string`='".mysql_real_escape_string($req)."' where `id`='".mysql_real_escape_string($_GET['f'])."'";
-			$q = $this->db->query($sql);
-			
-			
-			$sql = "update `logistic_providers` set `credits` = `credits`+ ".$credits." where `id`='".$user_id."'";
-			$q = $this->db->query($sql);
-			
-			
-		}
-		else{
-			$sql = "update `buyattempts` set `status` = 'PAYPAL - ".$ppvalidate."', `query_string`='".mysql_real_escape_string($req)."' where `id`='".mysql_real_escape_string($_GET['f'])."'";
-			$q = $this->db->query($sql);
+		if($buyattempts[0]['id']){
+			if(trim($_GET['f'])&&trim(strtoupper($ppvalidate))=="VERIFIED"){
+				
+				$user_id = $buyattempts[0]['user_id'];
+				$credits = $buyattempts[0]['credits']+0;
+				
+				$sql = "update `buyattempts` set `status` = 'PAYPAL - VERIFIED', `query_string`='".mysql_real_escape_string($req)."' where `id`='".mysql_real_escape_string($_GET['f'])."'";
+				$q = $this->db->query($sql);
+
+				$sql = "update `logistic_providers` set `credits` = `credits`+ ".$credits." where `id`='".$user_id."'";
+				$q = $this->db->query($sql);			
+				
+			}
+			else{
+				$sql = "update `buyattempts` set `status` = 'PAYPAL - ".$ppvalidate."', `query_string`='".mysql_real_escape_string($req)."' where `id`='".mysql_real_escape_string($_GET['f'])."'";
+				$q = $this->db->query($sql);
+			}
 		}
 	}
 }

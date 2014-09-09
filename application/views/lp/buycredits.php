@@ -71,31 +71,77 @@
 			  <tbody>
 				<tr>
 					<td>
-						<form class="form-horizontal" style="max-width:700px; margin:auto" name="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_self" >
-							<input type="hidden" value="_xclick" name="cmd">
-							<input type="hidden" value="carlos@seadex.com" name="business">
-							<input type="hidden" name="notify_url" value="http://seadex.com/lp/ipn?f=<?php echo $buyattemptid; ?>">
-							<input type="hidden" value="100 SeaDex Credits" name="item_name">
-							<input type="hidden" value="100.00" name="amount" id="amount_id">
-							<input type="hidden" value="http://seadex.com/lp/buycredits?success" name="return" id="paypal-return-url">
-							<input type="hidden" value="http://seadex.com/lp/buycredits?cancel" name="cancel_return">
-							<input type="hidden" value="USD" name="currency_code">
-							<input type="hidden" value="US" name="lc">
-							 <div class="form-group">
-								<div class="col-sm-12 text-center">
-								  USD 100 = 100 SeaDex Credits
-								</div>
-							  </div>
-							<div class="form-group">
-								<div class="col-sm-12 text-center">
-								  <input type='checkbox' id='torx'> I accept SeaDex' all <a href="#" onClick="window.showModalDialog('http://seadex.com/lp/tor',0, 'dialogWidth:600px; dialogHeight:400px; center:yes; resizable: no; status: no');">Terms and Conditions</a><br>
-									<br>
-									<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" onclick="if(0&&!jQuery('#torx').attr('checked')){ alert('Please check the Terms and Conditions before proceeding.'); return false; }">
-									<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-								</div>
-							  </div>			
+						<?php
+						if($amount==100){
+							?>
+							<form class="form-horizontal" style="max-width:700px; margin:auto" name="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_self" >
+								<input type="hidden" value="_xclick" name="cmd">
+								<input type="hidden" value="carlos@seadex.com" name="business">
+								<input type="hidden" name="notify_url" value="http://seadex.com/lp/ipn?f=<?php echo $buyattemptid; ?>">
+								<input type="hidden" value="100 SeaDex Credits" name="item_name">
+								<input type="hidden" value="99.00" name="amount" id="amount_id">
+								<input type="hidden" value="http://seadex.com/lp/buycredits?success" name="return" id="paypal-return-url">
+								<input type="hidden" value="http://seadex.com/lp/buycredits?cancel" name="cancel_return">
+								<input type="hidden" value="USD" name="currency_code">
+								<input type="hidden" value="US" name="lc">
+								 <div class="form-group">
+									<div class="col-sm-12 text-center">
+									  <a href="<?php echo site_url("lp/buycredits/100"); ?>"><img src="<?php echo site_url("media/seadex_credits_100.jpg"); ?>" /></a>
+									</div>
+								  </div>
+								<div class="form-group">
+									<div class="col-sm-12 text-center">
+									  <input type='checkbox' id='torx'> I accept SeaDex' all <a href="#" onClick="window.showModalDialog('http://seadex.com/lp/tor',0, 'dialogWidth:600px; dialogHeight:400px; center:yes; resizable: no; status: no');">Terms and Conditions</a><br>
+										<br>
+										<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" onclick="if(0&&!jQuery('#torx').attr('checked')){ alert('Please check the Terms and Conditions before proceeding.'); return false; }">
+										<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+									</div>
+								  </div>			
+								
+							</form>
+							<?php
+						}
+						else if($amount==50){
+							?>
+							<form class="form-horizontal" style="max-width:700px; margin:auto" name="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_self" >
+								<input type="hidden" value="_xclick" name="cmd">
+								<input type="hidden" value="carlos@seadex.com" name="business">
+								<input type="hidden" name="notify_url" value="http://seadex.com/lp/ipn?f=<?php echo $buyattemptid; ?>">
+								<input type="hidden" value="50 SeaDex Credits" name="item_name">
+								<input type="hidden" value="49.00" name="amount" id="amount_id">
+								<input type="hidden" value="http://seadex.com/lp/buycredits?success" name="return" id="paypal-return-url">
+								<input type="hidden" value="http://seadex.com/lp/buycredits?cancel" name="cancel_return">
+								<input type="hidden" value="USD" name="currency_code">
+								<input type="hidden" value="US" name="lc">
+								 <div class="form-group">
+									<div class="col-sm-12 text-center">
+									  <a href="<?php echo site_url("lp/buycredits/50"); ?>"><img src="<?php echo site_url("media/seadex_credits_50.jpg"); ?>" /></a>
+									</div>
+								  </div>
+								<div class="form-group">
+									<div class="col-sm-12 text-center">
+									  <input type='checkbox' id='torx'> I accept SeaDex' all <a href="#" onClick="window.showModalDialog('http://seadex.com/lp/tor',0, 'dialogWidth:600px; dialogHeight:400px; center:yes; resizable: no; status: no');">Terms and Conditions</a><br>
+										<br>
+										<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" onclick="if(0&&!jQuery('#torx').attr('checked')){ alert('Please check the Terms and Conditions before proceeding.'); return false; }">
+										<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+									</div>
+								  </div>			
+								
+							</form>
+							<?php
+						}
+						else{
+							?>
+							<div class="text-center" style="padding:40px; padding-top:20px">
+							<a href="<?php echo site_url("lp/buycredits/50"); ?>"><img src="<?php echo site_url("media/seadex_credits_50.jpg"); ?>" /></a>
+							</div>
+							<div class="text-center" style="padding:40px; padding-top:0px">
+							<a href="<?php echo site_url("lp/buycredits/100"); ?>"><img src="<?php echo site_url("media/seadex_credits_100.jpg"); ?>" /></a>
+							</div>
 							
-						</form>
+							<?php
+						}
+						?>
 						
 						
 					</td>

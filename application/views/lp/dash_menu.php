@@ -27,7 +27,7 @@ $method = $this->router->fetch_method();
   <tbody>
 	<tr>
 	  <td>
-		<div class="menu <?php if($method=="rfqs" || $method=="index"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/rfqs">Customer RFQs</a></div>
+		<div class="menu <?php if($method=="rfqs" || $method=="index" || $method=="dashboard"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/rfqs">Customer RFQs</a></div>
 		<div class="menu <?php if($method=="mybids"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/mybids">My Bids</a></div>
                 <div class="menu <?php if($method=="cobids"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/cobids">Company Bids</a></div>
 		<div class="menu <?php if($method=="myrates"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/myrates">My Rates</a></div>
@@ -36,7 +36,7 @@ $method = $this->router->fetch_method();
 		<div class="menu <?php if($method=="account"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/account">Edit My Profile</a></div>
                 <div class="menu <?php if($method=="mycompany"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/mycompany">My Company</a></div>
 				
-		<div class="menu <?php if($method=="buycredits"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/buycredits">Credits</a></div>
+		<div class="menu <?php if($method=="buycredits" || $method=="freecredits"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/buycredits">Credits</a></div>
                 <?php /*if($_SESSION['logistic_provider']['main']) {?><div class="menu <?php if($method=="colleagues"){ echo "active"; }?>"><a href="<?php echo site_url("lp"); ?>/colleagues">Colleagues</a></div><?php }*/?>
 	  </td>
 	</tr>

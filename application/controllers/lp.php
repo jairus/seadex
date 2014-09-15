@@ -14,7 +14,7 @@ class lp extends CI_Controller {
 	}
 	
 	
-	public function index(){
+	public function index($startl=0, $limit=100){
 		if(!$_SESSION['logistic_provider']['id']){
 			if(!trim($_SESSION['redirect'])&&trim($_GET['redirect'])){
 				$_SESSION['redirect'] = urldecode($_GET['redirect']);
@@ -41,7 +41,7 @@ class lp extends CI_Controller {
 				unset($_SESSION['redirect']);
 			}
 			else{
-				$this->dashboard();
+				$this->dashboard($startl, $limit);
 			}
 		}
 		unset($_SESSION['rfq']);
@@ -121,7 +121,6 @@ class lp extends CI_Controller {
 			}
 			$rfqdata = unserialize(base64_decode($rfq[0]['data']));
 			$rfqdata['id'] = $rfq[0]['id'];
-			$rfqdata['id'] = $rfq[0]['id'];
 			$rfqdata['bid_id'] = $rfq[0]['bid_id'];
 			$rfqdata['logistic_provider_id'] = $rfq[0]['logistic_provider_id'];
 			$rfqdata['views'] = $rfq[0]['views'];
@@ -150,7 +149,7 @@ class lp extends CI_Controller {
 			$data['rfqnextid'] = $rfqnextid;
 			$data['rfqprevid'] = $rfqprevid;		
 			//cost price
-			$credits = 2;
+			$credits = 0;
 				
 			if($action=='bid'){
 				if($_GET['bid_id']){
@@ -176,14 +175,14 @@ class lp extends CI_Controller {
 					$q = $this->db->query($sql);
 					$transaction = $q->result_array();
 					
-					if(isset($_GET['view'])&&$transaction[0]['id']){
+					if(isset($_GET['view'])&&($transaction[0]['id']||$credits==0)){
 						$data['view'] = 1;
 					}
 					else{
 						//if bought already
 						if($transaction[0]['id']||$credits==0){
 							$data['viewcontact'] = "View Contact";
-							$data['view'] = 1;
+							//$data['view'] = 1;
 						}
 						else{
 							
@@ -232,19 +231,19 @@ class lp extends CI_Controller {
 				$q = $this->db->query($sql);
 				$transaction = $q->result_array();
 				
-				if(isset($_GET['view'])&&$transaction[0]['id']){
+				if(isset($_GET['view'])&&($transaction[0]['id']||$credits==0)){
 					$data['view'] = 1;
 				}
 				else{
 					//if bought already
 					if($transaction[0]['id']||$credits==0){
 						$data['viewcontact'] = "View Contact";
-						$data['view'] = 1;
+						//$data['view'] = 1;
 					}
 					else{
 						
 						if(isset($_GET['view'])){
-							if($lp[0]['credits']>$credits){
+							if($lp[0]['credits']>=$credits){
 								$sql = "update `logistic_providers` set
 									`credits` = `credits` - ".$credits."
 									where `id` = '".$_SESSION['logistic_provider']['id']."'
@@ -286,7 +285,11 @@ class lp extends CI_Controller {
 		$this->dashboard();
 	}
 	
-	public function dashboard(){
+	
+	public function dashboard($startl=0, $limit=100){
+		if($startl<0){
+			$startl = 0;
+		}
 		if(!$_SESSION['logistic_provider']['id']){
 			$redirect = urlencode($_SERVER['REQUEST_URI']);
 			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
@@ -405,7 +408,7 @@ class lp extends CI_Controller {
 					`bid_id`=0 and 
 					(".$sqlext.") and 
 					(".$sqlext2.")
-					order by `id` desc limit 100";
+					order by `id` desc limit ".$startl.", ".$limit;
 				}
 				else if($_SESSION['searchfilter']['type']=="Route Search"){
 					$origin_country = explode("-",$_SESSION['searchfilter']['origin']['country']);
@@ -461,7 +464,7 @@ class lp extends CI_Controller {
 					dateadded
 					from `rfq` where `bid_id`=0 and ";
 					
-					$sql .= $sql_ext." order by `id` desc limit 100";
+					$sql .= $sql_ext." order by `id` desc limit ".$startl.", ".$limit;
 				}
 				
 				else if($_SESSION['searchfilter']['type']=="Country Search"){
@@ -504,7 +507,7 @@ class lp extends CI_Controller {
 					dateadded
 					from `rfq` where `bid_id`=0 and 
 					".$sqlext."
-					order by `id` desc limit 100";
+					order by `id` desc limit ".$startl.", ".$limit;
 				}
 				else if($_SESSION['searchfilter']['type']=="Search by Keywords"){
 					$keyword = trim($_SESSION['searchfilter']['keyword']);
@@ -535,7 +538,7 @@ class lp extends CI_Controller {
 					dateadded
 					from `rfq` where `bid_id`=0 and 
 					lower(`data_plain`) like '%".mysql_real_escape_string(trim($keyword))."%'
-					order by `id` desc limit 100";
+					order by `id` desc limit ".$startl.", ".$limit;
 					
 					//echo $sql;
 				}
@@ -580,7 +583,7 @@ class lp extends CI_Controller {
 						dateadded
 						from `rfq` where `bid_id`=0 and  ";
 						$sql .= "(".implode($sql_arr, " or ").")";
-						$sql .= " order by `id` desc limit 100";
+						$sql .= " order by `id` desc limit ".$startl.", ".$limit;
 					}
 				}
 				else{
@@ -606,7 +609,7 @@ class lp extends CI_Controller {
 					destination_date_utc,
 					views,
 					dateadded
-					from `rfq` where `bid_id`=0 order by `id` desc limit 100";
+					from `rfq` where `bid_id`=0 order by `id` desc limit ".$startl.", ".$limit;
 				}
 			}
 			else{
@@ -632,8 +635,10 @@ class lp extends CI_Controller {
 				destination_date_utc,
 				views,
 				dateadded
-				from `rfq` where `bid_id`=0 order by `id` desc limit 100";
+				from `rfq` where `bid_id`=0 order by `id` desc limit ".$startl.", ".$limit;
 			}
+			
+			
 			$q = $this->db->query($sql_cnt);
 			$count = $q->result_array();
 			$count = $count[0]['cnt'];
@@ -660,7 +665,7 @@ class lp extends CI_Controller {
 			$q = $this->db->query($sql);
 			$saved_search_filters = $q->result_array();
 			$data['saved_search_filters'] = $saved_search_filters;
-			
+			$data['startl'] = $startl;
 			
 			$this->load->view('sitelayout/header.php');
 			$this->load->view('sitelayout/nav.php');
@@ -1601,6 +1606,21 @@ The SeaDex team";
 		$q = $this->db->query($sql);
 		$lpx = $q->result_array();
 		$data['credits'] = $lpx[0]['credits'];
+		
+		//freecredits
+		$claimed = false;
+		$sql = "select * from `transactions` where `lpid`='".$_SESSION['logistic_provider']['id']."' and `action`='freecredit' order by `id` desc";
+		$q = $this->db->query($sql);
+		$transaction = $q->result_array();
+		if($transaction[0]['id']){
+			$monthnow = date("m", time());
+			$tmonth = date("m", strtotime($transaction[0]['dateadded']));
+			//if already claimed
+			if($monthnow == $tmonth){
+				$claimed = true;
+			}
+		}
+		$data['freecredit_claimed'] = $claimed;
 			
         $this->load->view('sitelayout/header.php');
         $this->load->view('sitelayout/nav.php');
@@ -1610,6 +1630,57 @@ The SeaDex team";
         $this->load->view('sitelayout/footer.php');
     }
 	
+	public function freecredits($claim=0){
+		if(!$_SESSION['logistic_provider']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
+			return 0;
+		}
+		
+		$freecredit = 10;
+		//freecredits
+		$claimed = false;
+		$sql = "select * from `transactions` where `lpid`='".$_SESSION['logistic_provider']['id']."' and `action`='freecredit' order by `id` desc";
+		$q = $this->db->query($sql);
+		$transaction = $q->result_array();
+		if($transaction[0]['id']){
+			$monthnow = date("m", time());
+			$tmonth = date("m", strtotime($transaction[0]['dateadded']));
+			//if already claimed
+			if($monthnow == $tmonth){
+				$claimed = true;
+			}
+		}
+		if($claim&&!$claimed){
+			$sql = "update `logistic_providers` set `credits` = `credits`+ ".$freecredit." where `id`='".$_SESSION['logistic_provider']['id']."'";
+			$q = $this->db->query($sql);		
+			$sql = "insert into transactions set
+				`lpid` = '".$_SESSION['logistic_provider']['id']."',
+				`rfqid` = '',
+				`action` = 'freecredit',
+				`credits` = ".$freecredit.",
+				`dateadded` = NOW()
+			";
+			$this->db->query($sql);
+			$claimed = true;
+			$data['claim'] = 1;
+		}
+		$data['freecredit'] = $freecredit;
+		$data['freecredit_claimed'] = $claimed;
+		
+		//current credits
+		$sql = "select * from `logistic_providers` where `id`='".$this->user_id."'";
+		$q = $this->db->query($sql);
+		$lpx = $q->result_array();
+		$data['credits'] = $lpx[0]['credits'];
+			
+        $this->load->view('sitelayout/header.php');
+        $this->load->view('sitelayout/nav.php');
+        $content = $this->load->view('lp/buycredits.php', $data, true);
+        $data['content'] = $content;
+        $content = $this->load->view('lp/content.php', $data);
+        $this->load->view('sitelayout/footer.php');
+	}
 	
 	public function ipn(){
 		$str = print_r($_GET, 1);

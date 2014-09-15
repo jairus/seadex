@@ -46,7 +46,7 @@
 			  </thead>
 			  <tbody>
 				<tr>
-					<td class="text-center">
+					<td class="text-center" style='font-size:24px'>
 						<?php echo $credits+0; ?> SeaDex Credits<br />
 						<?php
 						if(isset($_GET['success'])){
@@ -131,6 +131,22 @@
 							<?php
 						}
 						else{
+							if($freecredit_claimed){
+								if($claim){
+									?>
+									<div class="text-center" style="padding:40px; padding-top:20px">
+									<a style="color:green; font-size:16px">You have successfully claimed <?php echo $freecredit; ?> Free SeaDex Credits!</a>
+									</div>
+									<?php
+								}
+							}
+							else{
+								?>
+								<div class="text-center" style="padding:40px; padding-top:20px; font-size:16px">
+								<a href="<?php echo site_url("lp/freecredits/1"); ?>">Click Here to Get Your Monthly 10 SeaDex Credits for Free<!--<img src="<?php echo site_url("media/seadex_credits_50.jpg"); ?>" />--></a>
+								</div>
+								<?php
+							}
 							?>
 							<div class="text-center" style="padding:40px; padding-top:20px">
 							<a href="<?php echo site_url("lp/buycredits/50"); ?>"><img src="<?php echo site_url("media/seadex_credits_50.jpg"); ?>" /></a>

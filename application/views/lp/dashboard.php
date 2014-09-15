@@ -47,7 +47,7 @@
 	  <h2 class="text-right">Customer RFQs</h2>
 	  <div class="table-responsive">
 		<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-2">
 			
 			<?php
 			include_once(dirname(__FILE__)."/dash_menu.php");
@@ -439,20 +439,21 @@
 			  </tbody>
 			</table>
 		</div>
-		<div class="col-md-9">
+		<div class="col-md-10">
 			<table class="table table-striped">
 			  <thead>
 				<tr>
 				  <th class="start">RFQ&nbsp;#</th>
+				  <th width="10">FCL</th>
 				  <th width="17%">Origin</th>
 				  <th width="17%">Destination</th>
-				  <th width="13.3%">Pickup Date</th>
-				  <th width="13.3%">Delivery Date</th>
+				  <th width="10%">Pickup Date</th>
+				  <th width="10%">Delivery Date</th>
 				  <!--
 				  <th width="2.5%">Views</th>
 				  <th width="2.5%">Bids</th>
 				  -->
-				  <th width="18.3%">Date Added</th>
+				  <th width="15%">Date Added</th>
 				  <th class="end" width="19%"></th>
 				</tr>
 			  </thead>
@@ -472,6 +473,40 @@
 						  ?>
 					  </td>
 					  <td>
+						<?php
+							
+						  if($_GET['all']||1){
+							//echo "<pre>";
+							
+							$sql = "select `data` from `rfq` where `id`='".$rfqs[$i]['id']."' limit 1";
+							$q = $this->db->query($sql);
+							$rfqx = $q->result_array();
+							
+							$rfqdata = unserialize(base64_decode($rfqx[0]['data']));
+							$rfqdata['id'] = $rfqx[0]['id'];
+							$rfqdata['bid_id'] = $rfqx[0]['bid_id'];
+							$rfqdata['logistic_provider_id'] = $rfqx[0]['logistic_provider_id'];
+							$rfqdata['views'] = $rfqx[0]['views'];
+							$rfqdata['dateaccepted'] = $rfqx[0]['dateaccepted'];
+							//print_r($rfqdata);
+							$cargo = $rfqdata['cargo'];
+							$k = count($cargo);
+							$container = array();
+							for($j=0; $j<$k; $j++){
+								if(trim(strtolower($cargo[$j]['details']['in_container']))=='yes'){
+									$container[] = $cargo[$j]['details']['container_size'];
+								}
+							}
+							if(count($container)){
+								echo implode($container, ",");
+							}
+							else{
+								echo "-";
+							}
+						  }
+						?>
+					  </td>
+					  <td>
 						  <?php
 						  $city = "";
 						  if(trim($rfqs[$i]['origin_city'])){
@@ -489,6 +524,7 @@
 						  echo $rfqs[$i]['destination_port']." - ".$city.$rfqs[$i]['destination_country'];
 						  ?>
 					  </td>
+
 					  <td>
 						<?php
 						  echo date("M d, Y", strtotime($rfqs[$i]['origin_date']));
@@ -538,8 +574,48 @@
 					<?php
 				}
 				?>
+				<tr>
+					<td colspan=20 class="text-center">
+						<?php
+						if($startl>0){
+							?>
+							<input type="button" class="prev" value="< Previous" />
+							<?php
+						}
+						?>
+						<input type="button" class="next" value="Next >" />&nbsp;&nbsp;&nbsp;
+						Jump to page: <select class="paging">
+							<?php
+							for($m=0; $m<10; $m++){
+								if($startl==($m*100)){
+									?>
+									<option value='<?php echo $m*100; ?>' selected><?php echo $m+1; ?></option>
+									<?php
+								}
+								else{
+									?>
+									<option value='<?php echo $m*100; ?>'><?php echo $m+1; ?></option>
+									<?php
+								}
+							}
+							?>
+						</select>
+					</td>
+				</tr>
 			  </tbody>
 			</table>
 		  </div>
 		 </div>
 	  </div>
+	  <script>
+		jQuery(".prev").click(function(){
+			self.location="<?php echo site_url("lp"); ?>/dashboard/<?php echo $startl-100; ?>";
+		});
+		jQuery(".next").click(function(){
+			self.location="<?php echo site_url("lp"); ?>/dashboard/<?php echo $startl+100; ?>";
+		});
+		jQuery(".paging").change(function(){
+			self.location="<?php echo site_url("lp"); ?>/dashboard/"+jQuery(this).val();
+		
+		});
+	  </script>

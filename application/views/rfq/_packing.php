@@ -61,15 +61,20 @@
 			Length
 			<select class="form-control" onchange="sameify(jQuery(this),this.value)"  style="width:80px; display:inline" type="text" name="packing[length_unit][]" >
 				<option value="">Select</option>
-                                <option value='m'>m</option>
+				<!--<option value='cm'>cm</option>-->
+				<option value='m'>m</option>
+				<!--<option value='in'>in</option>-->
 				<option value='ft'>ft</option>
+
 			</select>
 			</th>
 			<th width="25%">
 			Width
 			<select class="form-control" onchange="sameify(jQuery(this),this.value)"  style="width:80px; display:inline" type="text" name="packing[width_unit][]" >
 				<option value="">Select</option>
-                                <option value='m'>m</option>
+                <!--<option value='cm'>cm</option>-->
+				<option value='m'>m</option>
+				<!--<option value='in'>in</option>-->
 				<option value='ft'>ft</option>
 			</select>
 			</th>
@@ -77,7 +82,7 @@
 			Height
 			<select class="form-control" onchange="sameify(jQuery(this),this.value)"  style="width:80px; display:inline" type="text" name="packing[height_unit][]" >
 				<option value="">Select</option>
-                                <option value='m'>m</option>
+                <option value='m'>m</option>
 				<option value='ft'>ft</option>
 			</select>
 			</th>

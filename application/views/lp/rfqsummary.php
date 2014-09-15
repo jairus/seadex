@@ -31,7 +31,7 @@ jQuery(function() {
 		<?php
 		if($credits>0){
 			?>
-			if(confirm("Viewing this contact will cost <?php echo $credits; ?> SeaDex Credits. Are you sure you want to view the contact details?")){
+			if(confirm("Viewing this contact will deduct <?php echo $credits; ?> SeaDex Credits. Are you sure you want to view the contact details?")){
 				self.location='?view';
 			}
 			<?php
@@ -140,179 +140,6 @@ if($rfq['userprofile']['contact_number']){
 					</th>
 				</tr>
 				<?php
-				if($message){
-					?>
-					<tr><td colspan="2" style="text-align: center; color:green">
-					<?php 
-					echo $message;
-					?>
-					</td></tr>
-					<?php
-				}
-				if($error){
-					?>
-					<tr><td colspan="2" style="text-align: center; color:red">
-					<?php 
-					echo $error;
-					?>
-					</td></tr>
-					<?php
-				}
-				if(!isset($view)){
-					?>
-					<tr><td colspan="2" style="text-align: center">
-					<input type="button" class="btn btn-default" style="margin:20px;" value="<?php echo $viewcontact; ?>" id="contact_info_trigger" />
-					<?php
-					if(isset($buy)){
-						echo "<div style='padding-bottom:20px'>".$buy."</div>";
-					}
-					?>
-					</td></tr>
-					<?php
-				}
-				?>
-				
-				<?php
-				if(isset($view)){
-					?>
-					<tr>
-						<th colspan=2 class="text-center"  style="background:#f0f0f0">
-						Customer Contact Information
-						</th>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">Customer Type</th>
-						<td width="50%"><?php echo ucfirst($rfq['customer_type']); ?></td>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">E-mail</th>
-						<td width="50%"><?php echo $rfq['userprofile']['email']; ?></td>
-					</tr>
-					<?php
-					if($rfq['userprofile']['company_name']){
-						?>
-						<tr class="contact_info">
-							<th width="50%">Company Name</th>
-							<td width="50%"><?php echo $rfq['userprofile']['company_name']; ?></td>
-						</tr>
-						<?php
-					}
-					?>
-					<tr class="contact_info">
-						<th width="50%">First Name</th>
-						<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">Last Name</th>
-						<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">Country</th>
-						<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">Contact Number</th>
-						<td width="50%"><?php echo $rfq['userprofile']['contactnumber']; ?></td>
-					</tr>
-					<?php
-					if(isset($rfq['shipping_info']['type_of_company_to_quote'])){
-						?>
-						<tr class="contact_info">
-							<th width="50%">RFQ for</th>
-							<td width="50%">
-							<?php echo $rfq['shipping_info']['type_of_company_to_quote']; ?>
-							</td>
-						</tr>
-						<?php
-					}
-				}
-				if(isset($rfq['shipping_info'])){
-					?>
-					<tr>
-						<th colspan=2 class="text-center"  style="background:#f0f0f0">
-						Shipping Information
-						</th>
-					</tr>
-					<tr>
-						<td colspan=2  style="background:#fafafa">
-							<table class="table table-bordered">
-								<tr>
-									<th width="50%">Origin</th>
-									<th width="50%">Destination</th>
-								</tr>
-								<tr>
-									<td width="50%"><b>Country:</b> <?php echo $rfq['shipping_info']['origin']['country']; ?></td>
-									<td width="50%"><b>Country:</b> <?php echo $rfq['shipping_info']['destination']['country']; ?></td>
-								</tr>
-								<tr>
-									<td width="50%"><b>City:</b> <?php echo $rfq['shipping_info']['origin']['city']; ?></td>
-									<td width="50%"><b>City:</b> <?php echo $rfq['shipping_info']['destination']['city']; ?></td>
-								</tr>
-								<tr>
-									<td width="50%"><b>Port:</b> <?php echo $rfq['shipping_info']['origin']['port']; ?></td>
-									<td width="50%"><b>Port:</b> <?php echo $rfq['shipping_info']['destination']['port']; ?></td>
-								</tr>
-								<tr>
-									<td width="50%"><b>Pickup Date (m/d/y):</b> <?php echo $rfq['shipping_info']['origin']['date']; ?></td>
-									<td width="50%"><b>Delivery Date (m/d/y):</b> <?php echo $rfq['shipping_info']['destination']['date']; ?></td>
-								</tr>
-								<tr>
-									<td width="50%"><b>Alternate Pickup Date:</b> <?php echo $rfq['shipping_info']['origin']['alternate_date']; ?></td>
-									<td width="50%"><b>Alternate Delivery Date:</b> <?php echo $rfq['shipping_info']['destination']['alternate_date']; ?></td>
-								</tr>
-								<!--
-								<tr>
-									<td width="50%"><?php echo $rfq['shipping_info']['origin']['time_zone']; ?> GMT</td>
-									<td width="50%"><?php echo $rfq['shipping_info']['destination']['time_zone']; ?>  GMT</td>
-								</tr>
-								-->
-							</table>
-							<style>
-								#map-canvas {
-								width: 500px;
-								height:300px;
-								margin: auto;
-								padding: 0px
-							  }
-							</style>
-							<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-							<script>
-							function initialize() {
-							  var myLatlng = new google.maps.LatLng(<?php echo $rfq['shipping_info']['origin']['port_coords']['lat']; ?>,<?php echo $rfq['shipping_info']['origin']['port_coords']['lon']; ?>);
-							  
-							  //var myLatlngX = new google.maps.LatLng(<?php echo $rfq['shipping_info']['origin']['port_coords']['lat']-$rfq['shipping_info']['destination']['port_coords']['lat']; ?>,<?php echo $rfq['shipping_info']['origin']['port_coords']['lon']-$rfq['shipping_info']['destination']['port_coords']['lon']; ?>);
-							  
-							  var mapOptions = {
-								zoom: 2,
-								center: myLatlng
-							  }
-							  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-							  
-							  var marker = new google.maps.Marker({
-								  position: myLatlng,
-								  map: map,
-								  title: "<?php echo htmlentitiesX($rfq['shipping_info']['origin']['port_coords']['name']); ?>"
-							  });
-							  
-							  var myLatlng2 = new google.maps.LatLng(<?php echo $rfq['shipping_info']['destination']['port_coords']['lat']; ?>,<?php echo $rfq['shipping_info']['destination']['port_coords']['lon']; ?>);
-							  var marker2 = new google.maps.Marker({
-								  position: myLatlng2,
-								  map: map,
-								  title: "<?php echo htmlentitiesX($rfq['shipping_info']['destination']['port_coords']['name']); ?>"
-							  });
-							 
-							}
-
-							google.maps.event.addDomListener(window, 'load', initialize);
-							</script>
-							<div id="map-canvas" ></div>
-							
-							
-						</td>
-					</tr>
-					<?php
-				}
 				$t = count($rfq['cargo']);
 				if($t){
 					?>
@@ -689,23 +516,198 @@ if($rfq['userprofile']['contact_number']){
 							
 						</td>
 					</tr>
+					
+					<?php
+				}
+				if($message){
+					?>
+					<tr><td colspan="2" style="text-align: center; color:green">
+					<?php 
+					echo $message;
+					?>
+					</td></tr>
+					<?php
+				}
+				if($error){
+					?>
+					<tr><td colspan="2" style="text-align: center; color:red">
+					<?php 
+					echo $error;
+					?>
+					</td></tr>
+					<?php
+				}
+				if(!isset($view)){
+					?>
+					<tr><td colspan="2" style="text-align: center">
+					<input type="button" class="btn btn-default" style="margin:20px;" value="<?php echo $viewcontact; ?>" id="contact_info_trigger" />
+					<?php
+					if(isset($buy)){
+						echo "<div style='padding-bottom:20px'>".$buy."</div>";
+					}
+					?>
+					</td></tr>
+					<?php
+				}
+				?>
+				
+				<?php
+				if(isset($view)){
+					?>
 					<tr>
-						<td colspan=2 class="text-center">
-							<input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
-							<input type="button" class="btn btn-primary btn-default" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
-							<?php
-							if($rfqprevid){
-								?><input type="button" class="btn btn-default" style="margin:20px;" value="Previous RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqprevid ?>'"><?php
+						<th colspan=2 class="text-center"  style="background:#f0f0f0">
+						Customer Contact Information
+						</th>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Customer Type</th>
+						<td width="50%"><?php echo ucfirst($rfq['customer_type']); ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">E-mail</th>
+						<td width="50%"><?php echo $rfq['userprofile']['email']; ?></td>
+					</tr>
+					<?php
+					if($rfq['userprofile']['company_name']){
+						?>
+						<tr class="contact_info">
+							<th width="50%">Company Name</th>
+							<td width="50%"><?php echo $rfq['userprofile']['company_name']; ?></td>
+						</tr>
+						<?php
+					}
+					?>
+					<tr class="contact_info">
+						<th width="50%">First Name</th>
+						<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Last Name</th>
+						<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Country</th>
+						<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Contact Number</th>
+						<td width="50%"><?php echo $rfq['userprofile']['contactnumber']; ?></td>
+					</tr>
+					<?php
+					if(isset($rfq['shipping_info']['type_of_company_to_quote'])){
+						?>
+						<tr class="contact_info">
+							<th width="50%">RFQ for</th>
+							<td width="50%">
+							<?php echo $rfq['shipping_info']['type_of_company_to_quote']; ?>
+							</td>
+						</tr>
+						<?php
+					}
+				}
+				if(isset($rfq['shipping_info'])){
+					?>
+					<tr>
+						<th colspan=2 class="text-center"  style="background:#f0f0f0">
+						Shipping Information
+						</th>
+					</tr>
+					<tr>
+						<td colspan=2  style="background:#fafafa">
+							<table class="table table-bordered">
+								<tr>
+									<th width="50%">Origin</th>
+									<th width="50%">Destination</th>
+								</tr>
+								<tr>
+									<td width="50%"><b>Country:</b> <?php echo $rfq['shipping_info']['origin']['country']; ?></td>
+									<td width="50%"><b>Country:</b> <?php echo $rfq['shipping_info']['destination']['country']; ?></td>
+								</tr>
+								<tr>
+									<td width="50%"><b>City:</b> <?php echo $rfq['shipping_info']['origin']['city']; ?></td>
+									<td width="50%"><b>City:</b> <?php echo $rfq['shipping_info']['destination']['city']; ?></td>
+								</tr>
+								<tr>
+									<td width="50%"><b>Port:</b> <?php echo $rfq['shipping_info']['origin']['port']; ?></td>
+									<td width="50%"><b>Port:</b> <?php echo $rfq['shipping_info']['destination']['port']; ?></td>
+								</tr>
+								<tr>
+									<td width="50%"><b>Pickup Date (m/d/y):</b> <?php echo $rfq['shipping_info']['origin']['date']; ?></td>
+									<td width="50%"><b>Delivery Date (m/d/y):</b> <?php echo $rfq['shipping_info']['destination']['date']; ?></td>
+								</tr>
+								<tr>
+									<td width="50%"><b>Alternate Pickup Date:</b> <?php echo $rfq['shipping_info']['origin']['alternate_date']; ?></td>
+									<td width="50%"><b>Alternate Delivery Date:</b> <?php echo $rfq['shipping_info']['destination']['alternate_date']; ?></td>
+								</tr>
+								<!--
+								<tr>
+									<td width="50%"><?php echo $rfq['shipping_info']['origin']['time_zone']; ?> GMT</td>
+									<td width="50%"><?php echo $rfq['shipping_info']['destination']['time_zone']; ?>  GMT</td>
+								</tr>
+								-->
+							</table>
+							<style>
+								#map-canvas {
+								width: 500px;
+								height:300px;
+								margin: auto;
+								padding: 0px
+							  }
+							</style>
+							<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+							<script>
+							function initialize() {
+							  var myLatlng = new google.maps.LatLng(<?php echo $rfq['shipping_info']['origin']['port_coords']['lat']; ?>,<?php echo $rfq['shipping_info']['origin']['port_coords']['lon']; ?>);
+							  
+							  //var myLatlngX = new google.maps.LatLng(<?php echo $rfq['shipping_info']['origin']['port_coords']['lat']-$rfq['shipping_info']['destination']['port_coords']['lat']; ?>,<?php echo $rfq['shipping_info']['origin']['port_coords']['lon']-$rfq['shipping_info']['destination']['port_coords']['lon']; ?>);
+							  
+							  var mapOptions = {
+								zoom: 2,
+								center: myLatlng
+							  }
+							  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+							  
+							  var marker = new google.maps.Marker({
+								  position: myLatlng,
+								  map: map,
+								  title: "<?php echo htmlentitiesX($rfq['shipping_info']['origin']['port_coords']['name']); ?>"
+							  });
+							  
+							  var myLatlng2 = new google.maps.LatLng(<?php echo $rfq['shipping_info']['destination']['port_coords']['lat']; ?>,<?php echo $rfq['shipping_info']['destination']['port_coords']['lon']; ?>);
+							  var marker2 = new google.maps.Marker({
+								  position: myLatlng2,
+								  map: map,
+								  title: "<?php echo htmlentitiesX($rfq['shipping_info']['destination']['port_coords']['name']); ?>"
+							  });
+							 
 							}
-							if($rfqnextid){
-								?><input type="button" class="btn btn-default" style="margin:20px;" value="Next RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqnextid ?>'"><?php
-							}
-							?>
+
+							google.maps.event.addDomListener(window, 'load', initialize);
+							</script>
+							<div id="map-canvas" ></div>
+							
+							
 						</td>
 					</tr>
 					<?php
 				}
+				
 				?>
+				<tr>
+					<td colspan=2 class="text-center">
+						<input type="button" class="btn btn-default" style="margin:20px;" value="Back to Dashboard" onclick="self.location='<?php echo site_url("lp") ?>'">
+						<input type="button" class="btn btn-primary btn-default" style="margin:20px;" value="Bid on this RFQ" onclick="bid()">
+						<?php
+						if($rfqprevid){
+							?><input type="button" class="btn btn-default" style="margin:20px;" value="Previous RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqprevid ?>'"><?php
+						}
+						if($rfqnextid){
+							?><input type="button" class="btn btn-default" style="margin:20px;" value="Next RFQ" onclick="self.location='<?php echo site_url("lp/rfq")."/".$rfqnextid ?>'"><?php
+						}
+						?>
+					</td>
+				</tr>
 			</table>
 			<?php
 			//echo "<pre>";

@@ -71,7 +71,7 @@ jQuery(function() {
 		<?php
 		if($credits>0){
 			?>
-			if(confirm("Viewing this contact will cost <?php echo $credits; ?> SeaDex Credits. Are you sure you want to view the contact details?")){
+			if(confirm("Viewing this contact will deduct <?php echo $credits; ?> SeaDex Credits. Are you sure you want to view the contact details?")){
 				self.location='?view';
 			}
 			<?php

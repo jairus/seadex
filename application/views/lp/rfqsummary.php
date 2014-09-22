@@ -135,7 +135,7 @@ if($rfq['userprofile']['contact_number']){
 		<div class="col-md-12 text-left">
 			<table class="table table-bordered">
 				<tr>
-					<th colspan=2 class="text-center"  style="background:#f0f0f0">
+					<th colspan=2 class="text-center"  style="background:#0E202E; color: white;">
 						RFQ # <?php echo $rfq['id'] ?>
 					</th>
 				</tr>
@@ -143,11 +143,13 @@ if($rfq['userprofile']['contact_number']){
 				$t = count($rfq['cargo']);
 				if($t){
 					?>
+					<!--
 					<tr>
 						<th colspan=2 class="text-center" style="background:#f0f0f0">
 						Cargo
 						</th>
 					</tr>
+					-->
 					<tr>
 						<td colspan=2 style="background:#fafafa">
 							
@@ -214,6 +216,31 @@ if($rfq['userprofile']['contact_number']){
 																<td>
 																<?php
 																echo $cargo['details']['container_size'];
+																?></td>
+															</tr>
+															<?php
+															if(trim($cargo['details']['container_type'])){
+																?>
+																<tr>
+																	<th>Container Type</th>
+																	<td>
+																	<?php
+																	echo $cargo['details']['container_type'];
+																	?></td>
+																</tr>
+																<?php
+																}
+															?>
+															<tr>
+																<th>Number of Containers</th>
+																<td>
+																<?php
+																if(!trim($cargo['details']['number_of_containers'])){
+																	echo "1";
+																}
+																else{
+																	echo $cargo['details']['number_of_containers'];
+																}
 																?></td>
 															</tr>
 															<?php
@@ -335,6 +362,31 @@ if($rfq['userprofile']['contact_number']){
 															?></td>
 														</tr>
 														<?php
+														if(trim($cargo['details']['container_type'])){
+															?>
+															<tr>
+																<th>Container Type</th>
+																<td>
+																<?php
+																echo $cargo['details']['container_type'];
+																?></td>
+															</tr>
+															<?php
+															}
+														?>
+														<tr>
+															<th>Number of Containers</th>
+															<td>
+															<?php
+															if(!trim($cargo['details']['number_of_containers'])){
+																echo "1";
+															}
+															else{
+																echo $cargo['details']['number_of_containers'];
+															}
+															?></td>
+														</tr>
+														<?php
 													}
 													else{
 														if($cargo['details']['item_in']){
@@ -439,6 +491,31 @@ if($rfq['userprofile']['contact_number']){
 															?></td>
 														</tr>
 														<?php
+														if(trim($cargo['details']['container_type'])){
+															?>
+															<tr>
+																<th>Container Type</th>
+																<td>
+																<?php
+																echo $cargo['details']['container_type'];
+																?></td>
+															</tr>
+															<?php
+															}
+														?>
+														<tr>
+															<th>Number of Containers</th>
+															<td>
+															<?php
+															if(!trim($cargo['details']['number_of_containers'])){
+																echo "1";
+															}
+															else{
+																echo $cargo['details']['number_of_containers'];
+															}
+															?></td>
+														</tr>
+														<?php
 													}
 													else{
 														
@@ -519,96 +596,11 @@ if($rfq['userprofile']['contact_number']){
 					
 					<?php
 				}
-				if($message){
-					?>
-					<tr><td colspan="2" style="text-align: center; color:green">
-					<?php 
-					echo $message;
-					?>
-					</td></tr>
-					<?php
-				}
-				if($error){
-					?>
-					<tr><td colspan="2" style="text-align: center; color:red">
-					<?php 
-					echo $error;
-					?>
-					</td></tr>
-					<?php
-				}
-				if(!isset($view)){
-					?>
-					<tr><td colspan="2" style="text-align: center">
-					<input type="button" class="btn btn-default" style="margin:20px;" value="<?php echo $viewcontact; ?>" id="contact_info_trigger" />
-					<?php
-					if(isset($buy)){
-						echo "<div style='padding-bottom:20px'>".$buy."</div>";
-					}
-					?>
-					</td></tr>
-					<?php
-				}
-				?>
 				
-				<?php
-				if(isset($view)){
-					?>
-					<tr>
-						<th colspan=2 class="text-center"  style="background:#f0f0f0">
-						Customer Contact Information
-						</th>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">Customer Type</th>
-						<td width="50%"><?php echo ucfirst($rfq['customer_type']); ?></td>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">E-mail</th>
-						<td width="50%"><?php echo $rfq['userprofile']['email']; ?></td>
-					</tr>
-					<?php
-					if($rfq['userprofile']['company_name']){
-						?>
-						<tr class="contact_info">
-							<th width="50%">Company Name</th>
-							<td width="50%"><?php echo $rfq['userprofile']['company_name']; ?></td>
-						</tr>
-						<?php
-					}
-					?>
-					<tr class="contact_info">
-						<th width="50%">First Name</th>
-						<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">Last Name</th>
-						<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">Country</th>
-						<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">Contact Number</th>
-						<td width="50%"><?php echo $rfq['userprofile']['contactnumber']; ?></td>
-					</tr>
-					<?php
-					if(isset($rfq['shipping_info']['type_of_company_to_quote'])){
-						?>
-						<tr class="contact_info">
-							<th width="50%">RFQ for</th>
-							<td width="50%">
-							<?php echo $rfq['shipping_info']['type_of_company_to_quote']; ?>
-							</td>
-						</tr>
-						<?php
-					}
-				}
 				if(isset($rfq['shipping_info'])){
 					?>
 					<tr>
-						<th colspan=2 class="text-center"  style="background:#f0f0f0">
+						<th colspan=2 class="text-center"  style="background:#0E202E; color: white;">
 						Shipping Information
 						</th>
 					</tr>
@@ -691,6 +683,93 @@ if($rfq['userprofile']['contact_number']){
 						</td>
 					</tr>
 					<?php
+				}
+				
+				if($message){
+					?>
+					<tr><td colspan="2" style="text-align: center; color:green">
+					<?php 
+					echo $message;
+					?>
+					</td></tr>
+					<?php
+				}
+				if($error){
+					?>
+					<tr><td colspan="2" style="text-align: center; color:red">
+					<?php 
+					echo $error;
+					?>
+					</td></tr>
+					<?php
+				}
+				if(!isset($view)){
+					?>
+					<tr><td colspan="2" style="text-align: center">
+					<input type="button" class="btn btn-default" style="margin:20px;" value="<?php echo $viewcontact; ?>" id="contact_info_trigger" />
+					<?php
+					if(isset($buy)){
+						echo "<div style='padding-bottom:20px'>".$buy."</div>";
+					}
+					?>
+					</td></tr>
+					<?php
+				}
+				?>
+				
+				<?php
+				if(isset($view)){
+					?>
+					<tr>
+						<th colspan=2 class="text-center"  style="background:#0E202E; color: white;">
+						Customer Contact Information
+						</th>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Customer Type</th>
+						<td width="50%"><?php echo ucfirst($rfq['customer_type']); ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">E-mail</th>
+						<td width="50%"><?php echo $rfq['userprofile']['email']; ?></td>
+					</tr>
+					<?php
+					if($rfq['userprofile']['company_name']){
+						?>
+						<tr class="contact_info">
+							<th width="50%">Company Name</th>
+							<td width="50%"><?php echo $rfq['userprofile']['company_name']; ?></td>
+						</tr>
+						<?php
+					}
+					?>
+					<tr class="contact_info">
+						<th width="50%">First Name</th>
+						<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Last Name</th>
+						<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Country</th>
+						<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
+					</tr>
+					<tr class="contact_info">
+						<th width="50%">Contact Number</th>
+						<td width="50%"><?php echo $rfq['userprofile']['contactnumber']; ?></td>
+					</tr>
+					<?php
+					if(isset($rfq['shipping_info']['type_of_company_to_quote'])){
+						?>
+						<tr class="contact_info">
+							<th width="50%">RFQ for</th>
+							<td width="50%">
+							<?php echo $rfq['shipping_info']['type_of_company_to_quote']; ?>
+							</td>
+						</tr>
+						<?php
+					}
 				}
 				
 				?>

@@ -313,14 +313,19 @@ class Lp_model extends CI_Model {
         $sql = "SELECT id,company_id FROM `company_users` WHERE user_id=?";
         $query = $this->db->query($sql, array($user_id));
         
-        $_SESSION['logistic_provider']['company']['approved'] = (int) ($created_by == $user_id);
-
+        $approved = (int) ($created_by == $user_id);
+        
+        // When currently logged-in.
+        if(isset($_SESSION['logistic_provider']) && ! empty($_SESSION['logistic_provider'])) {
+            $_SESSION['logistic_provider']['company']['approved'] = $approved;
+        }
+        
         if($query->num_rows()) { // Then, just Update.
             
             $id = $query->row()->id;
             
             $sql = "UPDATE `company_users` SET company_id=?,approved=? WHERE id=?";
-            $this->db->query($sql, array($company_id, $_SESSION['logistic_provider']['company']['approved'], $id));
+            $this->db->query($sql, array($company_id, $approved, $id));
             
             // @start: Loose from being a main account every time assigned to a new Company (if and only if he/she's not the creator of that Company).
             if($main_account && $created_by != $user_id) {
@@ -334,7 +339,7 @@ class Lp_model extends CI_Model {
         } else { // Else, insert.
             
             $sql = "INSERT INTO `company_users` SET company_id=?,user_id=?,approved=?,created=NOW()";
-            $this->db->query($sql, array($company_id, $user_id, $_SESSION['logistic_provider']['company']['approved']));
+            $this->db->query($sql, array($company_id, $user_id, $approved));
             $id = $this->db->insert_id();
         }
         

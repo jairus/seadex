@@ -1,6 +1,6 @@
 <script>
 function submitRegistration(){
-		if(jQuery("#tor")[0].checked&&jQuery("#sa")[0].checked){
+		if(jQuery("#sa")[0].checked){
 			data = jQuery("#registerform").serialize();
 			jQuery.ajax({
 			  type: "POST",
@@ -15,7 +15,7 @@ function submitRegistration(){
 		else{
 			
 			if(!jQuery("#sa")[0].checked){
-				alert("You must accept the Sales Agreement before you proceed.");
+				alert("You must accept the Sales Agreement and Terms and Conditions before you proceed.");
 			}
 			else if(!jQuery("#tor")[0].checked){
 				alert("You must accept the Terms and Conditions before you proceed.");
@@ -117,15 +117,18 @@ function alertX(msg){
 			  <div class="form-group">
 				<label class="col-sm-3 control-label"></label>
 				<div class="col-sm-9">
-					<input type="checkbox" id="sa" name="sa" value="yes" /> &nbsp;&nbsp;&nbsp;I accept the <a href="#" onclick="salesAgreement(); return false; ">Sales Agreement</a>
+					<input type="checkbox" id="sa" name="sa" value="yes" /> &nbsp;&nbsp;&nbsp;I accept the <a href="#" onclick="salesAgreement(); return false; " style="text-decoration:underline">Sales Agreement</a> and 
+					<a target="_blank" href="<?php echo site_url("lp/tor");?>" style="text-decoration:underline">Terms and Conditions</a>
 				</div>
 			  </div>
+			  <!--
 			  <div class="form-group">
 				<label class="col-sm-3 control-label"></label>
 				<div class="col-sm-9">
 					<input type="checkbox" id="tor" name="tor" value="yes" /> &nbsp;&nbsp;&nbsp;I accept the <a target="_blank" href="<?php echo site_url("lp/tor");?>">Terms and Conditions</a>
 				</div>
 			  </div>
+			  -->
 			  <div class="form-group">
 				<label class="col-sm-3 control-label"></label>
 				<div class="col-sm-9">

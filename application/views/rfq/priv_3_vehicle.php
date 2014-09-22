@@ -57,7 +57,11 @@
 				jQuery(".in_container .form-control").attr("disabled", true);
 				if(val=="Yes"){
 					jQuery("#container_size").show();
-					jQuery("#container_size .form-control").attr("disabled", false)
+					jQuery("#container_size .form-control").attr("disabled", false);
+					jQuery("#container_count").show();
+					jQuery("#container_count .form-control").attr("disabled", false);
+					jQuery("#container_type").show();
+					jQuery("#container_type .form-control").attr("disabled", false);
 				}
 				else{
 					jQuery("#packing").show();
@@ -98,7 +102,7 @@
 					}
 					</script>
 					<select type="text" class="form-control" name='container_size' id="container_size_select" onchange="containerSize(this.value)" >
-                                                <option value="">Please select</option>
+                        <option value="">Please select</option>
 						<option value='20 ft'>20 ft / 6 m</option>
 						<option value='40 ft'>40 ft / 12 m</option>
 						<option value='45 ft'>45 ft / 13.7 m</option>
@@ -112,7 +116,26 @@
 					<input id="container_size_text" class="form-control" type="text" disabled placeholder="Specify e.g. 20 ft , 6 meters" style="display:none">
 				</div>
 			</div>
-			
+			<div class="form-group dependents in_container" id="container_type" >
+				<label class="col-sm-3 control-label">Type of Container</label>
+				<div class="col-sm-9">
+					<select type="text" class="form-control" name='container_type' >
+						<option value="">Please select</option>
+						<option value='Platforms'>Platforms</option>
+						<option value='Ventilated Containers'>Ventilated Containers</option>
+						<option value='Insulated'>Insulated</option>
+						<option value='Refrigerated'>Refrigerated</option>
+						<option value='Bulk Containers'>Bulk Containers</option>
+						<option value='Tank Containers'>Tank Containers</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group dependents in_container" id="container_count" >
+				<label class="col-sm-3 control-label">Number of containers?</label>
+				<div class="col-sm-9">
+					<input id="number_of_containers" class="form-control" type="text" value="1">
+				</div>
+			</div>
 			
 			<div class="form-group dependents in_container" id="packing">
 				

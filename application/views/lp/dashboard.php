@@ -50,7 +50,9 @@
 		<div class="col-md-2">
 			
 			<?php
-			include_once(dirname(__FILE__)."/dash_menu.php");
+			if($_SESSION['logistic_provider']['id']){
+				include_once(dirname(__FILE__)."/dash_menu.php");
+			}
 			?>
 			<table class="table table-striped">
 			  <thead>
@@ -102,6 +104,7 @@
 					<option value="Country Search">Country Search</option>
 					<option value="Search by Keywords">Search by Keywords</option>
 					<option value="Categories">Categories</option>
+					<option value="Container">Container</option>
 					<option value="Any" selected>Any</option>
 				  </select>
 				  <script>
@@ -122,9 +125,21 @@
 							else if(val=="Categories"){
 								jQuery("#s4").show();
 							}
+							else if(val=="Container"){
+								jQuery("#s6").show();
+							}
 							else{
 								jQuery("#s5").show();
 							}
+							<?php
+		
+							if(!$_SESSION['logistic_provider']['id']){
+								?>
+								jQuery(".savefilterx").hide();
+								<?php
+							}
+							
+							?>
 						}
 						jQuery("#searchfilter").change(function(){
 							setupSF(jQuery("#searchfilter").val());
@@ -137,11 +152,11 @@
 					<input type="hidden" name="savefilter" class="savefilter">
 					<input type="hidden" name="type" value="Custom Search">
 					Country:
-					&nbsp;&nbsp;
+					<br />
 					<input type="radio" name="tofrom" value="origin" <?php if($_SESSION['searchfilter']['tofrom']=="origin") echo "checked"; ?> > Origin
-					&nbsp;&nbsp;
+					<br />
 					<input type="radio" name="tofrom" value="destination" <?php if($_SESSION['searchfilter']['tofrom']=="destination") echo "checked"; ?>> Destination
-					&nbsp;&nbsp;
+					<br />
 					<input type="radio" name="tofrom" value="both" <?php if($_SESSION['searchfilter']['tofrom']=="both" || $_SESSION['searchfilter']['tofrom']=="") echo "checked"; ?>> Both
 					<?php
 					$data['select_name'] = "country";
@@ -193,7 +208,7 @@
 						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Class 9:Miscellaneous dangerous substances and articles" /> Class 9:Miscellaneous dangerous substances and articles</div>
 					</div>
 					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; " />
-					<input type="button" class="btn btn-default" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername0').show()" />
+					<input type="button" class="btn btn-default savefilterx" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername0').show()" />
 					<div style="position:relative; display:none" id="filtername0">
 						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
 							<div class="text-left">Filter Name:</div>
@@ -201,7 +216,7 @@
 								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
 								<div class="col-md-12 text-left">
 								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername0').hide()">&nbsp;
-								<input type="submit" class="btn-default btn-xs" value="Save" onclick="saveFilter()"></div>
+								<input type="submit" class="btn-default btn-xs savefilterx" value="Save" onclick="saveFilter()"></div>
 							</div>
 						</div>
 					</div>
@@ -254,7 +269,7 @@
 						?>
 					</script>
 					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; " />
-					<input type="button" class="btn btn-default" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername1').show()" />
+					<input type="button" class="btn btn-default savefilterx" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername1').show()" />
 					<div style="position:relative; display:none" id="filtername1">
 						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
 							<div class="text-left">Filter Name:</div>
@@ -262,7 +277,7 @@
 								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
 								<div class="col-md-12 text-left">
 								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername1').hide()">&nbsp;
-								<input type="submit" class="btn-default btn-xs" value="Save" onclick="saveFilter()"></div>
+								<input type="submit" class="btn-default btn-xs savefilterx" value="Save" onclick="saveFilter()"></div>
 							</div>
 						</div>
 					</div>
@@ -273,11 +288,11 @@
 					<input type="hidden" name="savefilter" class="savefilter">
 					<input type="hidden" name="type" value="Country Search">
 					Country:
-					&nbsp;&nbsp;
+					<br />
 					<input type="radio" name="tofrom" value="origin" <?php if($_SESSION['searchfilter']['tofrom']=="origin") echo "checked"; ?> > Origin
-					&nbsp;&nbsp;
+					<br />
 					<input type="radio" name="tofrom" value="destination" <?php if($_SESSION['searchfilter']['tofrom']=="destination") echo "checked"; ?>> Destination
-					&nbsp;&nbsp;
+					<br />
 					<input type="radio" name="tofrom" value="both" <?php if($_SESSION['searchfilter']['tofrom']=="both" || $_SESSION['searchfilter']['tofrom']=="") echo "checked"; ?>> Both
 					<?php
 					$data['select_name'] = "country";
@@ -295,7 +310,7 @@
 					</script>
 					
 					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; " />
-					<input type="button" class="btn btn-default" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername2').show()" />
+					<input type="button" class="btn btn-default savefilterx" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername2').show()" />
 					<div style="position:relative; display:none" id="filtername2">
 						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
 							<div class="text-left">Filter Name:</div>
@@ -303,7 +318,65 @@
 								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
 								<div class="col-md-12 text-left">
 								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername2').hide()">&nbsp;
-								<input type="submit" class="btn-default btn-xs" value="Save" onclick="saveFilter()"></div>
+								<input type="submit" class="btn-default btn-xs savefilterx" value="Save" onclick="saveFilter()"></div>
+							</div>
+						</div>
+					</div>
+					</form>
+				  </div>
+				  <div id="s6" style="padding-top:10px; display:none" class="searchfil">
+					<form method="post">
+					<input type="hidden" name="savefilter" class="savefilter">
+					<input type="hidden" name="type" value="Container">
+					Container Size:
+					<br />
+					<select type="text" class="form-control" name='container_size' id="container_size" >
+                        <option value="">Please select</option>
+						<option value='20 ft'>20 ft / 6 m</option>
+						<option value='40 ft'>40 ft / 12 m</option>
+						<option value='45 ft'>45 ft / 13.7 m</option>
+						<option value='Open top 20 ft'>Open top 20 ft / 6 m</option>
+						<option value='Open top 40 ft'>Open top 40 ft / 12 m</option>
+						<option value='Open top 45 ft'>Open top 45 ft / 13.7 m</option>
+						<option value='Flatrack 20 ft'>Flatrack 20 ft / 6 m</option>
+						<option value='Flatrack 40 ft'>Flatrack 40 ft / 12 m</option>
+						<option value='Other'>Other (specify)</option>
+					</select>
+					Container Type:
+					<br />
+					<select type="text" class="form-control" name='container_type' id='container_type' >
+						<option value="">Please select</option>
+						<option value='Platforms'>Platforms</option>
+						<option value='Ventilated Containers'>Ventilated Containers</option>
+						<option value='Insulated'>Insulated</option>
+						<option value='Refrigerated'>Refrigerated</option>
+						<option value='Bulk Containers'>Bulk Containers</option>
+						<option value='Tank Containers'>Tank Containers</option>
+					</select>
+					<script>
+						<?php
+						if($_SESSION['searchfilter']['container_size']){
+							?>
+							jQuery("#container_size").val("<?php echo $_SESSION['searchfilter']['container_size']; ?>");
+							<?php
+						}
+						if($_SESSION['searchfilter']['container_type']){
+							?>
+							jQuery("#container_type").val("<?php echo $_SESSION['searchfilter']['container_type']; ?>");
+							<?php
+						}
+						?>
+					</script>
+					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; " />
+					<input type="button" class="btn btn-default savefilterx" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername2').show()" />
+					<div style="position:relative; display:none" id="filtername2">
+						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
+							<div class="text-left">Filter Name:</div>
+							<div class="row" style="padding-top:3px;">
+								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
+								<div class="col-md-12 text-left">
+								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername2').hide()">&nbsp;
+								<input type="submit" class="btn-default btn-xs savefilterx" value="Save" onclick="saveFilter()"></div>
 							</div>
 						</div>
 					</div>
@@ -316,7 +389,7 @@
 					Keyword:
 					<input type="text" class="form-control" name="keyword" value="<?php echo htmlentitiesX($_SESSION['searchfilter']['keyword'])?>"  />
 					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; "  />
-					<input type="button" class="btn btn-default" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername3').show()" />
+					<input type="button" class="btn btn-default savefilterx" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername3').show()" />
 					<div style="position:relative; display:none" id="filtername3">
 						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
 							<div class="text-left">Filter Name:</div>
@@ -324,7 +397,7 @@
 								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
 								<div class="col-md-12 text-left">
 								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername3').hide()">&nbsp;
-								<input type="submit" class="btn-default btn-xs" value="Save" onclick="saveFilter()"></div>
+								<input type="submit" class="btn-default btn-xs savefilterx" value="Save" onclick="saveFilter()"></div>
 							</div>
 						</div>
 					</div>
@@ -375,7 +448,7 @@
 						<div class="imo"><input type="checkbox" name="imos[]" class="imos" value="Class 9:Miscellaneous dangerous substances and articles" /> Class 9:Miscellaneous dangerous substances and articles</div>
 					</div>
 					<input type="submit" class="btn btn-default" value="Search" style="margin-top:10px; " />
-					<input type="button" class="btn btn-default" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername4').show()" />
+					<input type="button" class="btn btn-default savefilterx" value="Save Search Filter" style="margin-top:10px;" onclick="jQuery('#filtername4').show()" />
 					<div style="position:relative; display:none" id="filtername4">
 						<div style="top:-100px; left:100px; position:absolute; background:#f0f0f0; padding:10px; text-align:center; vertical-align:middle">
 							<div class="text-left">Filter Name:</div>
@@ -383,7 +456,7 @@
 								<div class="col-md-12"><input type="text" name="filtername" class="form-control" style="margin-bottom:5px;"></div>
 								<div class="col-md-12 text-left">
 								<input type="button" class="btn-default btn-xs" value="Cancel" onclick="jQuery('#filtername4').hide()">&nbsp;
-								<input type="submit" class="btn-default btn-xs" value="Save" onclick="saveFilter()"></div>
+								<input type="submit" class="btn-default btn-xs savefilterx" value="Save" onclick="saveFilter()"></div>
 							</div>
 						</div>
 					</div>
@@ -527,12 +600,20 @@
 
 					  <td>
 						<?php
-						  echo date("M d, Y", strtotime($rfqs[$i]['origin_date']));
+						  $ts = strtotime($rfqs[$i]['origin_date']);
+						  echo date("M d, Y", $ts);
+						  if(time()>$ts+(24*60*60)){
+							echo " <a style='color:red; font-style:italic'>Past Pickup Date</a>";
+						  }
 						?>
 					  </td>
 					  <td>
 						<?php
-						  echo date("M d, Y", strtotime($rfqs[$i]['destination_date']));
+						  $ts = strtotime($rfqs[$i]['destination_date']);
+						  echo date("M d, Y", $ts);
+						  if(time()+(24*60*60)>$ts){
+							echo " <a style='color:red; font-style:italic'>Past Delivery Date</a>";
+						  }
 						?>
 					  </td>
 					  <?php
@@ -577,29 +658,36 @@
 				<tr>
 					<td colspan=20 class="text-center">
 						<?php
-						if($startl>0){
+						$t = ceil($count/100);
+						if($t){
+						
+							if($startl>0){
+								?>
+								<input type="button" class="prev" value="< Previous" />
+								<?php
+							}
 							?>
-							<input type="button" class="prev" value="< Previous" />
+							<input type="button" class="next" value="Next >" />&nbsp;&nbsp;&nbsp;
+							Jump to page: <select class="paging">
+								<?php
+								
+								for($m=0; $m<$t; $m++){
+									if($startl==($m*100)){
+										?>
+										<option value='<?php echo $m*100; ?>' selected><?php echo $m+1; ?></option>
+										<?php
+									}
+									else{
+										?>
+										<option value='<?php echo $m*100; ?>'><?php echo $m+1; ?></option>
+										<?php
+									}
+								}
+								?>
+							</select>
 							<?php
 						}
 						?>
-						<input type="button" class="next" value="Next >" />&nbsp;&nbsp;&nbsp;
-						Jump to page: <select class="paging">
-							<?php
-							for($m=0; $m<10; $m++){
-								if($startl==($m*100)){
-									?>
-									<option value='<?php echo $m*100; ?>' selected><?php echo $m+1; ?></option>
-									<?php
-								}
-								else{
-									?>
-									<option value='<?php echo $m*100; ?>'><?php echo $m+1; ?></option>
-									<?php
-								}
-							}
-							?>
-						</select>
 					</td>
 				</tr>
 			  </tbody>
@@ -608,6 +696,15 @@
 		 </div>
 	  </div>
 	  <script>
+		<?php
+		
+		if(!$_SESSION['logistic_provider']['id']){
+			?>
+			jQuery(".savefilterx").hide();
+			<?php
+		}
+		
+		?>
 		jQuery(".prev").click(function(){
 			self.location="<?php echo site_url("lp"); ?>/dashboard/<?php echo $startl-100; ?>";
 		});

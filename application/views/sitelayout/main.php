@@ -1,26 +1,54 @@
+<?php
+@session_start();
+//echo "<pre>";
+//print_r($_SESSION);
+?>
 		<script>
-		custtype = "priv";
+		<?php
+		if($_SESSION['customer']['type']=='professional'){
+			?>
+			custtype = "prof";
+			<?php
+		}
+		else{
+			?>
+			custtype = "priv";
+			<?php
+		}
+		?>
 		function gotoRFQ(){
 			self.location="<?php echo site_url(); ?>rfq/"+custtype+"/1";
+		}
+		function gotoBids(){
+			self.location="<?php echo site_url(); ?>lp/dashboard";
 		}
 		</script>
 		<div class="sub-header sub-header-homepage">
           <div class="container theme-showcase" >
               <h1>Get <span>the best freight rates</span> FOR YOUR SHIPMENT !</h1>
               <h2><span>Save up to 50%</span> or more by choosing the right service provider!</h2>
-              <hr>
-              <h3>Please select what type of consumer you are:</h3>
-              <p data-toggle="buttons" class="consumer-type">
-                <label class="btn btn-transculent btn-lg btn-tick" onclick="custtype='priv'">
-                  <input type="radio" name="options" id="option2" value="priv" > Private Consumer
-                </label>
-				<label class="btn btn-transculent btn-lg btn-tick" onclick="custtype='prof'">
-                  <input type="radio" name="options" id="option1" value="prof"> Professional Consumer
-                </label>
-                
-              </p>
+              <hr style="margin:40px 0px">
+              <?php
+			  
+			  if(!$_SESSION['customer']){
+				  ?>
+				  <h3>Please select what type of consumer you are:</h3>
+				  <p data-toggle="buttons" class="consumer-type">
+					<label class="btn btn-transculent btn-lg btn-tick" onclick="custtype='priv'">
+					  <input type="radio" name="options" id="option2" value="priv" > I am an Individual
+					</label>
+					<label class="btn btn-transculent btn-lg btn-tick" onclick="custtype='prof'">
+					  <input type="radio" name="options" id="option1" value="prof"> I am a Company
+					</label>
+				  </p>
+				  <?php
+			  }
+			  ?>
               <p>
                 <a class="btn btn-success btn-lg" role="button" onclick="gotoRFQ()">Get free quotes now !</a>
+              </p>
+			  <p>
+                <a class="btn btn-success btn-lg" role="button" onclick="gotoBids()">Bid on RFQ’s now</a>
               </p>
 
           </div> <!-- /container -->

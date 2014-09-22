@@ -12,7 +12,7 @@
 	margin-top:10px;
 }
 body{
-	background:#f0f0f0;
+	background:#0E202E; color: white;;
 }
 </style>
 <script>
@@ -126,7 +126,7 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 		<div class="col-md-12 text-left">
 			<table class="table table-bordered">
 			<tr>
-					<th colspan=2 class="text-center" style="background:#f0f0f0">
+					<th colspan=2 class="text-center" style="background:#0E202E; color: white;">
 					Bid Summary
 					</th>
 				</tr>
@@ -276,7 +276,7 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 					</td>
 				</tr>
 				<tr>
-					<th colspan=2 class="text-center"  style="background:#f0f0f0">
+					<th colspan=2 class="text-center"  style="background:#0E202E; color: white;">
 					Customer Information
 					</th>
 				</tr>
@@ -328,7 +328,7 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 				if(isset($rfq['shipping_info'])){
 					?>
 					<tr>
-						<th colspan=2 class="text-center"  style="background:#f0f0f0">
+						<th colspan=2 class="text-center"  style="background:#0E202E; color: white;">
 						Shipping Information
 						</th>
 					</tr>
@@ -466,7 +466,7 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 				if($t){
 					?>
 					<tr>
-						<th colspan=2 class="text-center" style="background:#f0f0f0">
+						<th colspan=2 class="text-center" style="background:#0E202E; color: white;">
 						Cargo Details
 						</th>
 					</tr>
@@ -536,6 +536,31 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 																<td>
 																<?php
 																echo $cargo['details']['container_size'];
+																?></td>
+															</tr>
+															<?php
+															if(trim($cargo['details']['container_type'])){
+																?>
+																<tr>
+																	<th>Container Type</th>
+																	<td>
+																	<?php
+																	echo $cargo['details']['container_type'];
+																	?></td>
+																</tr>
+																<?php
+																}
+															?>
+															<tr>
+																<th>Number of Containers</th>
+																<td>
+																<?php
+																if(!trim($cargo['details']['number_of_containers'])){
+																	echo "1";
+																}
+																else{
+																	echo $cargo['details']['number_of_containers'];
+																}
 																?></td>
 															</tr>
 															<?php
@@ -653,6 +678,31 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 															?></td>
 														</tr>
 														<?php
+														if(trim($cargo['details']['container_type'])){
+															?>
+															<tr>
+																<th>Container Type</th>
+																<td>
+																<?php
+																echo $cargo['details']['container_type'];
+																?></td>
+															</tr>
+															<?php
+															}
+														?>
+														<tr>
+															<th>Number of Containers</th>
+															<td>
+															<?php
+															if(!trim($cargo['details']['number_of_containers'])){
+																echo "1";
+															}
+															else{
+																echo $cargo['details']['number_of_containers'];
+															}
+															?></td>
+														</tr>
+														<?php
 													}
 													else{
 														if($cargo['details']['item_in']){
@@ -749,6 +799,31 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 															<td>
 															<?php
 															echo $cargo['details']['container_size'];
+															?></td>
+														</tr>
+														<?php
+														if(trim($cargo['details']['container_type'])){
+															?>
+															<tr>
+																<th>Container Type</th>
+																<td>
+																<?php
+																echo $cargo['details']['container_type'];
+																?></td>
+															</tr>
+															<?php
+															}
+														?>
+														<tr>
+															<th>Number of Containers</th>
+															<td>
+															<?php
+															if(!trim($cargo['details']['number_of_containers'])){
+																echo "1";
+															}
+															else{
+																echo $cargo['details']['number_of_containers'];
+															}
 															?></td>
 														</tr>
 														<?php

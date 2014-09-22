@@ -290,7 +290,7 @@ class lp extends CI_Controller {
 		if($startl<0){
 			$startl = 0;
 		}
-		if(!$_SESSION['logistic_provider']['id']){
+		if(!$_SESSION['logistic_provider']['id']&&0){
 			$redirect = urlencode($_SERVER['REQUEST_URI']);
 			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
 		}
@@ -382,6 +382,7 @@ class lp extends CI_Controller {
 					$sql_cnt = "select 
 					count(`id`) as cnt
 					from `rfq` where 
+					`bid_id`=0 and  
 					(".$sqlext.") and 
 					(".$sqlext2.")
 					order by `id`";
@@ -423,7 +424,9 @@ class lp extends CI_Controller {
 					
 					$sql_cnt = "select 
 					count(`id`) as cnt
-					from `rfq` where ";
+					from `rfq` where 
+					`bid_id`=0 and  
+					";
 					
 					if(trim($origin_country)){
 						$sql_arr[] = " `origin_country` = '".mysql_real_escape_string($origin_country)."' ";
@@ -462,7 +465,8 @@ class lp extends CI_Controller {
 					destination_date_utc,
 					views,
 					dateadded
-					from `rfq` where `bid_id`=0 and ";
+					from `rfq` where `bid_id`=0 and
+					";
 					
 					$sql .= $sql_ext." order by `id` desc limit ".$startl.", ".$limit;
 				}
@@ -484,6 +488,7 @@ class lp extends CI_Controller {
 					$sql_cnt = "select 
 					count(`id`) as cnt
 					from `rfq` where 
+					`bid_id`=0 and  
 					".$sqlext."
 					order by `id`";
 					
@@ -515,6 +520,7 @@ class lp extends CI_Controller {
 					$sql_cnt = "select 
 					count(`id`) as cnt
 					from `rfq` where 
+					`bid_id`=0 and  
 					`data_plain` = '%".mysql_real_escape_string(trim($_SESSION['keyword']))."%'
 					order by `id`";
 					
@@ -542,6 +548,49 @@ class lp extends CI_Controller {
 					
 					//echo $sql;
 				}
+				else if($_SESSION['searchfilter']['type']=="Container"){
+					$keyword1 = trim($_SESSION['searchfilter']['container_size']);
+					$keyword2 = trim($_SESSION['searchfilter']['container_type']);
+					
+					$sql_cnt = "select 
+					count(`id`) as cnt
+					from `rfq` where 
+					`bid_id`=0 and  
+					(
+						lower(`data_plain`) like '%".mysql_real_escape_string($keyword1)."%' or 
+						lower(`data_plain`) like '%[container_type] => ".mysql_real_escape_string($keyword2)."%'
+					)
+					order by `id`";
+					
+					//echo $sql_cnt;
+					//exit();
+					$sql = "select
+					id,
+					origin_country,
+					origin_city,
+					origin_port,
+					origin_date,
+					origin_time_zone,
+					origin_timestamp_utc,
+					origin_date_utc,
+					destination_country,
+					destination_city,
+					destination_port,
+					destination_date,
+					destination_time_zone,
+					destination_timestamp_utc,
+					destination_date_utc,
+					views,
+					dateadded
+					from `rfq` where `bid_id`=0 and 
+					(
+						lower(`data_plain`) like '%".mysql_real_escape_string($keyword1)."%' or 
+						lower(`data_plain`) like '%[container_type] => ".mysql_real_escape_string($keyword2)."%'
+					)
+					order by `id` desc limit ".$startl.", ".$limit;
+					
+					//echo $sql;
+				}
 				else if($_SESSION['searchfilter']['type']=="Categories"){
 					$categories = array();
 					$imos = array();
@@ -556,7 +605,9 @@ class lp extends CI_Controller {
 					if(count($arr)){
 						$sql_cnt = "select 
 						count(`id`) as cnt
-						from `rfq` where ";
+						from `rfq` where 
+						`bid_id`=0 and
+						";
 						foreach($arr as $value){
 							$sql_arr[] = " `data_plain` like '%".mysql_real_escape_string(trim($value))."%' ";
 						}
@@ -581,7 +632,8 @@ class lp extends CI_Controller {
 						destination_date_utc,
 						views,
 						dateadded
-						from `rfq` where `bid_id`=0 and  ";
+						from `rfq` where `bid_id`=0 and				
+						";
 						$sql .= "(".implode($sql_arr, " or ").")";
 						$sql .= " order by `id` desc limit ".$startl.", ".$limit;
 					}
@@ -589,7 +641,10 @@ class lp extends CI_Controller {
 				else{
 					$sql_cnt = "select 
 					count(`id`) as cnt
-					from `rfq` where 1 order by `id`";
+					from `rfq` where 
+					`bid_id`=0 and
+					1
+					order by `id`";
 					
 					$sql = "select 
 					id,
@@ -609,13 +664,17 @@ class lp extends CI_Controller {
 					destination_date_utc,
 					views,
 					dateadded
-					from `rfq` where `bid_id`=0 order by `id` desc limit ".$startl.", ".$limit;
+					from `rfq` where `bid_id`=0 and
+					1
+					order by `id` desc limit ".$startl.", ".$limit;
 				}
 			}
 			else{
 				$sql_cnt = "select 
 				count(`id`) as cnt
-				from `rfq` where 1 order by `id`";
+				from `rfq` where 
+				`bid_id`=0 
+				order by `id`";
 				
 				$sql = "select 
 				id,
@@ -635,7 +694,9 @@ class lp extends CI_Controller {
 				destination_date_utc,
 				views,
 				dateadded
-				from `rfq` where `bid_id`=0 order by `id` desc limit ".$startl.", ".$limit;
+				from `rfq` where `bid_id`=0 
+				order by `id` desc limit ".$startl.", ".$limit;
+				//DATEDIFF(STR_TO_DATE(`destination_date`,'%m/%d/%Y'),NOW()) > -10
 			}
 			
 			

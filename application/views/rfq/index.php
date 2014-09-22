@@ -18,10 +18,10 @@
 	<h2 class="question-title">What type of customer are you ?</h2>
 	<p data-toggle="buttons" class="consumer-type">
 	  <label class="btn btn-transculent btn-lg" onclick='self.location="<?php echo site_url("rfq/priv"); ?>"' >
-		<input type="radio" name="options" id="option2" > Private Consumer
+		<input type="radio" name="options" id="option2" > 	I am an Individual
 	  </label>
 	  <label class="btn btn-transculent btn-lg" onclick='self.location="<?php echo site_url("rfq/prof"); ?>"'>
-		<input type="radio" name="options" id="option1"> Professional Consumer
+		<input type="radio" name="options" id="option1"> I am a Company
 	  </label>
 	</p>
   </div>

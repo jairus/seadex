@@ -719,6 +719,12 @@ if($rfq['userprofile']['contact_number']){
 				
 				<?php
 				if(isset($view)){
+					//echo "<pre>";
+					//print_r($rfq['userprofile']);
+					//echo "</pre>";
+					if(!$rfq['userprofile']['contactnumber']){
+						$rfq['userprofile']['contactnumber'] = $rfq['userprofile']['contact'];
+					}
 					?>
 					<tr>
 						<th colspan=2 class="text-center"  style="background:#0E202E; color: white;">
@@ -742,19 +748,31 @@ if($rfq['userprofile']['contact_number']){
 						</tr>
 						<?php
 					}
+					if($rfq['userprofile']['name']){
+						?>
+						<tr class="contact_info">
+							<th width="50%">Name</th>
+							<td width="50%"><?php echo $rfq['userprofile']['name']; ?></td>
+						</tr>
+						<?php
+					}
+					else{
+						?>
+						<tr class="contact_info">
+							<th width="50%">First Name</th>
+							<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
+						</tr>
+						<tr class="contact_info">
+							<th width="50%">Last Name</th>
+							<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
+						</tr>
+						<tr class="contact_info">
+							<th width="50%">Country</th>
+							<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
+						</tr>
+						<?php
+					}
 					?>
-					<tr class="contact_info">
-						<th width="50%">First Name</th>
-						<td width="50%"><?php echo $rfq['userprofile']['firstname']; ?></td>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">Last Name</th>
-						<td width="50%"><?php echo $rfq['userprofile']['lastname']; ?></td>
-					</tr>
-					<tr class="contact_info">
-						<th width="50%">Country</th>
-						<td width="50%"><?php echo $rfq['userprofile']['country']; ?></td>
-					</tr>
 					<tr class="contact_info">
 						<th width="50%">Contact Number</th>
 						<td width="50%"><?php echo $rfq['userprofile']['contactnumber']; ?></td>

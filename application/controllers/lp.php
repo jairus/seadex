@@ -19,9 +19,10 @@ class lp extends CI_Controller {
 			if(!trim($_SESSION['redirect'])&&trim($_GET['redirect'])){
 				$_SESSION['redirect'] = urldecode($_GET['redirect']);
 			}
+		    $data['companies'] = $this->lp_model->getCompanies('*'); 
 			$this->load->view('sitelayout/header.php');
 			$this->load->view('sitelayout/nav.php');
-			$content = $this->load->view('lp/index.php', '', true);
+			$content = $this->load->view('lp/index.php', $data, true);
 			$data['content'] = $content;
 			$this->load->view('sitelayout/container_lp.php', $data);
 			$this->load->view('sitelayout/footer.php');
@@ -290,11 +291,15 @@ class lp extends CI_Controller {
 		if($startl<0){
 			$startl = 0;
 		}
-		if(!$_SESSION['logistic_provider']['id']&&0){
-			$redirect = urlencode($_SERVER['REQUEST_URI']);
-			echo "<script>self.location='".site_url("lp")."/?redirect=".$redirect."'</script>";
+		if(!$_SESSION['logistic_provider']['id']){
+			$_SESSION['lpmessage'] = "";
+			$_SESSION['customlogin'] = true;
 		}
 		else{
+			unset($_SESSION['lpmessage']);
+			unset($_SESSION['customlogin']);
+		}
+		if(1){
 			//$sql = "select * from `rfq` where `destination_timestamp_utc`>=".time()." order by `destination_timestamp_utc`, `destination_country` asc limit 50";
 			//$sql = "select * from `rfq` where 1 order by `destination_timestamp_utc` desc, `destination_country` asc limit 50";
 			
@@ -773,6 +778,7 @@ class lp extends CI_Controller {
     }
         
 	public function register(){
+		
 		if($_POST['register']){                    
 			foreach($_POST as $key=>$value){
 				$_POST[$key] = trim($value);
@@ -793,9 +799,14 @@ class lp extends CI_Controller {
 				$error = true;
 				$errormsg = "Invalid Password";
 			}
+			
 			else if($_POST['password']!=$_POST['repassword']){
 				$error = true;
 				$errormsg = "Password and Confirm Password don't match";
+			}
+			else if(!preg_match("/[A-Z]/", trim($_POST['password']))||!preg_match("/[a-z]/", trim($_POST['password']))||!preg_match("/[0-9]/", trim($_POST['password']))){
+				$error = true;
+				$errormsg = "Password must contain at least a small letter, a capital letter and number";
 			}
 			else{
 				$sql = "select * from `logistic_providers` where `email`='".mysql_real_escape_string($_POST['email'])."'";

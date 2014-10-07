@@ -65,7 +65,7 @@ function alertX(msg){
 				<div class="form-group">
 					<label class="col-sm-3 control-label">Password</label>
 					<div class="col-sm-9">
-						<input type="password" class="form-control" name="userprofile[password]" />
+						<input type="password" class="form-control" name="userprofile[password]" /><div><i>Must contain at least 1 capital letter, 1 small letter and a number</i></div>
 					</div>
 				</div>
 				<div class="form-group">

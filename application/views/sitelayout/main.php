@@ -17,7 +17,8 @@
 		}
 		?>
 		function gotoRFQ(){
-			self.location="<?php echo site_url(); ?>rfq/"+custtype+"/1";
+			//self.location="<?php echo site_url(); ?>rfq/"+custtype+"/1";
+			self.location="<?php echo site_url(); ?>rfq/";
 		}
 		function gotoBids(){
 			self.location="<?php echo site_url(); ?>lp/dashboard";
@@ -26,11 +27,11 @@
 		<div class="sub-header sub-header-homepage">
           <div class="container theme-showcase" >
               <h1>Get <span>the best freight rates</span> FOR YOUR SHIPMENT !</h1>
-              <h2><span>Save up to 50%</span> or more by choosing the right service provider!</h2>
-              <hr style="margin:40px 0px">
+              <h2 style="font-size:32px"><span>Save up to 50%</span> or more by choosing the right service provider!</h2>
+              <hr>
               <?php
 			  
-			  if(!$_SESSION['customer']){
+			  if(!$_SESSION['customer']&&0){
 				  ?>
 				  <h3>Please select what type of consumer you are:</h3>
 				  <p data-toggle="buttons" class="consumer-type">
@@ -45,14 +46,18 @@
 			  }
 			  ?>
               <p>
-                <a class="btn btn-success btn-lg" role="button" onclick="gotoRFQ()">Get free quotes now !</a>
+                <a class="btn btn-success btn-lg" role="button" onclick="gotoRFQ()">Get free quotes now !</a> &nbsp; 
+				<a class="btn btn-success btn-lg" role="button" onclick="gotoBids()">Bid on RFQ’s now !</a>		&nbsp; 		
+				<a class="btn btn-success btn-lg" role="button" onclick="$('#login-popup').show(); ">Login</a>
+
               </p>
-			  <p>
-                <a class="btn btn-success btn-lg" role="button" onclick="gotoBids()">Bid on RFQ’s now</a>
-              </p>
+			  
 
           </div> <!-- /container -->
         </div>
+		<script>
+		var loginPopup2 = $('#login-popup2');
+		</script>
 
         <div class="homepage" role="main">
           <section class="container">

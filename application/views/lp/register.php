@@ -68,6 +68,17 @@ function alertX(msg){
 				<div class="col-sm-12 text-center" style="color:red" id="errormessage" >
 				</div>
 			  </div>
+			  <?php
+			  if(trim($_SESSION['lpmessage'])){
+					?>
+					 <div class="form-group">
+						<div class="col-sm-12 text-center" style="color:green" >
+						<?php echo $_SESSION['lpmessage']; ?>
+						</div>
+					  </div>
+					<?php
+				}
+			  ?>
 			  <div class="form-group">
 				<label class="col-sm-3 control-label">Company Name</label>
 				<div class="col-sm-9">
@@ -105,7 +116,7 @@ function alertX(msg){
 			  <div class="form-group">
 				<label class="col-sm-3 control-label">Password</label>
 				<div class="col-sm-9">
-				  <input type="password" class="form-control" name='password'>
+				  <input type="password" class="form-control" placeholder="" name='password'><div><i>Must contain at least 1 capital letter, 1 small letter and a number</i></div>
 				</div>
 			  </div>
 			  <div class="form-group">

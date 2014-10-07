@@ -7,6 +7,11 @@
 //echo "<pre>";
 //print_r($_POST);
 //echo "</pre>";
+$customer = $_SESSION['customer'];
+if(!$customer['id']&&$_SESSION['logistic_provider']['id']){
+	$customer = $_SESSION['logistic_provider'];
+	$customer['lp'] = 1;
+}
 ?>
 <script>
 function submitProfile(){
@@ -95,41 +100,68 @@ function alertX2(msg){
 </div>
 <div class="row">
 	<form id="proceedform" class="form-horizontal" method="post" action="<?php echo site_url("rfq/userprofile"); ?>">
-		<input type="hidden" name="customer" value="1" />
+		<?php
+		if($customer['lp']){
+			?><input type="hidden" name="logistic_provider" value="1" /><?php
+		}
+		else{
+			?><input type="hidden" name="customer" value="1" /><?php
+		}
+		?>
 		<div class="col-md-12">
 			<div class="form-group">
 				<label class="col-sm-3 control-label">E-mail Address</label>
 				<div class="col-sm-9">
-					<?php echo $_SESSION['customer']['email']; ?>
+					<?php echo $customer['email']; ?>
 				</div>
 			</div>
 			<?php
-			if($_SESSION['customer']['company_name']){
+			if($customer['company_name']){
 			?>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Company Name</label>
 				<div class="col-sm-9">
-					<?php echo $_SESSION['customer']['company_name']; ?>
+					<?php echo $customer['company_name']; ?>
 				</div>
 			</div>
 			<?php
 			}
+			
+			if($customer['name']){
+				?>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Name</label>
+					<div class="col-sm-9">
+						<?php echo $customer['name']; ?>
+					</div>
+				</div>
+				<?php
+			}
+			else{
+				?>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">First Name</label>
+					<div class="col-sm-9">
+						<?php echo $customer['first_name']; ?>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Last Name</label>
+					<div class="col-sm-9">
+						<?php echo $customer['last_name']; ?>
+					</div>
+				</div>
+				<?php
+			}
+			//print_r($customer);
+			if(!$customer['lp']){
+				?>
+				<div class="col-md-12 text-center">
+					<a href="#" onclick="logout(); return false;" >Click here to use a different Account.</a>
+				</div>
+				<?php
+			}
 			?>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">First Name</label>
-				<div class="col-sm-9">
-					<?php echo $_SESSION['customer']['first_name']; ?>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">Last Name</label>
-				<div class="col-sm-9">
-					<?php echo $_SESSION['customer']['last_name']; ?>
-				</div>
-			</div>
-			<div class="col-md-12 text-center">
-				<a href="#" onclick="logout(); return false;" >Click here to use a different Account.</a>
-			</div>
 			<div class="col-md-12 backbutton text-center">
 				<button type="button" class="btn btn-default" onclick="self.location='<?php echo site_url("rfq/".$type."/4"); ?>'">Back</button>
 				<?php
@@ -278,7 +310,7 @@ function alertX2(msg){
 </div>
 <script>
 	<?php
-	if(!$_SESSION['customer']['email']){
+	if(!$customer['email']){
 		?>
 		login();
 		jQuery("#proceedform").hide();

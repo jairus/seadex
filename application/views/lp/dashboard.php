@@ -603,7 +603,7 @@
 						  $ts = strtotime($rfqs[$i]['origin_date']);
 						  echo date("M d, Y", $ts);
 						  if(time()>$ts+(24*60*60)){
-							echo " <a style='color:red; font-style:italic'>Past Pickup Date</a>";
+							echo " <a style='padding:2px; border:1px solid #2D6289; color:#2D6289'>PICK&#8209;UP&nbsp;ASAP</a>";
 						  }
 						?>
 					  </td>
@@ -612,7 +612,7 @@
 						  $ts = strtotime($rfqs[$i]['destination_date']);
 						  echo date("M d, Y", $ts);
 						  if(time()+(24*60*60)>$ts){
-							echo " <a style='color:red; font-style:italic'>Past Delivery Date</a>";
+							echo " <a class='' style='padding:2px; border:1px solid #2D6289; color:#2D6289'>Check&nbsp;Availability</a>";
 						  }
 						?>
 					  </td>

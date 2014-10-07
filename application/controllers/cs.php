@@ -460,6 +460,15 @@ The SeaDex team";
 					<?php
 					$error = true;
 				}
+				else if(!preg_match("/[A-Z]/", trim($user['password']))||!preg_match("/[a-z]/", trim($user['password']))||!preg_match("/[0-9]/", trim($user['password']))){
+					$error = true;
+					//$errormsg = "Password must contain at least a small letter, a capital letter and number";
+					?>
+					<script>
+						alertX("Password must contain at least a small letter, a capital letter and number");
+					</script>
+					<?php
+				}
 				else if(trim($user['password'])!=trim($user['confirm_password'])){
 					?>
 					<script>

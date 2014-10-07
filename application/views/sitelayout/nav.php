@@ -41,6 +41,7 @@
 				  }
 				  else if($_SESSION['logistic_provider']['id']){
 					?>
+					 <li><a href="<?php echo site_url("rfq")."/"; ?>">Request for quotation</a></li>
 					<li><a href="<?php echo site_url("about")."/"; ?>">About</a></li>
                     <li><a href="<?php echo site_url("contact")."/"; ?>">Contact Seadex</a></li>
 					<li><a href="<?php echo site_url("lp")."/"; ?>">Service Provider Dashboard</a></li>
@@ -129,7 +130,7 @@
 		  // Login window
 		  var showLoginButton = $('#show-login');
 		  var loginPopup = $('#login-popup');
- 
+		  
 		  showLoginButton.on('click', function(e) {
 			loginPopup.show();
 			e.preventDefault();

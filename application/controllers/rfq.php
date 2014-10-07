@@ -153,6 +153,7 @@ class rfq extends CI_Controller {
 		<?php
 	}
 	public function userprofile(){
+		
 		$data['type'] = $_SESSION['rfq']['cust_type'];
 		if(!isset($_SESSION['rfq'])){
 			?>
@@ -389,6 +390,44 @@ class rfq extends CI_Controller {
 				`destination_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['date'])."',
 				`destination_alternate_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['alternate_date'])."',
 				`customer_id` = '".mysql_real_escape_string($customer['id'])."',
+				`dateadded` = NOW()
+				";
+				$q = $this->db->query($sql);
+				$_SESSION['rfq_complete'] = true;
+				?>
+				<script>
+					window.parent.location = "<?php echo site_url("rfq/thankyou"); ?>";
+				</script>
+				<?php
+			}
+		}
+		else if($_POST['logistic_provider']){
+			if($_SESSION['logistic_provider']['id']){
+				$logistic_provider = $_SESSION['logistic_provider'];
+				$_SESSION['rfq']['userprofile'] = $logistic_provider;
+				unset($_SESSION['rfq']['userprofile']['password']);
+				unset($_SESSION['rfq']['userprofile']['confirm_password']);
+				unset($_SESSION['logistic_provider']['password']);
+				
+				$rfq_shipping_info = $_SESSION['rfq']['shipping_info'];
+				$data_plain = serialize($_SESSION['rfq']);
+				$data = base64_encode(serialize($_SESSION['rfq']));
+				$data_plain = print_r($_SESSION['rfq'], 1);
+				$sql = "
+				INSERT INTO `rfq` set 
+				`data` = '".mysql_real_escape_string($data)."',
+				`data_plain` = '".mysql_real_escape_string($data_plain)."',
+				`origin_country` = '".mysql_real_escape_string($rfq_shipping_info['origin']['country'])."',
+				`origin_city` = '".mysql_real_escape_string($rfq_shipping_info['origin']['city'])."',
+				`origin_port` = '".mysql_real_escape_string($rfq_shipping_info['origin']['port'])."',
+				`origin_date` = '".mysql_real_escape_string($rfq_shipping_info['origin']['date'])."',
+				`origin_alternate_date` = '".mysql_real_escape_string($rfq_shipping_info['origin']['alternate_date'])."',
+				`destination_country` = '".mysql_real_escape_string($rfq_shipping_info['destination']['country'])."',
+				`destination_city` = '".mysql_real_escape_string($rfq_shipping_info['destination']['city'])."',
+				`destination_port` = '".mysql_real_escape_string($rfq_shipping_info['destination']['port'])."',
+				`destination_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['date'])."',
+				`destination_alternate_date` = '".mysql_real_escape_string($rfq_shipping_info['destination']['alternate_date'])."',
+				`logistic_provider_cust_id` = '".mysql_real_escape_string($logistic_provider['id'])."',
 				`dateadded` = NOW()
 				";
 				$q = $this->db->query($sql);

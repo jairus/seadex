@@ -29,8 +29,8 @@ table th.startend{
 <h2 style="text-align: right">Company Bids</h2>
 <div class="table-responsive">
     <div class="row">
-        <div class="col-md-3"><?php include_once(dirname(__FILE__) . '/dash_menu.php')?></div>
-        <div class="col-md-9">
+        <div class="col-md-2"><?php include_once(dirname(__FILE__) . '/dash_menu.php')?></div>
+        <div class="col-md-10">
         <table class="table table-striped">
             <thead>
                 <tr>

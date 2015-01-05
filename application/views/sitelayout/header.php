@@ -72,6 +72,109 @@
 		color: #0E202E
 	}
 	</style>
+	<script>(function() {
+	  var _fbq = window._fbq || (window._fbq = []);
+	  if (!_fbq.loaded) {
+		var fbds = document.createElement('script');
+		fbds.async = true;
+		fbds.src = '//connect.facebook.net/en_US/fbds.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(fbds, s);
+		_fbq.loaded = true;
+	  }
+	  _fbq.push(['addPixelId', '1388988408028903']);
+	})();
+	window._fbq = window._fbq || [];
+	window._fbq.push(['track', 'PixelInitialized', {}]);
+	</script>
+	<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=1388988408028903&amp;ev=PixelInitialized" /></noscript>
+	<?php
+	$method = $this->router->fetch_method();
+	$class = $this->router->fetch_class();
+	if($class=="cs"&&$method=="thankyou"){
+		?>
+		<!-- Facebook Conversion Code for SeaDex - Shipper Signup -->
+		<script>(function() {
+		  var _fbq = window._fbq || (window._fbq = []);
+		  if (!_fbq.loaded) {
+			var fbds = document.createElement('script');
+			fbds.async = true;
+			fbds.src = '//connect.facebook.net/en_US/fbds.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(fbds, s);
+			_fbq.loaded = true;
+		  }
+		})();
+		window._fbq = window._fbq || [];
+		window._fbq.push(['track', '6020825144925', {'value':'0.00','currency':'USD'}]);
+		</script>
+		<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6020825144925&amp;cd[value]=0.00&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
+		<?php
+	}
+	else if($class=="lp"&&$method=="thankyou"){
+		?>
+		<!-- Facebook Conversion Code for SeaDex - FF Signup -->
+		<script>(function() {
+		  var _fbq = window._fbq || (window._fbq = []);
+		  if (!_fbq.loaded) {
+			var fbds = document.createElement('script');
+			fbds.async = true;
+			fbds.src = '//connect.facebook.net/en_US/fbds.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(fbds, s);
+			_fbq.loaded = true;
+		  }
+		})();
+		window._fbq = window._fbq || [];
+		window._fbq.push(['track', '6020825174325', {'value':'0.00','currency':'USD'}]);
+		</script>
+		<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6020825174325&amp;cd[value]=0.00&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
+		<?php
+	}
+	else if($class=="rfq"&&$method=="thankyou"){
+		?>
+		<!-- Facebook Conversion Code for SeaDex - RFQ Submission -->
+		<script>(function() {
+		  var _fbq = window._fbq || (window._fbq = []);
+		  if (!_fbq.loaded) {
+			var fbds = document.createElement('script');
+			fbds.async = true;
+			fbds.src = '//connect.facebook.net/en_US/fbds.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(fbds, s);
+			_fbq.loaded = true;
+		  }
+		})();
+		window._fbq = window._fbq || [];
+		window._fbq.push(['track', '6020825186325', {'value':'0.00','currency':'USD'}]);
+		</script>
+		<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6020825186325&amp;cd[value]=0.00&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
+		<?php
+	}
+	else if($class=="lp"&&$method=="thankyou_for_bidding"){
+		?>
+		<!-- Facebook Conversion Code for SeaDex - RFQ Bid -->
+		<script>(function() {
+		  var _fbq = window._fbq || (window._fbq = []);
+		  if (!_fbq.loaded) {
+			var fbds = document.createElement('script');
+			fbds.async = true;
+			fbds.src = '//connect.facebook.net/en_US/fbds.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(fbds, s);
+			_fbq.loaded = true;
+		  }
+		})();
+		window._fbq = window._fbq || [];
+		window._fbq.push(['track', '6020825196525', {'value':'0.00','currency':'USD'}]);
+		</script>
+		<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?ev=6020825196525&amp;cd[value]=0.00&amp;cd[currency]=USD&amp;noscript=1" /></noscript>
+		<?php
+	}
+	
+	
+	?>
+
   </head>
   <body class="js">
 	<script>

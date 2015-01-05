@@ -534,7 +534,9 @@
 				<?php
 				$t = count($rfqs);
 				for($i=0; $i<$t; $i++){
-					
+					if(strtotime($rfqs[$i]['destination_date'])==0){
+						continue;
+					}
 					if(!trim($rfqs[$i]['origin_port'])){
 						//continue;
 					}

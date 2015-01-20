@@ -1,6 +1,6 @@
 <?php
-//echo "<pre>";
-//print_r($rfq);
+$method = $this->router->fetch_method();
+$class = $this->router->fetch_class();
 ?>
 <style>
 #container {
@@ -55,7 +55,7 @@ if($rfq['userprofile']['contact_number']){
 			?>RFQ # <?php echo $rfq['id'] ?></h2>
 		</div>
 		<div class="col-md-6 text-right">
-			<h2><a href="<?php echo site_url("cs") ?>">Back to Dashboard</a></h2>
+			<h2><a href="<?php echo site_url($class."") ?>">Back to Dashboard</a></h2>
 		</div>
 	</div>
 	<div class="row">
@@ -79,7 +79,7 @@ if($rfq['userprofile']['contact_number']){
 								return false;
 							}
 							</script>
-							<form method="post" action='<?php echo site_url("cs/rfq/".$rfq['id']."/cancel"); ?>' style="width:300px; margin:auto" id="cancelform">
+							<form method="post" action='<?php echo site_url($class."/rfq/".$rfq['id']."/cancel"); ?>' style="width:300px; margin:auto" id="cancelform">
 							
 							Reason for cancellation:
 							<select class="form-control" style="margin:10px;" name="cancel_reason">
@@ -104,7 +104,7 @@ if($rfq['userprofile']['contact_number']){
 					</tr>
 					<tr>
 						<td colspan=2 class="text-center">
-							<form method="post" action='<?php echo site_url("cs/rfq/".$rfq['id']."/cancel"); ?>' style="width:300px; margin:auto" id="cancelform">
+							<form method="post" action='<?php echo site_url($class."/rfq/".$rfq['id']."/cancel"); ?>' style="width:300px; margin:auto" id="cancelform">
 							
 							Date of cancellation: <?php echo date("M d,Y", strtotime($rfq['datecancelled'])); ?><br />
 							Reason for cancellation: <?php echo $rfq['cancel_reason']; ?>
@@ -147,7 +147,7 @@ if($rfq['userprofile']['contact_number']){
 									<tr>
 										<td>
 											<?php 
-											//echo "<a href='".site_url("cs")."/rfq/".$rfq['id']."/bid?bid_id=".$bids[$i]['id']."'>".$bids[$i]['company_name']."</a>" ; 
+											//echo "<a href='".site_url($class."")."/rfq/".$rfq['id']."/bid?bid_id=".$bids[$i]['id']."'>".$bids[$i]['company_name']."</a>" ; 
 											echo $bids[$i]['company_name'];
 											if($rfq['bid_id']==$bids[$i]['id']){
 												echo "&nbsp;&nbsp;<a style='color:green'>( Accepted Bid )</a>";
@@ -190,7 +190,7 @@ if($rfq['userprofile']['contact_number']){
 											?>
 										</td>
 										<td>
-											<?php echo "<a href='".site_url("cs")."/rfq/".$rfq['id']."/bid?bid_id=".$bids[$i]['id']."'>View Bid</a>" ; ?>
+											<?php echo "<a href='".site_url($class."")."/rfq/".$rfq['id']."/bid?bid_id=".$bids[$i]['id']."'>View Bid</a>" ; ?>
 										</td>
 									</tr>
 									<?php

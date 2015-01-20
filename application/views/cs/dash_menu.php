@@ -34,6 +34,7 @@ if($class=="cs"){
 				<div class="menu <?php if($method=="completed_listings"){ echo "active"; }?>"><a href="<?php echo site_url($class); ?>/completed_listings">Completed Listings</a></div>
 				<div class="menu <?php if($method=="expired_listings"){ echo "active"; }?>"><a href="<?php echo site_url($class); ?>/expired_listings">Expired Listings</a></div>
 				<div class="menu <?php if($method=="cancelled_listings"){ echo "active"; }?>"><a href="<?php echo site_url($class); ?>/cancelled_listings">Cancelled Listings</a></div>
+				<div class="menu <?php if($method=="invoices"){ echo "active"; }?>"><a href="<?php echo site_url($class); ?>/invoices">Invoices</a></div>
 				<div class="menu <?php if($method=="changepass"){ echo "active"; }?>"><a href="<?php echo site_url($class); ?>/changepass">Change Password</a></div>
 			  </td>
 			</tr>
@@ -73,6 +74,7 @@ else{
 			<div class="menu <?php if($method=="completed_listings"){ echo "active"; }?>"><a href="<?php echo site_url("cs_lp"); ?>/completed_listings">Completed RFQ Listings</a></div>
 			<div class="menu <?php if($method=="expired_listings"){ echo "active"; }?>"><a href="<?php echo site_url("cs_lp"); ?>/expired_listings">Expired RFQ Listings</a></div>
 			<div class="menu <?php if($method=="cancelled_listings"){ echo "active"; }?>"><a href="<?php echo site_url("cs_lp"); ?>/cancelled_listings">Cancelled RFQ Listings</a></div>
+			<div class="menu <?php if($method=="invoices"){ echo "active"; }?>"><a href="<?php echo site_url("cs_lp"); ?>/invoices">Invoices</a></div>
 		  </td>
 		</tr>
 	  </tbody>

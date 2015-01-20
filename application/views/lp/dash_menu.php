@@ -47,6 +47,7 @@ $class = $this->router->fetch_class();
 		<div class="menu <?php if($method=="completed_listings"){ echo "active"; }?>"><a href="<?php echo site_url("cs_lp"); ?>/completed_listings">Completed RFQ Listings</a></div>
 		<div class="menu <?php if($method=="expired_listings"){ echo "active"; }?>"><a href="<?php echo site_url("cs_lp"); ?>/expired_listings">Expired RFQ Listings</a></div>
 		<div class="menu <?php if($method=="cancelled_listings"){ echo "active"; }?>"><a href="<?php echo site_url("cs_lp"); ?>/cancelled_listings">Cancelled RFQ Listings</a></div>
+		<div class="menu <?php if($method=="invoices"){ echo "active"; }?>"><a href="<?php echo site_url("cs_lp"); ?>/invoices">Invoices</a></div>
 	  </td>
 	</tr>
   </tbody>

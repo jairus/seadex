@@ -1,0 +1,1 @@
+VERIFIED update `logistic_providers` set `credits` = `credits`+ 100 where `id`='29'

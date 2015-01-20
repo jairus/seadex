@@ -1,6 +1,6 @@
 <?php
-//echo "<pre>";
-//print_r($rfq);
+$method = $this->router->fetch_method();
+$class = $this->router->fetch_class();
 ?>
 <style>
 #container {
@@ -107,7 +107,7 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 			<h2>RFQ # <?php echo $rfq['id'] ?></h2>
 		</div>
 		<div class="col-md-6 text-right">
-			<h2><a href="<?php echo site_url("cs")."/rfq/".$rfq['id']."/bids" ?>">Back to Bids</a></h2>
+			<h2><a href="<?php echo site_url($class."")."/rfq/".$rfq['id']."/bids" ?>">Back to Bids</a></h2>
 		</div>
 	</div>
 	<div class="row">
@@ -243,25 +243,40 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 								jQuery("#acceptbutton").hide();
 								jQuery("#acceptform").fadeIn(200);
 							}
+							function aPay(){
+								self.location="<?php echo site_url($class."")."/rfq/".$rfq['id']."/pay?bid_id=".$_GET['bid_id']; ?>";
+							}
 							</script>
 							<div class="text-center" style="margin-bottom:30px;">
-								<input id="acceptbutton" type="button" class="btn btn-primary btn-lg" value="Accept This Bid and Contact Service Provider" onclick="return acceptBid();" >
-								<div id='acceptform' style="display:none; max-width:500px; margin:auto">
-									<form class="form-horizontal" action="<?php echo site_url("cs")."/rfq/".$rfq['id']."/acceptbid?bid_id=".$_GET['bid_id']; ?>" method="post">
-										<div class="row">Message</div>
-										<div class="row"><textarea class="form-control" style="height:100px;" name="message" ><?php
-										
-										echo "Dear Sir, 
+									<?php
+									if($_GET['pay']){
+										?>
+										<input id="acceptbutton" type="button" class="btn btn-primary btn-lg" value="Accept This Bid and Pay" onclick="return aPay();" >
+										<?php
+									}
+									else{
+										?>
+										<input id="acceptbutton" type="button" class="btn btn-primary btn-lg" value="Accept This Bid and Contact Service Provider" onclick="return acceptBid();" >
+										<div id='acceptform' style="display:none; max-width:500px; margin:auto">
+										<form class="form-horizontal" action="<?php echo site_url($class."")."/rfq/".$rfq['id']."/acceptbid?bid_id=".$_GET['bid_id']; ?>" method="post">
+											<div class="row">Message</div>
+											<div class="row"><textarea class="form-control" style="height:100px;" name="message" ><?php
+											
+											echo "Dear Sir, 
 
-I would like to inform you that I have accepted your proposal for my RFQ. I understand  that you have the right to inspect and confirm and re-quote  if needed. 
+	I would like to inform you that I have accepted your proposal for my RFQ. I understand  that you have the right to inspect and confirm and re-quote  if needed. 
 
-I have read the documents (If attached) and will sign and fax or scan and email back to confirm.
-";
-										
-										?></textarea></div>
-										<div class="row" style="margin-top:10px;"><input type="submit" value="Proceed" class="form-control btn btn-primary" /></div>
-									</form>
-								</div>
+	I have read the documents (If attached) and will sign and fax or scan and email back to confirm.
+	";
+											
+											?></textarea></div>
+											<div class="row" style="margin-top:10px;"><input type="submit" value="Proceed" class="form-control btn btn-primary" /></div>
+										</form>
+										</div>
+										<?php
+									}
+									?>
+								
 							</div>
 							<?php
 						}

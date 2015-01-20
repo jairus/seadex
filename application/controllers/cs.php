@@ -42,6 +42,24 @@ class cs extends CI_Controller {
 		unset($_SESSION['rfq']);
 	}
 	
+	public function invoices(){
+		if(!$_SESSION['customer']['id']){
+			$redirect = urlencode($_SERVER['REQUEST_URI']);
+			echo "<script>self.location='".site_url("cs")."/?redirect=".$redirect."'</script>";
+		}
+		//$sql = "select * from `bluesnap_ipn_returns` where `logistic_provider_cust_id`='".$_SESSION['logistic_provider']['id']."'";
+		$sql = "select * from `bluesnap_ipn_returns` where `customer_id`='".$_SESSION['customer']['id']."' order by `id` desc";
+		$q = $this->db->query($sql);
+		$invoices = $q->result_array();
+		$this->load->view('sitelayout/header.php');
+		$this->load->view('sitelayout/nav.php');
+		$data['invoices'] = $invoices;
+		$content = $this->load->view('cs/invoices.php', $data, true);
+		$data['content'] = $content;
+		$content = $this->load->view('cs/content.php', $data);
+		$this->load->view('sitelayout/footer.php');
+	}
+	
 	public function tor(){
 		$this->load->view('sitelayout/header.php');
 		$this->load->view('cs/nav.php');
@@ -52,7 +70,7 @@ class cs extends CI_Controller {
 	}
 	public function account(){
 		if(!$_SESSION['customer']['id']){
-			echo "<script>self.location='".site_url("lp")."/'</script>";
+			echo "<script>self.location='".site_url("cs")."/'</script>";
 		}
 		$this->load->view('sitelayout/header.php');
 		$this->load->view('cs/nav.php');
@@ -123,6 +141,39 @@ class cs extends CI_Controller {
 				$data['bids'] = $bids;
 				$this->load->view('cs/rfqsummary_bid.php', $data);
 				$this->load->view('sitelayout/footer.php');
+			}
+			else if($action=="pay" && $rfqdata['bid_id']<1){
+				$sql = "select * from `bids` 
+				where 
+				`bids`.`rfq_id` = '".$rfq[0]['id']."' 
+				and `bids`.`id`='".$_GET['bid_id']."'
+				order by `bids`.`total_bid_usd` asc";
+				
+				$q = $this->db->query($sql);
+				$bids = $q->result_array();
+				if(isset($bids[0]['id'])){
+					//echo "<pre>";
+					//print_r($bids);
+					//echo "</pre>";
+					//get lp
+					$sql = "select * from `logistic_providers` where `id`='".$bids[0]['logistic_provider_id']."'";
+					$q = $this->db->query($sql);
+					$lp = $q->result_array();
+					
+					?>
+					<form method="post" action="https://sandbox.bluesnap.com/jsp/buynow.jsp" id="submitform" style="display:none">
+					Shipping Price: USD <input type="text" name="overridePrice" value="<?php echo htmlentitiesX($bids[0]['total_bid_usd']); ?>" />
+					<input type="hidden" name="contractId" value="2154142" />
+					<input type="hidden" name="custom1" value="<?php echo $bids[0]['id']; ?>" />
+					<input type="hidden" name="custom2" value="<?php echo htmlentitiesX($lp[0]['company_name']); ?>" />
+					<!--<input type="submit" value="Pay Now">-->
+					</form>
+					<script>
+						document.getElementById("submitform").submit();
+					</script>
+					<?php
+					exit();
+				}
 			}
 			else if($action=="acceptbid" && $rfqdata['bid_id']<1){
 				$sql = "select `bids`.`id`, `bids`.`logistic_provider_id` from `bids` 

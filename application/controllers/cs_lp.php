@@ -85,7 +85,7 @@ class cs_lp extends CI_Controller {
 			file_put_contents(dirname(__FILE__)."/bluesnaplogs/".date("Y-m-d_H:i:s").".txt", $str);
 			$bid_id = $_POST['Bid_ID'];
 			$lp_name = $_POST['Freight_Forwarder'];
-			$amount_usd = $_POST['invoiceAmountUSD'];
+			$amount_usd = number_format($_POST['invoiceAmountUSD'], 2, ".", "");
 			
 			//get bid
 			$sql = "select * from `bids` where `id`='".mysql_real_escape_string($bid_id)."'";

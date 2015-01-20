@@ -131,7 +131,7 @@ class cs extends CI_Controller {
 				on (`bids`.`logistic_provider_id` = `logistic_providers`.`id`)
 				where 
 				`bids`.`rfq_id` = '".$rfq[0]['id']."' 
-				and `bids`.`id`='".$_GET['bid_id']."'
+				and `bids`.`id`='".mysql_real_escape_string($_GET['bid_id'])."'
 				order by `bids`.`total_bid_usd` asc";
 				$q = $this->db->query($sql);
 				$bids = $q->result_array();
@@ -139,6 +139,14 @@ class cs extends CI_Controller {
 				$this->load->view('sitelayout/nav.php');
 				$data['rfq'] = $rfqdata;
 				$data['bids'] = $bids;
+				
+				$sql = "select * from `bluesnap_ipn_returns` where `bid_id`='".mysql_real_escape_string($_GET['bid_id'])."'";
+				$q = $this->db->query($sql);
+				$invoice = $q->result_array();
+				$invoice = $invoice[0]; 
+				$invoice['data'] = @json_decode($invoice['data']);
+				$data['invoice'] = $invoice;
+				
 				$this->load->view('cs/rfqsummary_bid.php', $data);
 				$this->load->view('sitelayout/footer.php');
 			}

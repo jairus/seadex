@@ -15,7 +15,7 @@ else{
 		  <th class="start">Invoice #</th>
 		  <th>USD Amount</th>
 		  <th>Local Charged Amount</th>
-		  <th>Invoice URL</th>
+		  <!--<th>Invoice URL</th>-->
 		  <th>Payment For</th>
 		  <th class="end" width="19%">Date</th>
 		</tr>
@@ -27,7 +27,7 @@ else{
 			for($i=0; $i<$t; $i++){
 				$invoices[$i]['data'] = json_decode($invoices[$i]['data']);
 				?>
-				<tr>
+				<tr onclick="self.location='<?php echo site_url().$class."/rfq/".$invoices[$i]['rfq_id']."/bid?bid_id=".$invoices[$i]['bid_id']; ?>'" style="cursor:pointer">
 				  <td>
 					  <?php
 					  
@@ -44,11 +44,13 @@ else{
 					  echo $invoices[$i]['data']->invoiceLocalCurrency." ".$invoices[$i]['data']->invoiceLocalAmount;
 					  ?>
 				  </td>
+				  <!--
 				  <td>
 					  <?php
 					  echo "<a href='".$invoices[$i]['data']->invoiceURL."' target='_blank'>Click here</a>";;
 					  ?>
 				  </td>
+				  -->
 				  <td>
 					<?php
 					echo "<a href='".site_url().$class."/rfq/".$invoices[$i]['rfq_id']."/bid?bid_id=".$invoices[$i]['bid_id']."'>Bid #".$invoices[$i]['bid_id']." Click here</a>";

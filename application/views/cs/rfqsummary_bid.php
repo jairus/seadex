@@ -282,7 +282,17 @@ $bid_data = unserialize(base64_decode($bids[0]['data']));
 						}
 						else if($rfq['bid_id']==$bids[0]['id']){
 							?>
-							<div class="text-center" style="margin-bottom:10px; color:green">Accepted Bid</div>
+							<div class="text-center" style="margin-bottom:10px; color:green">Accepted Bid
+							</div>
+							
+							<?php
+							if($invoice['data']->referenceNumber){
+								?><div class="text-center" style="margin-bottom:10px; color:green"><?php
+								echo "<a href='".$invoice['data']->invoiceURL."' target='_blank'>Invoice # ".$invoice['data']->referenceNumber."</a>";;
+								?></div><?php
+							}
+							?>
+							
 							<div class="text-center" style="margin-bottom:10px; color:green">Your Message:</div>
 							<div class="text-left" style="border:1px solid gray; padding:10px; margin:auto; margin-bottom:10px; color:green; max-width:600px; height:200px; overflow:auto"><?php
 							
